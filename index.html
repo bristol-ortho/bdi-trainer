@@ -952,6 +952,8 @@ function stopSpeak(){
   try { speechSynthesis.cancel(); } catch {}
   if (AV.wrap){ const svg = AV.wrap.querySelector("svg"); if (svg){ delete svg.dataset.speaking; svg.dataset.mouth = ""; } const c = AV.wrap.querySelector(".av-caption"); if (c) c.classList.remove("on"); }
 }
+let SPEECH_OK = false;
+["click", "keydown", "touchend"].forEach(ev => document.addEventListener(ev, () => { if (SPEECH_OK || !("speechSynthesis" in window)) return; SPEECH_OK = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch {} }, {capture: true}));
 function speak(text){
   stopSpeak();
   const wrap = AV.wrap; if (!wrap || !document.body.contains(wrap)) return;
@@ -1167,13 +1169,16 @@ function finishViva(V, vv, av){
 }
 function setupMic(ta, btn){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR || !btn) return;
-  btn.hidden = false; let rec = null, on = false;
+  btn.hidden = false; let rec = null, on = false, base = "";
+  const stop = () => { on = false; btn.classList.remove("rec"); btn.textContent = "🎤"; };
+  const WHY = {"not-allowed": "The microphone is blocked. Allow it for this site: in Safari go to Safari ▸ Settings ▸ Websites ▸ Microphone; in Chrome/Edge click the lock icon in the address bar. On a Mac also switch on Dictation in System Settings ▸ Keyboard.", "service-not-allowed": "Voice typing is switched off on this device. On a Mac turn on Dictation in System Settings ▸ Keyboard, then reload.", "no-speech": "I did not hear anything — try again and speak after the red dot appears.", "audio-capture": "No microphone was found.", "network": "Voice typing needs an internet connection."};
   btn.addEventListener("click", () => {
-    if (on){ rec && rec.stop(); return; }
-    rec = new SR(); rec.lang = "en-GB"; rec.interimResults = false; rec.continuous = true;
-    rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) ta.value += (ta.value ? " " : "") + e.results[i][0].transcript; };
-    rec.onend = () => { on = false; btn.classList.remove("rec"); }; rec.onerror = () => { on = false; btn.classList.remove("rec"); };
-    try { rec.start(); on = true; btn.classList.add("rec"); } catch {}
+    if (on){ try { rec && rec.stop(); } catch {} return; }
+    try { rec = new SR(); } catch { toast("Voice typing is not available in this browser."); return; }
+    rec.lang = "en-US"; rec.interimResults = true; rec.continuous = false; base = ta.value ? ta.value.trim() + " " : "";
+    rec.onresult = e => { let t = ""; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = base + t; };
+    rec.onend = stop; rec.onerror = e => { stop(); toast(WHY[e.error] || "Voice typing stopped (" + (e.error || "error") + ")."); };
+    try { rec.start(); on = true; btn.classList.add("rec"); btn.textContent = "⏺"; toast("Listening… speak now, press again to stop."); } catch (e) { stop(); toast("Could not start the microphone."); }
   });
 }
 
@@ -1517,7 +1522,8 @@ function mountChat(host, o){
       const t = await callAI(msgs, o.system); msgs.push({role: "assistant", content: t});
       const vm = t.match(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)/i), v = vm ? vm[1].toLowerCase() : null, body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim();
       wait.innerHTML = (v ? `<div class="verdict ${v}">${{correct: "✓ Correct", partial: "◐ Needs refinement", wrong: "✗ Incorrect"}[v]}</div>` : "") + chatMd(body); asked++;
-      if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…"); speak(body);
+      if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…");
+      const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; wait.appendChild(rb); speak(body);
       if (v && o.nQ && !finished){ graded++; sum += {correct: 1, partial: .5, wrong: 0}[v]; const inf = $("#tInfo"); if (inf) inf.textContent = `Question ${Math.min(graded + 1, o.nQ)} of ${o.nQ} · graded so far: ${graded}`; }
       const sc = t.match(/SCORE:\s*(\d{1,3})\s*\/\s*100/i);
       if (sc && o.exam && !o.nQ && !o.done){ o.done = true; const p = Math.min(100, +sc[1]); record("tutor", p, o.topic, 20 + Math.round(p / 2)); }
@@ -1532,7 +1538,7 @@ function mountChat(host, o){
     const pct = Math.round(sum / o.nQ * 100), un = Math.max(0, o.nQ - graded);
     msgs.push({role: "user", content: `[System: the exam is over${timeUp ? " because the time limit has been reached" : ""}. Do not ask any more questions. In a short spoken closing: say what the resident did well, the three main weaknesses, and then reveal the actual diagnosis and the treatment that was carried out in the book. The resident answered ${graded} of ${o.nQ} questions; their score is ${pct} out of 100.]`});
     const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> closing the exam…');
-    try { const t = await callAI(msgs, o.system); const body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim(); wait.innerHTML = chatMd(body); speak(body); } catch (e) { wait.innerHTML = '<span class="bad">The closing comments could not be loaded, but your score is saved.</span>'; }
+    try { const t = await callAI(msgs, o.system); const body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim(); wait.innerHTML = chatMd(body); speak(body); const rb2 = document.createElement("button"); rb2.type = "button"; rb2.className = "btn sm"; rb2.textContent = "🔊 Hear again"; rb2.style.marginTop = "8px"; rb2.onclick = () => speak(body); wait.appendChild(rb2); } catch (e) { wait.innerHTML = '<span class="bad">The closing comments could not be loaded, but your score is saved.</span>'; }
     const card = document.createElement("div"); card.className = "scorecard";
     card.innerHTML = `${timeUp ? "<b>Time is up.</b> " : ""}Final score: <b>${pct}%</b> — ${sum % 1 ? sum.toFixed(1) : sum} marks out of ${o.nQ} questions. You answered ${graded} of ${o.nQ}${un ? `; the ${un} unanswered question${un > 1 ? "s" : ""} counted as wrong` : ""}.`;
     cm.appendChild(card); card.scrollIntoView({block: "nearest", behavior: "smooth"});
@@ -1607,7 +1613,7 @@ function startTutor(ev){
   const nQ = scored ? +$("#tNq").value : 0;
   const tm = $("#tTime").value, limit = !scored ? 0 : tm === "auto" ? Math.max(15, nQ * 2) : tm === "custom" ? Math.max(1, +$("#tMin").value || 20) : 0;
   const qa = bc.qs.map((q, i) => `Q${i + 1}: ${q.q}\nA${i + 1}: ${q.a.slice(0, 500)}`).join("\n").slice(0, 4200);
-  const unseenRules = unseen ? `\n\nUNSEEN CASE RULES\n- The resident has never seen this case. On their screen they can see only the PRE-TREATMENT RECORDS (extra-oral and intra-oral photographs, panoramic radiograph and lateral cephalometric radiograph where the book provides them). Treat the book's text as the truth about what those records show, but you cannot see the images yourself, so never invent findings the text does not give.\n- Do NOT reveal the diagnosis, problem list, treatment plan, appliances or outcome until the resident has had to work them out. Do not state the case number.\n- Open by giving the age, sex and presenting complaint in one or two sentences, then ask the resident to describe what they see on the records. Then move through, one question at a time: extra-oral and intra-oral findings, radiographic and cephalometric findings, diagnosis, problem list, aetiology, treatment aims and options, the plan you would choose and why, mechanics and anchorage, risks, retention. Use the book's own questions as the backbone.` : "";
+  const unseenRules = unseen ? `\n\nUNSEEN CASE RULES\n- The resident has never seen this case. On their screen they can see only the PRE-TREATMENT RECORDS (extra-oral and intra-oral photographs, panoramic radiograph and lateral cephalometric radiograph where the book provides them). Treat the book's text as the truth about what those records show, but you cannot see the images yourself, so never invent findings the text does not give.\n- Do NOT reveal the diagnosis, problem list, treatment plan, appliances or outcome until the resident has had to work them out. Do not state the case number.\n- Your opening may contain ONLY the age, sex, presenting complaint and any relevant medical history — one or two sentences. It must NOT mention or hint at any clinical, radiographic or cephalometric finding, any missing, impacted, supernumerary, carious or crowded teeth, skeletal pattern, or diagnosis: the resident has to find all of that on the records. Then ask the resident to describe what they see on the records. Confirm a finding only after the resident has stated it or asked about it. Then move through, one question at a time: extra-oral and intra-oral findings, radiographic and cephalometric findings, diagnosis, problem list, aetiology, treatment aims and options, the plan you would choose and why, mechanics and anchorage, risks, retention. Use the book's own questions as the backbone.` : "";
   const scoreRules = scored ? `\n\nEXAM FORMAT\n- This is a timed, scored exam of exactly ${nQ} questions. Number them silently. Each of the resident's replies is tagged by the system with the number of the question it answers; grade only that reply with VERDICT:CORRECT, VERDICT:PARTIAL or VERDICT:WRONG as the first word.\n- When the tag says it is question ${nQ} of ${nQ}, grade it and do NOT ask any further question — the system will then close the exam.\n- Do not output a SCORE line yourself; the system computes the score from your verdicts. Unanswered questions count as wrong.` : "";
   const sys = tutorSystem(`CASE ${bc.id} (from Clinical Cases in Orthodontics, p. ${bc.page - 10})\n${bc.full.slice(0, 3200)}\n\nTHE BOOK'S OWN QUESTION-AND-ANSWER SEQUENCE FOR THIS CASE (use as the backbone and correct answers; adapt, do not read out):\n${qa}\n\nLevel: ${$("#tLevel").value}.${unseenRules}${scoreRules}`, mode === "disc" ? "discussion" : "exam");
   clearInterval(TUT.tick); $("#tClock").hidden = true;
