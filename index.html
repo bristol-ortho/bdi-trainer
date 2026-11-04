@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<html lang="en" data-look="collegiate"><head><meta charset="utf-8"><script>try{if(localStorage.getItem("bdi-look")==="classic")document.documentElement.dataset.look="classic"}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bristol Dental Institute — Orthodontic Fellowship Trainer</title>
 <meta name="description" content="Orthodontic fellowship trainer: cases, viva examiner, quizzes and a reference library.">
 <meta name="theme-color" content="#0d0d0f"><link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="BDI Ortho">
 <link rel="icon" href="icon-32.png" sizes="32x32"><link rel="icon" href="icon-192.png" sizes="192x192">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://www.gstatic.com" crossorigin><link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
 <style>
 /* App shell: a black sidebar holds the institute mark and navigation; the warm paper canvas holds the work. Gold is used sparingly, for the active place and the primary action. */
 :root{
@@ -485,6 +485,78 @@ body.locked #gate{display:grid}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media print{.side,.toast{display:none!important}.shell{display:block}.pane{box-shadow:none}}
+
+/* ---------- Collegiate: burgundy header with the institute skyline, ivory pages, gold details ---------- */
+html[data-look="collegiate"]{--bg:#f7f1e6;--surface:#fffdf8;--sunk:#efe6d6;--ink:#2a1216;--ink-2:#4a2c30;--muted:#75595d;--line:#e3d7c3;--line-2:#d7c7ad;--gold:#7b1a2a;--gold-2:#d9bd7c;--gold-soft:#f3e7d0;--gold-ink:#5b0f1c;--night:#5b0f1c;--night-2:#4a0c17;--night-3:#6e1626;--night-line:#7a2a37;--night-mut:#d8c2a6;--g-hi:#d9bd7c;--g-lo:#a88f55;--glow-rgb:123,26,42;--f-body:"EB Garamond","IBM Plex Sans Arabic",Georgia,serif}
+html[data-look="collegiate"] body{font-size:17px}
+html[data-look="collegiate"] .shell{display:block!important;min-height:100vh}
+html[data-look="collegiate"] .side{position:sticky!important;top:0;height:auto!important;width:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 18px;padding:14px max(20px,calc((100vw - 1180px)/2)) 0!important;border:0!important;background:var(--night);z-index:30;overflow:visible!important}
+html[data-look="collegiate"] .side>.brand{grid-column:1;flex-direction:row!important;align-items:center;justify-content:flex-start!important;text-align:left!important;gap:16px!important;padding:0 0 12px!important}
+html[data-look="collegiate"] .brand-sky{width:132px!important;max-width:132px!important;color:#fff}
+html[data-look="collegiate"] .brand h1{font-size:27px!important;font-style:normal;font-weight:500;color:#f6efe2}
+html[data-look="collegiate"] .brand p{color:var(--gold-2);font-family:"EB Garamond",Georgia,serif;font-size:12px;letter-spacing:.14em;margin-top:3px}
+html[data-look="collegiate"] .side-foot{grid-column:2;grid-row:1;margin:0!important;padding:0 0 12px!important;border:0!important;display:flex!important}
+html[data-look="collegiate"] .side-foot .av0{background:transparent;border-color:var(--gold-2);color:var(--gold-2)}
+html[data-look="collegiate"] .side-foot b{color:#f6efe2}
+html[data-look="collegiate"] .side-foot span{color:var(--night-mut)}
+html[data-look="collegiate"] .tabs{grid-column:1/-1;display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 -8px;padding:0;border-top:1px solid rgba(217,189,124,.35)}
+html[data-look="collegiate"] .tabs::-webkit-scrollbar{display:none}
+html[data-look="collegiate"] .tab{flex:none;width:auto!important;padding:10px 10px 11px!important;border-radius:0!important;background:none!important;color:#f0e4d0!important;font-size:15.5px;white-space:nowrap;border-bottom:2px solid transparent}
+html[data-look="collegiate"] .tab svg{display:none}
+html[data-look="collegiate"] .tab:hover{color:#fff!important;border-bottom-color:rgba(217,189,124,.55)}
+html[data-look="collegiate"] .tab[aria-selected="true"]{color:var(--gold-2)!important;border-bottom-color:var(--gold-2)}
+html[data-look="collegiate"] .tab[aria-selected="true"]::before,html[data-look="collegiate"] .tab[aria-selected="true"]::after{display:none!important;content:none!important}
+html[data-look="collegiate"] .gut{margin:0!important;width:auto!important}
+html[data-look="collegiate"] .wrap{max-width:1180px;margin:0 auto}
+html[data-look="collegiate"] .coll-hero{padding:30px 0 0;margin:0 0 22px;color:var(--ink)}
+html[data-look="collegiate"] .coll-eyebrow{font:500 12.5px/1.4 "EB Garamond",Georgia,serif;letter-spacing:.14em;color:var(--gold)}
+html[data-look="collegiate"] .coll-hero h1{font:500 clamp(38px,6vw,58px)/1.05 var(--f-display);margin:8px 0 0;color:var(--ink)}
+html[data-look="collegiate"] .coll-line{font:italic 21px/1.3 "EB Garamond",Georgia,serif;color:#5b3a3f;margin:10px 0 0}
+html[data-look="collegiate"] .coll-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+html[data-look="collegiate"] .coll-cell{display:flex;flex-direction:column;justify-content:flex-start;appearance:none;background:none;border:0;border-inline-start:1px solid var(--line-2);padding:14px 16px;text-align:start;cursor:pointer;font:400 19px/1.3 "EB Garamond",Georgia,serif;color:var(--ink);min-width:0}
+html[data-look="collegiate"] .coll-cell:first-child{border-inline-start:0;padding-inline-start:0}
+html[data-look="collegiate"] .coll-cell:hover{color:var(--gold)}
+html[data-look="collegiate"] .coll-cell:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+html[data-look="collegiate"] .coll-cell b{display:block;font:500 12px/1.4 "EB Garamond",Georgia,serif;letter-spacing:.14em;color:var(--gold);margin-bottom:4px}
+html[data-look="collegiate"] .btn.primary{background:var(--night);border-color:var(--night);color:#f6efe2}
+html[data-look="collegiate"] .btn.primary:hover{background:var(--night-3)}
+html[data-look="collegiate"] .btn.gold{background:var(--night);border-color:var(--night);color:#f6efe2;box-shadow:none}
+html[data-look="collegiate"] .btn.gold:hover{background:var(--night-3);filter:none}
+html[data-look="collegiate"] .cine-sky{color:#2e0710}
+html[data-look="collegiate"] .cine{background:var(--night)!important}
+html[data-look="collegiate"] .cine::before{display:none!important}
+html[data-look="collegiate"] .pring span{background:var(--night)!important}
+html[data-look="collegiate"] .phero .wsm,html[data-look="collegiate"] .phero-side div>span{color:#ecdcc0}
+html[data-look="collegiate"] .qopt:hover:not(:disabled){background:#fff9ee}
+@media (max-width:700px){html[data-look="collegiate"] .side{grid-template-columns:minmax(0,1fr);padding:10px 14px 0!important}
+html[data-look="collegiate"] .side-foot{display:none!important}
+html[data-look="collegiate"] .side>.brand{gap:10px!important;padding-bottom:9px!important}
+html[data-look="collegiate"] .brand-sky{width:82px!important}
+html[data-look="collegiate"] .brand h1{font-size:21px!important}
+html[data-look="collegiate"] .brand p{font-size:10.5px}
+html[data-look="collegiate"] .tabs{margin:0 -6px}
+html[data-look="collegiate"] .coll-hero{padding-top:20px}
+html[data-look="collegiate"] .coll-cell{padding:11px 9px;font-size:16px}
+html[data-look="collegiate"] .coll-cell b{font-size:10.5px;letter-spacing:.08em}}
+html[data-look="collegiate"] .look-classic,html[data-look="classic"] .look-coll,html[data-look="collegiate"] .navlbl{display:none!important}
+.look-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.look-opt{appearance:none;background:var(--surface);border:1px solid var(--line-2);border-radius:12px;padding:10px;text-align:start;cursor:pointer;color:var(--ink);font:inherit;min-width:0}
+.look-opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.look-opt[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.look-opt b{display:block;margin-top:9px;font-weight:600}.look-opt small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.look-sw{display:block;height:58px;border-radius:7px;overflow:hidden;position:relative}
+.look-sw i{position:absolute;display:block}
+.look-sw.c{background:#f7f1e6}.look-sw.c i{left:0;right:0;top:0;height:20px;background:#5b0f1c;border-bottom:2px solid #d9bd7c}
+.look-sw.n{background:#f6f5f1}.look-sw.n i{left:0;top:0;bottom:0;width:30%;background:#0d0d0f;border-right:2px solid #c9a24d}
+/* thin copyright bar at the very bottom, both designs */
+main.gut{display:flex;flex-direction:column;min-width:0;padding-bottom:0!important}
+main.gut>.wrap{flex:1 0 auto;width:100%}
+.copybar{flex:none;margin-top:28px;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;line-height:1.4;text-align:center}
+html[data-look="collegiate"] .shell{display:flex!important;flex-direction:column}
+html[data-look="collegiate"] main.gut{flex:1 0 auto}
+.gate-main{position:relative}
+.gate-copy{position:absolute;left:0;right:0;bottom:0;margin:0}
+@media print{.copybar{display:none}}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -505,7 +577,7 @@ body.locked #gate{display:grid}
   <div class="cine-hero"><h2>A new era of<br>dental education</h2><p>Real patient records. A live examiner. The confidence to pass your fellowship.</p><button type="button" class="btn glow" onclick="var e=document.getElementById('gEmail');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});e.focus({preventScroll:true})}">Start training</button></div>
   <svg class="cine-sky" viewBox="0 0 1190 366" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><use href="#bdi-sky"/></svg>
  </div>
- <div class="gate-main"><div class="gbox"><h1>Welcome</h1><p class="gsub">Sign in to continue your training.</p><div id="gateBody"><span class="skel" style="width:60%"></span><span class="skel"></span><span class="skel" style="width:80%"></span></div></div></div>
+ <div class="gate-main"><div class="gbox"><h1>Welcome</h1><p class="gsub">Sign in to continue your training.</p><div id="gateBody"><span class="skel" style="width:60%"></span><span class="skel"></span><span class="skel" style="width:80%"></span></div></div><footer class="copybar gate-copy">© 2026 Bristol Dental Institute. All rights reserved.</footer></div>
 </div>
 
 <div class="shell">
@@ -532,11 +604,12 @@ body.locked #gate{display:grid}
 <main class="gut"><div class="wrap">
 
 <section class="view" id="v-dashboard">
- <div class="welcome cine"><div class="wtxt"><div class="wsm" id="wGreet">Good day</div><h1><span id="hello">Hello, Doctor</span><em>Think like the examiner.</em></h1></div>
+ <div class="welcome cine look-classic"><div class="wtxt"><div class="wsm" id="wGreet">Good day</div><h1><span id="helloC">Hello, Doctor</span><em>Think like the examiner.</em></h1></div>
   <div class="actions pillbar"><button class="btn glow" data-go="cases">Practise a case</button><button class="btn" data-go="tutor">Exam room</button><button class="btn" data-go="quiz">Quiz</button></div>
   <svg class="welcome-sky" viewBox="0 0 1190 366" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><use href="#bdi-sky"/></svg></div>
+ <div class="pane look-classic" id="planHomeC" style="margin-bottom:18px"></div>
+ <div class="coll-hero look-coll"><div class="coll-eyebrow">YOUR FELLOWSHIP PREPARATION</div><h1 id="hello">Good morning, Doctor.</h1><p class="coll-line">Think like the examiner.</p><div class="coll-row" id="planHome"></div></div>
  <div class="statbar" id="statBar"></div>
- <div class="pane" id="planHome" style="margin-bottom:18px"></div>
  <div class="pane" id="progPane" hidden><div class="pane-h"><h2>Work on next</h2><span class="meta">your weakest topics</span></div><div class="pane-b" id="progBox"></div></div>
 </section>
 
@@ -665,6 +738,10 @@ body.locked #gate{display:grid}
    <div class="pane"><div class="pane-h"><h2>Profile</h2></div><div class="pane-b stack">
     <div class="f"><label for="pName">Your name</label><input type="text" id="pName" placeholder="Dr …"><span class="hint" style="margin:0">Shown on your dashboard and the leaderboard.</span></div>
     </div></div>
+   <div class="pane"><div class="pane-h"><h2>Design</h2></div><div class="pane-b"><div class="look-opts" id="lookOpts">
+    <button type="button" class="look-opt" data-look-pick="collegiate" aria-pressed="false"><span class="look-sw c"><i></i></span><b>Collegiate</b><small>Burgundy and ivory</small></button>
+    <button type="button" class="look-opt" data-look-pick="classic" aria-pressed="false"><span class="look-sw n"><i></i></span><b>Night &amp; Gold</b><small>Black and gold</small></button>
+   </div></div></div>
    <div class="pane" hidden><div class="pane-h"><h2>AI tutor (optional)</h2></div><div class="pane-b stack">
     <p class="hint" style="margin:0">The AI examiner works for free with no key (a public free service; about one reply every 15 seconds). Never type patient names or identifiers. For faster replies you can use a free Google Gemini key; any key stays only in this browser.</p>
     <div class="grid"><div class="f"><label for="aiProv">Provider</label><select id="aiProv"><option value="free">Institute examiner (default)</option><option value="gemini">Google Gemini (free key)</option><option value="anthropic">Anthropic (own key)</option></select></div><div class="f"><label for="aiModel">Model (optional)</label><input type="text" id="aiModel" placeholder="claude-sonnet-5-5 / gemini-2.0-flash"></div><div class="f wide" id="aiKeyRow"><label for="aiKey">API key</label><input type="password" id="aiKey" autocomplete="off"></div></div>
@@ -677,7 +754,7 @@ body.locked #gate{display:grid}
  </div>
 </section>
 
-</div></main>
+</div><footer class="copybar">© 2026 Bristol Dental Institute. All rights reserved.</footer></main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "ccf3e8a9cc"};</script>
@@ -1718,8 +1795,9 @@ function streak(){
 function renderDashboard(){
   const L = levelInfo(ST.xp);
   const h = new Date().getHours(), nm = (ST.name || "").trim().replace(/^dr\.?\s+/i, "");
+  $("#hello").textContent = `${h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}, ${nm ? "Dr " + nm : "Doctor"}.`;
   $("#wGreet").textContent = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-  $("#hello").textContent = nm ? `Hello, Dr ${nm}` : "Hello, Doctor";
+  $("#helloC").textContent = nm ? `Hello, Dr ${nm}` : "Hello, Doctor";
   const g = ST.events.filter(e => e.score != null), sk = streak();
   const avg = g.length ? Math.round(g.reduce((s, e) => s + e.score, 0) / g.length) + "%" : "–";
   $("#statBar").innerHTML = `<div class="lv"><div class="ring" style="--p:${L.pct}"><span>${L.i + 1}</span></div><div style="min-width:0;flex:1"><h2>${esc(L.cur.n)}</h2><div class="xpbar"><i style="width:${L.pct}%"></i></div><div class="meta">${ST.xp.toLocaleString()} XP${L.nxt ? ` · next: ${esc(L.nxt.n)}` : ""}</div></div></div>` +
@@ -2272,10 +2350,11 @@ function renderMyFiles(){
 }
 /* ---------- Part A preparation: best-of-five and case scenarios. A question is shown only if its quoted sentence is really in the book passage it came from. ---------- */
 const PA = {bank: null, used: new Set(), run: null};
-const paNorm = t => String(t).toLowerCase().replace(/(\w)- (\w)/g, "$1$2").replace(/\bf (i|l)/g, "f$1").replace(/(\w)f (i|l)/g, "$1f$2").replace(/[^a-z0-9]+/g, " ").trim();
+const paClean = t => ocrFix(String(t)).replace(/([a-z])- ([a-z])/g, "$1$2").replace(/\b([Tt])h e\b/g, "$1he").replace(/\s+/g, " ");
+const paNorm = t => paClean(t).toLowerCase().replace(/(\w)- (\w)/g, "$1$2").replace(/\bf (i|l)/g, "f$1").replace(/(\w)f (i|l)/g, "$1f$2").replace(/[^a-z0-9]+/g, " ").trim();
 function paChunks(topic, n){
   const key = topic ? tok(topic).sort((p, q) => idfOf(q) - idfOf(p))[0] : null;
-  const list = (topic ? search(topic, 300) : shuffle(INDEX.chunks.slice())).filter(c => !isRefList(c.t) && c.t.length > 400 && c.page > 12 && (c.t.match(/\b(tooth|teeth|incisors?|molars?|canines?|overjet|overbite|appliances?|malocclusion|mandib\w*|maxill\w*)\b/gi) || []).length >= 3 && !PA.used.has(c) && (!key || tok(c.t).includes(key)));
+  const list = (topic ? search(topic, 300) : shuffle(INDEX.chunks.slice())).filter(c => !isRefList(c.t) && c.t.length > 400 && c.page > 12 && (c.t.match(/\b(tooth|teeth|incisors?|molars?|canines?|overjet|overbite|appliances?|malocclusion|mandib\w*|maxill\w*)\b/gi) || []).length >= 3 && !PA.used.has(c) && (!key || tok(c.t).filter(w => w === key).length >= 2));
   /* a spread across the books, not the first book that matches */
   const by = {}; shuffle(list.slice(0, 120)).forEach(c => (by[c.b] = by[c.b] || []).push(c));
   const out = [], keys = shuffle(Object.keys(by)); for (let i = 0; out.length < n && keys.length; i++){ const k = keys[i % keys.length], c = by[k].shift(); if (c) out.push(c); else { keys.splice(i % keys.length, 1); i--; } }
@@ -2289,15 +2368,15 @@ function paCheck(raw, chunks){
     if (!c || o.length !== 5 || new Set(o.map(x => x.toLowerCase())).size !== 5 || o.some(x => !x) || !(a >= 0 && a <= 4) || !q.stem || !q.explanation) return null;
     const qt = paNorm(q.quote || ""); if (qt.split(" ").length < 6 || !paNorm(c.t).includes(qt)) return null;
     if (/\bfig(ure)?s?\b/i.test(q.stem + " " + o.join(" "))) return null;
-    return {q: String(q.stem).trim(), o: [o[a], ...o.filter((_, i) => i !== a)], x: String(q.explanation).trim(), e: String(q.quote).trim(), ref: cite(c), kind: q.kind === "case" ? "case" : "sba"};
+    return {q: String(q.stem).trim(), o: [o[a], ...o.filter((_, i) => i !== a)], x: String(q.explanation).trim(), e: paClean(q.quote).trim(), ref: cite(c), kind: q.kind === "case" ? "case" : "sba"};
   }).filter(Boolean);
 }
-const PA_SYS = `You write postgraduate orthodontic exam questions in single best answer format, for residents preparing for a Part A examination. Use ONLY the numbered textbook excerpts given. Each question has exactly 5 options, one clearly best according to the excerpt and four plausible but less good. Do not use "all of the above" or "none of the above". Test understanding and clinical judgement, not trivia. Never mention a figure, a page, or a book in the question. Reply with a JSON array only, each item: {"kind":"sba" or "case","stem":"...","options":["...","...","...","...","..."],"answer":0-4,"explanation":"two sentences on why it is best and why the others are less good","excerpt":number of the excerpt used,"quote":"8 to 25 words copied exactly, word for word, from that excerpt, which support the answer"}. For kind "sba" the stem is one direct question asking for the best or most likely answer. For kind "case" the stem is a full short clinical scenario with age, complaint and findings consistent with the excerpt, ending with a question such as the best treatment plan, the most appropriate next step or the best treatment option. Do not invent findings that change the answer given by the excerpt.`;
+const PA_SYS = `You write postgraduate orthodontic exam questions in single best answer format, for residents preparing for a Part A examination. Use ONLY the numbered textbook excerpts given. Each question has exactly 5 options, one best according to the excerpt and four that a good resident could seriously consider. All options must be real orthodontic terms or treatments of similar length and style, so the answer cannot be guessed from its wording, and never use invented terms or absolute words like always or never to mark a wrong option. Do not use "all of the above" or "none of the above". Test clinical judgement and understanding more than recall of a definition. Use correct British spelling. If an excerpt is too thin for a good question, write it from another excerpt instead. Never mention a figure, a page, or a book in the question. Reply with a JSON array only, each item: {"kind":"sba" or "case","stem":"...","options":["...","...","...","...","..."],"answer":0-4,"explanation":"two sentences on why it is best and why the others are less good","excerpt":number of the excerpt used,"quote":"8 to 25 words copied exactly, word for word, from that excerpt, which support the answer"}. For kind "sba" the stem is one direct question asking for the best or most likely answer. For kind "case" the stem is a full short clinical scenario with age, complaint and findings consistent with the excerpt, ending with a question such as the best treatment plan, the most appropriate next step or the best treatment option. Do not invent findings that change the answer given by the excerpt.`;
 async function paGenerate(topic, type){
-  const chunks = paChunks(topic, 5); if (!chunks.length) return [];
+  const chunks = paChunks(topic, 3); if (!chunks.length) return [];
   chunks.forEach(c => PA.used.add(c));
-  const ask = type === "case" ? "Write 5 questions, all of kind case." : type === "sba" ? "Write 5 questions, all of kind sba." : "Write 5 questions: 3 of kind sba and 2 of kind case.";
-  const t = await within(callAI([{role: "user", content: `${ask} One question from each excerpt.\n\n` + chunks.map((c, i) => `EXCERPT ${i + 1}\n${ocrFix(c.t).replace(/([a-z])- ([a-z])/g, "$1$2").slice(0, 1500)}`).join("\n\n")}], PA_SYS, {tokens: 8192, json: true}), 70000);
+  const ask = type === "case" ? "Write 3 questions, all of kind case." : type === "sba" ? "Write 3 questions, all of kind sba." : "Write 3 questions: 2 of kind sba and 1 of kind case.";
+  const t = await within(callAI([{role: "user", content: `${ask} One question from each excerpt.\n\n` + chunks.map((c, i) => `EXCERPT ${i + 1}\n${paClean(c.t).slice(0, 1500)}`).join("\n\n")}], PA_SYS, {tokens: 8192, json: true}), 70000);
   return paCheck(t, chunks);
 }
 async function paLoadBank(){ if (PA.bank) return PA.bank; try { PA.bank = JSON.parse(await decFile("q1.dat")); } catch { PA.bank = []; } return PA.bank; }
@@ -2320,7 +2399,9 @@ async function paFill(run){
 function paShow(run){
   const box = $("#paArea");
   if (run.i >= run.total) return paFinish(run);
-  const it = run.queue.shift();
+  let it = run.queue.shift();
+  /* no waiting: a checked starter question fills the gap while more are prepared */
+  if (!it && run.type !== "case"){ it = paFromBank(run.topic, run.type, 1, run.shown)[0]; if (it) run.shown.add(it.q); }
   if (!it){
     if (run.loading || !run.empty){ run.waiting = true; box.innerHTML = '<p class="muted"><span class="dots"><i></i><i></i><i></i></span> Preparing your questions from the books…</p>'; paFill(run); return; }
     run.waiting = false;
@@ -2436,10 +2517,14 @@ function renderPlan(){
   <div class="actions" style="justify-content:center;margin:6px 0 4px"><button type="button" class="btn sm" id="planEdit">Change my plan</button></div>`;
 }
 function renderPlanHome(){
-  const box = $("#planHome"); if (!box) return; const p = ST.plan, today = ymd(new Date());
-  if (!p || p.exam <= today || !BOOKCASES.length){ box.innerHTML = `<div class="pane-b planhome"><div><b>${p && p.exam <= today ? "Set your next exam date" : "Plan your road to the exam"}</b><span class="meta">A daily plan built around your exam date and your weakest topics.</span></div><button class="btn sm primary" data-go="plan">${p ? "Open plan" : "Build my plan"}</button></div>`; return; }
-  const t = planToday(p), n = t.tasks.filter(x => !(p.done || {})[x.id]).length, left = Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5);
-  box.innerHTML = `<div class="pane-b planhome"><div><b>${left} ${left === 1 ? "day" : "days"} to your exam</b><span class="meta">${!t.tasks.length ? "Nothing planned for today" : n ? `${n} ${n === 1 ? "task" : "tasks"} left today` : "Today is done"}</span></div><button class="btn sm primary" data-go="plan">Open today's plan</button></div>`;
+  const box = $("#planHome"); if (!box) return; const p = ST.plan, today = ymd(new Date()), live = p && p.exam > today && BOOKCASES.length;
+  const t = live ? planToday(p) : null, next = t && t.tasks.find(x => !(p.done || {})[x.id]), left = live ? Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5) : 0;
+  const cell = (go, h, v) => `<button type="button" class="coll-cell" data-go="${go}"><b>${h}</b>${esc(v)}</button>`;
+  box.innerHTML = cell("plan", "TODAY", !live ? "Build your plan" : next ? next.label : t.tasks.length ? "Today is done" : "Nothing planned") + cell("parta", "PART A", "Practise questions") + cell("plan", "EXAM", live ? `${left} ${left === 1 ? "day" : "days"}` : "Set your date");
+  const boxC = $("#planHomeC"); if (!boxC) return;
+  if (!live){ boxC.innerHTML = `<div class="pane-b planhome"><div><b>${p && p.exam <= today ? "Set your next exam date" : "Plan your road to the exam"}</b><span class="meta">A daily plan built around your exam date and your weakest topics.</span></div><button class="btn sm primary" data-go="plan">${p ? "Open plan" : "Build my plan"}</button></div>`; return; }
+  const n = t.tasks.filter(x => !(p.done || {})[x.id]).length;
+  boxC.innerHTML = `<div class="pane-b planhome"><div><b>${left} ${left === 1 ? "day" : "days"} to your exam</b><span class="meta">${!t.tasks.length ? "Nothing planned for today" : n ? `${n} ${n === 1 ? "task" : "tasks"} left today` : "Today is done"}</span></div><button class="btn sm primary" data-go="plan">Open today's plan</button></div>`;
 }
 function planGo(id){
   const p = ST.plan, x = [(p.today || {}).tasks || []].flat().find(y => y.id === id); if (!x) return;
@@ -2677,7 +2762,7 @@ function tutorSystem(caseBlock, mode){
   const mentor = `You are the BDI Mentor (always write this name in Latin letters exactly like this, even when the rest is Arabic), the resident's own consultant orthodontist, with full command of every area of orthodontics. This is a real two-way discussion of the resident's own case, like a trainee talking to their consultant in clinic. Answer what they actually ask, directly, first. They may ask anything: what to say here, why an answer is right, whether they can say something, what a term means, what the options are, or simply that they don't know. When they don't know, explain it simply and do not quiz them. When they give an opinion, say honestly what is right and what is wrong and why. Cover whatever the case needs: diagnosis, problem list, aims, options, mechanics, anchorage, risks, consent and retention. Ask a question back only when it genuinely moves the discussion on, not in every reply, and match the length of your reply to the question. When they ask for evidence or a reference, say what the textbooks state and give the book and page exactly as labelled in the excerpts; if the excerpts do not cover it, say the library does not cover it rather than guessing. You cannot see their photographs or radiographs, which stay private on their own device, and you must never ask them to send one: when a record matters, ask them what they see and work from that, and say when a description is too vague to judge. Never claim to see an image and never invent a finding. Ask them not to write the patient's name. Remind them once that clinical decisions belong to their supervising clinician. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
   const topicExam = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist testing a resident on one topic, using the programme's textbooks. Ask ONE question at a time, starting with the basics and going deeper as they do well. Base your questions on the library excerpts, and do not put the answer inside your question. After each answer say briefly what was right and what was missing or wrong, then ask the next question. If they do not know, explain the answer simply, then move on. When they ask where the evidence is, or ask for a reference or source, stop questioning for that reply: answer about your last question or point, say what the textbooks state, and give each book and page exactly as labelled in the excerpts. If the excerpts do not support it, say plainly that the library does not cover it, and never guess a book or page. Then ask if they want to continue. Stay on the topic unless they ask to change it. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
   const evidence = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist helping a resident find what the programme's textbooks say. Do not quiz them. State the main points on what they asked, and give the book and page for each point exactly as labelled in the excerpts. Say where books disagree. If the excerpts do not cover something, say plainly that the library does not cover it, and never guess a book or page. They may then ask about another part or another topic, and you answer the same way. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
-  return `${mode === "exam" ? exam : mode === "mentor" ? mentor : mode === "topic" ? topicExam : mode === "evidence" ? evidence : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
+  return `${mode === "exam" ? exam : mode === "mentor" ? mentor : mode === "topic" ? topicExam : mode === "evidence" ? evidence : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said. Stay professional: address the resident as you or Doctor, with no slang or terms of endearment in any language, and no small talk before the answer.\n- Write every book citation exactly as labelled, with its page number in digits, in English even inside Arabic text; do not spell page numbers out in words.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
 }
 /* One key serves every resident, so Google will sometimes answer "busy": move to the next model (each has its own limit), then wait and go round once more, within a fixed time, before telling the resident. */
 const GEM_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.0-flash"];
@@ -3016,6 +3101,10 @@ async function loadBoard(){
     $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Avg score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${r.xp}</td><td>${r.avg == null ? "–" : r.avg + "%"}</td></tr>`; }).join("") + "</table></div>";
   } catch (e) { $("#boardBox").innerHTML = `<p class="bad">Could not load the leaderboard: ${esc(e.message || e)}</p>`; }
 }
+/* Design choice: kept on this device; applied before first paint by the head script */
+function lookNow(){ return document.documentElement.dataset.look === "classic" ? "classic" : "collegiate"; }
+function lookShow(){ const v = lookNow(); document.querySelectorAll("[data-look-pick]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lookPick === v ? "true" : "false")); const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = v === "classic" ? "#0d0d0f" : "#5b0f1c"; }
+function bindLook(){ const box = $("#lookOpts"); if (!box) return; lookShow(); box.addEventListener("click", ev => { const b = ev.target.closest("[data-look-pick]"); if (!b) return; document.documentElement.dataset.look = b.dataset.lookPick; try { localStorage.setItem("bdi-look", b.dataset.lookPick); } catch (e) {} lookShow(); }); }
 function renderAccount(){ try { renderAccount0(); } finally { const st = $("#fbStatus"); if (st && FB.err && !st.textContent) st.textContent = FB.err; } }
 function renderAccount0(){
   const a = ST.ai || {};
@@ -3072,7 +3161,7 @@ function bind(){
   $("#myFiles").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (b){ MY.files.splice(+b.dataset.rm, 1); renderMyFiles(); } });
   $("#myMentor").addEventListener("click", startMentor);
   bindPlan();
-  bindPartA();
+  bindPartA(); bindLook();
   $("#evForm").addEventListener("submit", e => { e.preventDefault(); startEvidence($("#evTopic").value, true); });
   $("#evQuiz").addEventListener("click", () => startEvidence($("#evTopic").value, false));
   $("#evChips").addEventListener("click", e => { const b = e.target.closest("button"); if (b){ $("#evTopic").value = b.textContent; $("#evTopic").focus(); } });
