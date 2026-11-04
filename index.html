@@ -629,7 +629,7 @@ body.locked #gate{display:grid}
 </div></main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "8e8c4fe689", "m10.dat": "fca3b4da7c", "m2.dat": "9dc9a08440", "m3.dat": "9902b8e73a", "m4.dat": "bb5cd01561", "m5.dat": "59f0c66d1c", "m6.dat": "e7aa00d373", "m7.dat": "5f20c1342a", "m9.dat": "271b3d42f9"};</script>
+<script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b"};</script>
 <script src="config.js"></script>
 <script>/* Bristol Dental Institute — Orthodontic Fellowship Trainer: content (cases, viva rubrics, quiz bank) */
 const BOOKS = [
@@ -1439,7 +1439,7 @@ const BOOK_FIXES = {
   "6.3": f => { f.rep(2, "essentially is skeletal", "essentially skeletal"); },
   "6.4": f => { f.mv(5, " vertical proportions and an openbite", 7); f.del(12, " Figure 6.17 shows the"); f.qset(13, "Describe the finish (Figure 6.17)"); },
   "6.6": f => { f.mv(3, " At the start of treatment, a quadhelix", 3, " • Continue lower centre line"); f.split(3, " At the start of treatment, a quadhelix", " A quadhelix was fitted"); f.mv(2, " • Space closure", 2, " One year later"); f.split(2, " One year later there was", " • Expansion to correct"); f.split(2, " At presentation this patient", " Removal of the remaining"); },
-  "6.7": f => { f.qset(10, "Upper and lower Hawley retainers were provided. How would these be designed and how should they be worn?"); f.del(9, " The occlusion on removal of"); f.qset(7, "Two lower-arch options were considered: option 1 removes the LLE and closes the space; option 2 keeps space for restoration. What factors will be taken into account when choosing between them?"); f.split(1, " Describe the incisor relationship (Figure 6.27)", " There is a class III"); },
+  "6.7": f => { f.qset(10, "Upper and lower Hawley retainers were provided. How would these be designed and how should they be worn?"); f.del(9, " The occlusion on removal of"); f.qset(7, "Two lower-arch options are shown (Figure 6.29). What are the differences between them, and what factors will be taken into account when choosing between them?"); f.split(1, " Describe the incisor relationship (Figure 6.27)", " There is a class III"); },
   "6.8": f => { f.rep(2, "to achieving a positive", "to achieve a positive"); },
   "6.11": f => { f.mv(0, " allows the upper incisors to be kept", 3); },
   "6.13": f => { f.rep(4, "the decision to made", "the decision to be made"); },
@@ -1899,16 +1899,17 @@ const noFig = s => String(s || "").replace(/\s*\((?:see\s+)?Figs?(?:ures?)?\.?\s
 const bookSummary = bc => { const m = noFig(bc.full).match(/\bSummary\s+((?:A|An|This)\s.{40,1000}?)(?=\s(?:Treatment [Pp]lan|What|How|Why|Which|Describe|Discuss|Is|Are|Can|Should)\b|$)/); return m ? m[1].trim() : ""; };
 /* a viva in stages, like a real examiner: first the patient sheet and photographs (summary, problem list), then each record put in front of the resident with its question */
 /* Pre-treatment records of each book case: positions in its image list, reviewed by eye. In most cases the first image is the whole record set, so only the others are listed. Everything else shows treatment or its result and must not appear before the question about it. */
-const FIG_LABELS = {"1.3": {3: "1.14"}};
+/* cases whose records are spread over several figures, named by the book's figure number */
+const RECORD_LABELS = {"2.19": ["2.48", "2.49"], "3.11": ["3.38", "3.39"], "6.4": ["6.12", "6.13"], "6.7": ["6.25", "6.26", "6.27", "6.28"], "6.8": ["6.32", "6.33"]};
 const CASE_RECORDS = {"1.3": [2, 3], "2.10": [0, 1], "2.14": [0, 1, 2], "2.16": [0, 1, 2], "2.17": [0, 1], "2.18": [0, 1], "3.12": [0, 1], "6.10": [0, 1], "6.12": [0, 1], "6.16": [0, 1], "6.17": [0, 1], "7.1": [0, 1], "7.2": [0, 1], "7.7": [0, 1], "7.8": [0, 1], "7.11": [0, 1]};
-const caseRecords = bc => { const all = (window.BDIFIGS && BDIFIGS.idx[bc.id]) || []; return (CASE_RECORDS[bc.id] || [0]).map(i => all[i] && ({...all[i], l: (FIG_LABELS[bc.id] || {})[i] || all[i].l})).filter(Boolean).map(f => ({l: f.l, p: f.p, src: BDIFIGS.img[f.k]})); };
+const caseRecords = bc => { const all = (window.BDIFIGS && BDIFIGS.idx[bc.id]) || []; const pick = RECORD_LABELS[bc.id] ? RECORD_LABELS[bc.id].map(l => all.find(f => f.l === l)) : (CASE_RECORDS[bc.id] || [0]).map(i => all[i]); return pick.filter(Boolean).map(f => ({l: f.l, p: f.p, src: BDIFIGS.img[f.k]})); };
 /* the book's own "summarise this case" and "problem list" questions become the first two questions rather than being asked twice */
 const GENERAL_SUM = /^(summari[sz]e (?:the |this |her |his )?(?:main |presenting |clinical |occlusal |and |radiographic )*(?:features |findings )?(?:(?:of|associated with) )?(?:this |the |her |his )?(?:malocclusion|case|occlusion)?|describe (?:her|the|his) malocclusion|what are the main features of (?:her|this|the|his) (?:malocclusion|occlusion))\s*(?:(?:shown )?in Figures? [\d.]+|\(Figures? [^)]*\))?\s*[?.]?$/i;
 const GENERAL_PROB = /\b(problem list|main problems|key problems?)\b/i;
 const SUMQ = "Look at the patient's details and all the records in front of you, then write your summary of this case.";
 async function stagedViva(bc){
   const ch = bc.id.split(".")[0], ok = await loadFigs(ch);
-  const all = (ok && window.BDIFIGS && BDIFIGS.idx[bc.id] || []).map((f, i) => ({l: (FIG_LABELS[bc.id] || {})[i] || f.l, p: f.p, src: BDIFIGS.img[f.k]}));
+  const all = (ok && window.BDIFIGS && BDIFIGS.idx[bc.id] || []).map(f => ({l: f.l, p: f.p, src: BDIFIGS.img[f.k]}));
   const stage = ok ? caseRecords(bc) : [], onStage = new Set(stage.map(f => f.l));
   const later = []; let sumA = "", probA = "";
   bc.qs.forEach(q => {
