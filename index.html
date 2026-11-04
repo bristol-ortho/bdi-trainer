@@ -259,7 +259,22 @@ details.mini{margin-bottom:12px}details.mini summary,details summary.muted{curso
 @keyframes sk{to{background-position:-200% 0}}
 
 /* ---------- viva & chat ---------- */
-.viva-panel{display:grid;gap:12px}
+.myfiles{display:grid;gap:8px;margin-top:12px}.myfiles:empty{display:none}.myfile{display:flex;align-items:center;gap:10px;min-width:0;padding:6px;border:1px solid var(--line);border-radius:10px}.myfile img{width:52px;height:52px;object-fit:cover;border-radius:7px;flex:none}.myname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.evbox{margin-top:10px;font-size:14px;min-width:0}.evbox>summary{cursor:pointer;font-weight:600}.viva-msg .cite{white-space:normal;display:inline;overflow-wrap:anywhere}.evbox .src{min-width:0;overflow-wrap:anywhere}
+.pform{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:14px;align-items:end}.pform .f{min-width:0}.pform input,.pform select{width:100%}
+.phero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:30px 32px;margin:0 0 14px;border-radius:16px;color:#f4efe5;box-shadow:var(--sh-2)}.phero>*{position:relative;z-index:2}.phero .wsm{font-size:13px;letter-spacing:.04em;color:#e7dcc6}
+.pcount{display:flex;align-items:baseline;gap:12px;margin-top:6px}.pcount b{font-family:var(--f-display);font-weight:600;font-size:76px;line-height:1;color:#fff}.pcount span{font-family:var(--f-display);font-size:26px;color:#f1e3c4}
+.phero-side{display:flex;align-items:center;gap:14px}.phero-side b{display:block;font-size:17px;color:#fff}.phero-side div>span{font-size:13px;color:#e7dcc6}.pring{--ring-bg:rgba(255,255,255,.16);width:72px;height:72px;background:conic-gradient(var(--gold-2) calc(var(--p)*1%),rgba(255,255,255,.18) 0)}.pring span{width:58px;height:58px;font-family:inherit;font-size:17px;font-weight:600;background:#1b0f0a;color:#fff}
+.pphases{display:flex;gap:6px;margin:0 0 14px}.pseg{min-width:84px}.pseg i{display:block;height:7px;border-radius:99px;margin-bottom:7px;background:var(--line-2)}.pseg.learn i{background:var(--gold)}.pseg.practice i{background:var(--ink)}.pseg.quiet i{background:var(--ok)}.pseg b{display:block;font-size:13px}.pseg span{font-size:12px;color:var(--muted)}
+.ptoday{margin-bottom:14px;border-color:var(--line-2)}.ptoday.alldone{border-color:var(--ok)}.pwell{margin:0 0 12px;font-family:var(--f-display);font-size:23px;color:var(--ok)}
+.ptask{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.ptask:first-of-type{border-top:0;padding-top:0}.ptask:last-child{padding-bottom:0}.ptxt{flex:1;min-width:0}.ptxt b{display:block;font-weight:600;overflow-wrap:anywhere}.ptxt span{font-size:13px;color:var(--muted)}.ptask.done b{color:var(--muted);text-decoration:line-through}
+.pcheck{position:relative;flex:none;width:26px;height:26px;cursor:pointer}.pcheck input{position:absolute;inset:0;opacity:0;margin:0;width:100%;height:100%;cursor:pointer}.pcheck i{display:block;width:100%;height:100%;border:2px solid var(--line-2);border-radius:50%;transition:.15s}.pcheck input:checked+i{background:var(--ok);border-color:var(--ok)}.pcheck input:checked+i::after{content:"";display:block;width:6px;height:11px;margin:4px auto 0;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}.pcheck input:focus-visible+i{outline:2px solid var(--gold);outline-offset:2px}
+.pweek{border-top:1px solid var(--line);padding:11px 0}.pweek:first-child{border-top:0;padding-top:0}.pweek:last-child{padding-bottom:0}.pweek>summary{cursor:pointer;font-weight:600;display:flex;justify-content:space-between;gap:12px}.pday{display:flex;gap:14px;padding:10px 0 0}.pdate{flex:none;width:58px}.pdate b{display:block;font-size:14px}.pdate span{font-size:12px;color:var(--muted)}.pdtxt{min-width:0;font-size:14px;overflow-wrap:anywhere}
+.planhome{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.planhome b{display:block;font-family:var(--f-display);font-size:21px;font-weight:600}
+@media (max-width:760px){.pform{grid-template-columns:minmax(0,1fr)}.phero{padding:24px 22px}.pcount b{font-size:60px}.pcount span{font-size:22px}.pphases{flex-direction:column}.pseg{flex:none!important;display:grid;grid-template-columns:1fr auto;column-gap:10px}.pseg i{grid-column:1/-1}}
+.paform{display:grid;grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr)) auto;gap:14px;align-items:end}.paform input,.paform select{width:100%}.pabar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.pafb{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--hi-soft)}.pafb.ok{background:var(--ok-soft)}.pafb>b{display:block;margin-bottom:4px}.pafb p{margin:0 0 6px}.paquote{font-style:italic}
+@media (max-width:760px){.paform{grid-template-columns:minmax(0,1fr)}}
+.viva-panel{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}.viva-panel>.viva-msg{min-width:0;max-width:100%}
 .viva-msg{max-width:86%;padding:12px 16px;border-radius:14px;font-size:14.5px;line-height:1.6;animation:fadeUp .3s var(--ease);overflow-wrap:anywhere}
 .viva-msg.exam{justify-self:start;background:var(--surface);border:1px solid var(--line);border-top-left-radius:4px;box-shadow:var(--sh-1)}
 .viva-msg.student{justify-self:end;background:var(--night);color:#f1efe9;border-top-right-radius:4px;white-space:pre-wrap}
@@ -502,7 +517,10 @@ body.locked #gate{display:grid}
   <button class="tab" data-view="cases" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1z"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M8 12h8M8 16h5"/></svg>Cases</button>
   <button class="tab" data-view="tutor" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4.5"/></svg>Exam room</button>
   <button class="tab" data-view="quiz" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.5L16 9.5"/></svg>Quiz</button>
+  <button class="tab" data-view="parta" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H18a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg>Part A preparation</button>
   <button class="tab" data-view="mycase" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><circle cx="12" cy="12.5" r="2.2"/><path d="M8.5 18.5c.7-1.6 2-2.4 3.5-2.4s2.8.8 3.5 2.4"/></svg>My case</button>
+  <button class="tab" data-view="evidence" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/><path d="M8.5 11l1.8 1.8 3.4-3.6"/></svg>Where is the evidence</button>
+  <button class="tab" data-view="plan" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M8.5 15l2.3 2.3 4.7-4.8"/></svg>Study plan</button>
   <button class="tab" data-view="tools" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3v3"/><circle cx="12" cy="8" r="2"/><path d="M10.8 9.7L6 21M13.2 9.7L18 21M7.6 17h8.8"/></svg>Tools</button>
   <button class="tab" data-view="library" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 2z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H18"/><path d="M9 7h6"/></svg>Library</button>
   <button class="tab" data-view="account" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
@@ -518,6 +536,7 @@ body.locked #gate{display:grid}
   <div class="actions pillbar"><button class="btn glow" data-go="cases">Practise a case</button><button class="btn" data-go="tutor">Exam room</button><button class="btn" data-go="quiz">Quiz</button></div>
   <svg class="welcome-sky" viewBox="0 0 1190 366" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><use href="#bdi-sky"/></svg></div>
  <div class="statbar" id="statBar"></div>
+ <div class="pane" id="planHome" style="margin-bottom:18px"></div>
  <div class="pane" id="progPane" hidden><div class="pane-h"><h2>Work on next</h2><span class="meta">your weakest topics</span></div><div class="pane-b" id="progBox"></div></div>
 </section>
 
@@ -566,16 +585,48 @@ body.locked #gate{display:grid}
 </section>
 
 <section class="view" id="v-mycase" hidden>
- <div class="phead"><div><div class="eyebrow">Case analysis</div><h1>My case</h1><p>Paste your case or upload a text/PDF file. The trainer extracts the findings, calculates the Eastman-corrected ANB and expected lower incisor angle, lists what an examiner expects, and finds the relevant textbook passages.</p></div></div>
+ <div class="phead"><div><div class="eyebrow">Case analysis</div><h1>My case</h1><p>Write your case and discuss it with your own consultant. Ask anything, say when you don't know, and ask for the evidence: answers come with references from the textbooks. Photographs, radiographs and PDF pages stay private on your device. Do not write the patient's name.</p></div></div>
  <div class="ws">
   <div class="pane"><div class="pane-h"><h2>Your case presentation</h2></div><div class="pane-b">
    <textarea id="myText" class="big" placeholder="e.g. 13-year-old girl, Class II division 1, overjet 8 mm, overbite 5 mm, SNA 82, SNB 76, ANB 6, MMPA 28, LI-MnP 98 ..."></textarea>
-   <div class="actions" style="margin-top:12px"><label class="btn">Upload file<input type="file" id="myFile" accept=".txt,.md,.pdf,text/plain,application/pdf" hidden></label><button class="btn primary" id="myRun">Analyse case</button></div>
+   <div id="myFiles" class="myfiles"></div>
+   <p class="muted small" id="myPrivate" hidden style="margin:10px 0 0">These stay on your device and are not sent anywhere. Your mentor cannot see them: describe what you see and it will guide you.</p>
+   <div class="actions" style="margin-top:12px"><label class="btn">Add photos, X-rays or PDF<input type="file" id="myFile" multiple accept="image/*,.pdf,.txt,.md,text/plain,application/pdf" hidden></label><button class="btn primary" id="myMentor">Start with my mentor</button><button class="btn" id="myRun">Quick analysis</button></div>
    <div class="actions" id="myActions" style="margin-top:12px" hidden><button class="btn gold" id="myViva">Practise a viva on this case</button></div></div></div>
-  <div class="pane"><div class="pane-h"><h2>Analysis</h2></div><div class="pane-b answer" id="myOut"><p class="muted">The analysis appears here.</p></div></div>
+  <div class="pane"><div class="pane-h"><h2>Analysis</h2></div><div class="pane-b answer" id="myOut"><p class="muted">The quick analysis appears here.</p></div></div>
  </div>
+ <div class="pane" id="myMentorPane" hidden style="margin-top:14px"><div class="pane-h"><h2>Your consultant</h2></div><div class="pane-b"><div class="recs" id="myRecs" hidden></div><div id="myChat"></div></div></div>
 </section>
 
+<section class="view" id="v-evidence" hidden>
+ <div class="phead"><div><div class="eyebrow">Topic examination</div><h1>Where is the evidence</h1><p>Choose any topic or point. See what the textbooks say straight away, with the book and the page, or let the examiner ask you questions on it and ask for the evidence whenever you want.</p></div></div>
+ <div class="pane"><div class="pane-h"><h2>Your topic</h2></div><div class="pane-b">
+  <form id="evForm" class="actions" style="align-items:stretch"><input id="evTopic" type="text" maxlength="120" autocomplete="off" placeholder="e.g. supernumerary teeth" aria-label="Topic" style="flex:1 1 220px;min-width:0"><button class="btn primary" type="submit">Show me the evidence</button><button class="btn" type="button" id="evQuiz">Ask me on this topic</button></form>
+  <div class="actions" id="evChips" style="margin-top:10px"><button type="button" class="btn sm">Supernumerary teeth</button><button type="button" class="btn sm">Impacted canine</button><button type="button" class="btn sm">Hypodontia</button><button type="button" class="btn sm">Functional appliances</button><button type="button" class="btn sm">Anchorage</button><button type="button" class="btn sm">Retention and relapse</button></div>
+  <p class="notice2" id="evNote" hidden style="margin:10px 0 0"></p></div></div>
+ <div class="pane" id="evPane" hidden style="margin-top:14px"><div class="pane-h"><h2 id="evTitle"></h2><button type="button" class="btn sm" id="evAsk">Where is the evidence?</button></div><div class="pane-b"><div id="evSources" hidden style="margin-bottom:14px"></div><div id="evChat"></div></div></div>
+</section>
+<section class="view" id="v-plan" hidden>
+ <div class="phead"><div><div class="eyebrow">Your road to the exam</div><h1>Study plan</h1><p>A daily plan built around your exam date and your weakest topics. Miss a day and it moves forward by itself.</p></div></div>
+ <div class="pane" id="planSetup"><div class="pane-h"><h2>Build your plan</h2></div><div class="pane-b"><form id="planForm" class="pform">
+   <div class="f"><label for="planExam">Exam date</label><input type="date" id="planExam" required></div>
+   <div class="f"><label for="planMins">Time a day</label><select id="planMins"><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60" selected>1 hour</option><option value="90">1½ hours</option><option value="120">2 hours</option><option value="180">3 hours</option></select></div>
+   <div class="f"><label for="planRest">Rest day</label><select id="planRest"><option value="-1">No rest day</option><option value="5" selected>Friday</option><option value="6">Saturday</option><option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option></select></div>
+   <button class="btn gold" type="submit">Build my plan</button></form></div></div>
+ <div id="planBox"></div>
+</section>
+<section class="view" id="v-parta" hidden>
+ <div class="phead"><div><div class="eyebrow">For residents preparing for Part A</div><h1>Part A preparation</h1><p>Single best answer questions with five options, and full case scenarios such as the best treatment plan. Pick any topic. Every question comes from your textbooks and shows its evidence, with the book and the page.</p></div></div>
+ <div class="pane"><div class="pane-h"><h2>Start a practice</h2></div><div class="pane-b">
+  <form id="paForm" class="paform">
+   <div class="f"><label for="paTopic">Topic</label><input id="paTopic" type="text" maxlength="120" autocomplete="off" placeholder="All topics, or e.g. hypodontia"></div>
+   <div class="f"><label for="paType">Question type</label><select id="paType"><option value="mix">Both</option><option value="sba">Single best answer</option><option value="case">Case scenarios</option></select></div>
+   <div class="f"><label for="paCount">Questions</label><select id="paCount"><option>10</option><option selected>20</option><option>50</option><option>100</option></select></div>
+   <button class="btn gold" type="submit">Start</button></form>
+  <div class="actions" id="paChips" style="margin-top:12px"><button type="button" class="btn sm">Class II division 1</button><button type="button" class="btn sm">Class III</button><button type="button" class="btn sm">Hypodontia</button><button type="button" class="btn sm">Impacted canine</button><button type="button" class="btn sm">Functional appliances</button><button type="button" class="btn sm">Cephalometrics</button><button type="button" class="btn sm">Anchorage</button><button type="button" class="btn sm">Retention</button></div>
+  <p class="notice2" id="paNote" hidden style="margin:10px 0 0"></p></div></div>
+ <div class="pane" id="paRun" hidden style="margin-top:14px"><div class="pane-h"><h2 id="paTitle"></h2></div><div class="pane-b" id="paArea"></div></div>
+</section>
 <section class="view" id="v-tools" hidden>
  <div class="phead"><div><div class="eyebrow">Chairside</div><h1>Tools</h1><p>Quick cephalometric interpretation and space analysis. Results update as you type.</p></div></div>
  <div class="cols2">
@@ -629,7 +680,7 @@ body.locked #gate{display:grid}
 </div></main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b"};</script>
+<script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "ccf3e8a9cc"};</script>
 <script src="config.js"></script>
 <script>/* Bristol Dental Institute — Orthodontic Fellowship Trainer: content (cases, viva rubrics, quiz bank) */
 const BOOKS = [
@@ -1677,6 +1728,7 @@ function renderDashboard(){
   $("#sideUser").innerHTML = `<div class="av0">${esc((nm || who).replace(/[^A-Za-z\u0600-\u06FF]/g, "").slice(0, 1).toUpperCase() || "D")}</div><div><b>${esc(nm ? "Dr " + nm : who)}</b><span>${esc(L.cur.n)} · ${ST.xp.toLocaleString()} XP</span></div>`;
   const tm = {}; g.forEach(e => { const t = tm[e.topic] || (tm[e.topic] = {s: 0, n: 0}); t.s += e.score; t.n++; });
   const weak = Object.entries(tm).map(([k, v]) => [k, Math.round(v.s / v.n)]).sort((a, b) => a[1] - b[1]).slice(0, 3);
+  renderPlanHome();
   $("#progPane").hidden = !weak.length;
   $("#progBox").innerHTML = weak.map(([k, p]) => `<div class="trow ${p < 50 ? "weak" : p < 70 ? "mid" : ""}"><span>${esc(k)}</span><div class="bar"><i style="width:${p}%"></i></div><span class="meta">${p}%</span></div>`).join("");
 }
@@ -2002,7 +2054,7 @@ async function aiMark(q, answer){
 }
 function startViva(qs, caseText, topic, caseId, box, title){
   const V = {qs, i:0, results:[], caseId, topic};
-  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Viva examination</h2><label class="chk"><input type="checkbox" id="voiceChk" ${voiceOn?"checked":""}> Examiner voice</label></div><div class="pane-b">${avatarHtml()}${curCase && curCase.book ? `<div class="expage">${sheetHtml(curCase.book)}${curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}</div>` : caseText ? `<details class="casebox" open><summary>Case presentation</summary><pre class="casetext">${esc(caseText)}</pre></details>` : ""}<div class="viva-panel" id="vv"></div><form class="ask" id="vf"><textarea id="va" rows="4" placeholder="Type your answer… (or press the mic and speak)"></textarea><div class="stackb"><button type="button" class="btn" id="mic" hidden>🎤</button><button class="btn primary">Answer</button></div></form></div></div>`;
+  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Viva examination</h2><label class="chk"><input type="checkbox" id="voiceChk" ${voiceOn?"checked":""}> Examiner voice</label></div><div class="pane-b">${avatarHtml()}${curCase && curCase.book ? `<div class="expage">${sheetHtml(curCase.book)}${curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}</div>` : caseText ? `<details class="casebox" open><summary>Case presentation</summary><pre class="casetext">${esc(caseText)}</pre></details>${curCase && curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}` : ""}<div class="viva-panel" id="vv"></div><form class="ask" id="vf"><textarea id="va" rows="4" placeholder="Type your answer… (or press the mic and speak)"></textarea><div class="stackb"><button type="button" class="btn" id="mic" hidden>🎤</button><button class="btn primary">Answer</button></div></form></div></div>`;
   const av = box.querySelector(".avatar-wrap"), vv = $("#vv"), vf = $("#vf"), va = $("#va");
   $("#voiceChk").addEventListener("change", e => setVoice(e.target.checked));
   const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; vv.appendChild(d); d.scrollIntoView({block:"nearest", behavior:"smooth"}); return d; };
@@ -2042,7 +2094,7 @@ function finishViva(V, vv, av){
   setMood(av, pct >= 70 ? "happy" : "concern", pct >= 70 ? "Well done." : "Keep studying.");
   $("#vf").hidden = true;
   const xp = 20 + Math.round(pct / 2);
-  ST.events.push({type:"viva", score:pct, topic:V.topic, xp, at:Date.now(), caseId:V.caseId}); const b = levelInfo(ST.xp).i; ST.xp += xp; save();
+  ST.events.push({type:"viva", score:pct, topic:V.topic, xp, at:Date.now(), caseId:V.caseId}); const b = levelInfo(ST.xp).i; ST.xp += xp; save(); planNote("case", null, String(V.caseId || "").replace(/^b/, ""));
   toast(levelInfo(ST.xp).i > b ? `Level up — ${LEVELS[levelInfo(ST.xp).i].n}! (+${xp} XP)` : `+${xp} XP`); renderDashboard();
 }
 function setupMic(ta, btn){
@@ -2156,7 +2208,7 @@ function finishQuiz(timeUp){
   $("#quizArea").innerHTML = `<div class="viva-score"><h3>${timeUp ? "Time is up" : "Quiz complete"}</h3><div class="score-bar"><i style="width:${pct}%;background:${pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--hi)'}"></i></div><p><b>${pct}%</b> — ${Math.round(Q.right * 10) / 10} correct out of ${N} questions (${esc(Q.topic)}). +${xp} XP</p><p class="muted small">You answered ${Q.answeredN} of ${N}${un ? `; the ${un} unanswered question${un === 1 ? "" : "s"} counted as wrong` : ""}. Time used: ${mins} min${Q.limit ? ` of ${Q.limit}` : ""}.</p><div class="actions"><button class="btn primary" id="qAgain">New quiz</button></div></div>`;
   $("#qAgain").addEventListener("click", () => { $("#quizArea").innerHTML = ""; $("#quizMeta").textContent = ""; $("#quizSetup").hidden = false; updateAvail(); });
   const topic = Q.items.every(i => i.topic === Q.items[0].topic) ? Q.items[0].topic : "Mixed";
-  record("quiz", pct, topic, xp);
+  record("quiz", pct, topic, xp); planNote("quiz", Q && Q.items && Q.items.every(i => i.topic === topic) ? topic : null);
 }
 
 /* ---------- my case analysis ---------- */
@@ -2182,6 +2234,273 @@ function analyse(text){
   };
   if (f.anb == null){ const m = text.match(/\bANB\s*[:=]?\s*[-−–]\s*(\d+)/i); if (m) f.anb = -num(m[1]); }
   return f;
+}
+/* The resident's photographs and PDF pages never leave this page: they are shown only to the resident. Only what the resident writes goes to the AI. */
+const MY = {files: []};
+const MY_MAX_FILES = 10;
+async function shrinkImage(f){
+  const url = URL.createObjectURL(f);
+  try {
+    const im = new Image(); im.src = url;
+    await within(im.decode(), 20000).catch(() => { throw new Error(f.name + " is not a supported picture. Save it as JPG or PNG and try again."); });
+    const k = Math.min(1, 1600 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement("canvas"); c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+    const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+    return c.toDataURL("image/jpeg", .85);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function addMyFile(f){
+  if (/\.(txt|md)$/i.test(f.name) || f.type === "text/plain"){ const t = $("#myText"); t.value = (t.value ? t.value + "\n" : "") + await f.text(); return; }
+  if (MY.files.length >= MY_MAX_FILES) throw new Error(`You can add up to ${MY_MAX_FILES} files.`);
+  if (/\.pdf$/i.test(f.name) || f.type === "application/pdf"){
+    /* read on this device: its text joins the case, its pages stay here as pictures */
+    await ensurePdf();
+    const pdf = await pdfjsLib.getDocument({data: await f.arrayBuffer(), disableWorker: true, isEvalSupported: false}).promise; let text = "";
+    for (let i = 1; i <= pdf.numPages; i++){
+      const pg = await pdf.getPage(i); text += (await pg.getTextContent()).items.map(x => x.str).join(" ") + "\n";
+      if (MY.files.length < MY_MAX_FILES){ const vp0 = pg.getViewport({scale: 1}), vp = pg.getViewport({scale: Math.min(2, 1600 / Math.max(vp0.width, vp0.height))}), c = document.createElement("canvas"); c.width = vp.width; c.height = vp.height; await pg.render({canvasContext: c.getContext("2d"), viewport: vp}).promise; MY.files.push({name: `${f.name}, page ${i}`, src: c.toDataURL("image/jpeg", .82)}); }
+    }
+    if (text.trim()){ const t = $("#myText"); t.value = (t.value ? t.value + "\n" : "") + text.trim(); }
+    return;
+  }
+  if (!f.type.startsWith("image/") && !/\.(jpe?g|png|webp|heic|heif)$/i.test(f.name)) throw new Error(f.name + " is not a picture or a PDF.");
+  const src = await shrinkImage(f);
+  MY.files.push({name: f.name, src});
+}
+function renderMyFiles(){
+  $("#myFiles").innerHTML = MY.files.map((f, i) => `<div class="myfile"><img src="${f.src}" alt=""><span class="myname">${esc(f.name)}</span><button type="button" class="btn sm" data-rm="${i}" aria-label="Remove ${esc(f.name)}">Remove</button></div>`).join("");
+  $("#myPrivate").hidden = !MY.files.length;
+}
+/* ---------- Part A preparation: best-of-five and case scenarios. A question is shown only if its quoted sentence is really in the book passage it came from. ---------- */
+const PA = {bank: null, used: new Set(), run: null};
+const paNorm = t => String(t).toLowerCase().replace(/(\w)- (\w)/g, "$1$2").replace(/\bf (i|l)/g, "f$1").replace(/(\w)f (i|l)/g, "$1f$2").replace(/[^a-z0-9]+/g, " ").trim();
+function paChunks(topic, n){
+  const key = topic ? tok(topic).sort((p, q) => idfOf(q) - idfOf(p))[0] : null;
+  const list = (topic ? search(topic, 300) : shuffle(INDEX.chunks.slice())).filter(c => !isRefList(c.t) && c.t.length > 400 && c.page > 12 && (c.t.match(/\b(tooth|teeth|incisors?|molars?|canines?|overjet|overbite|appliances?|malocclusion|mandib\w*|maxill\w*)\b/gi) || []).length >= 3 && !PA.used.has(c) && (!key || tok(c.t).includes(key)));
+  /* a spread across the books, not the first book that matches */
+  const by = {}; shuffle(list.slice(0, 120)).forEach(c => (by[c.b] = by[c.b] || []).push(c));
+  const out = [], keys = shuffle(Object.keys(by)); for (let i = 0; out.length < n && keys.length; i++){ const k = keys[i % keys.length], c = by[k].shift(); if (c) out.push(c); else { keys.splice(i % keys.length, 1); i--; } }
+  return out;
+}
+/* returns only the questions that pass every check */
+function paCheck(raw, chunks){
+  let arr; const body = String(raw).replace(/^[\s\S]*?\[/, "["); try { arr = JSON.parse(body.slice(0, body.lastIndexOf("]") + 1) || body); } catch { const cut = body.lastIndexOf("},"); try { arr = JSON.parse(body.slice(0, cut + 1) + "]"); } catch { return []; } }
+  return (Array.isArray(arr) ? arr : []).map(q => {
+    const c = chunks[(+q.excerpt || 0) - 1], o = Array.isArray(q.options) ? q.options.map(x => String(x).replace(/^\s*[A-E][).:]\s*/, "").trim()) : [], a = +q.answer;
+    if (!c || o.length !== 5 || new Set(o.map(x => x.toLowerCase())).size !== 5 || o.some(x => !x) || !(a >= 0 && a <= 4) || !q.stem || !q.explanation) return null;
+    const qt = paNorm(q.quote || ""); if (qt.split(" ").length < 6 || !paNorm(c.t).includes(qt)) return null;
+    if (/\bfig(ure)?s?\b/i.test(q.stem + " " + o.join(" "))) return null;
+    return {q: String(q.stem).trim(), o: [o[a], ...o.filter((_, i) => i !== a)], x: String(q.explanation).trim(), e: String(q.quote).trim(), ref: cite(c), kind: q.kind === "case" ? "case" : "sba"};
+  }).filter(Boolean);
+}
+const PA_SYS = `You write postgraduate orthodontic exam questions in single best answer format, for residents preparing for a Part A examination. Use ONLY the numbered textbook excerpts given. Each question has exactly 5 options, one clearly best according to the excerpt and four plausible but less good. Do not use "all of the above" or "none of the above". Test understanding and clinical judgement, not trivia. Never mention a figure, a page, or a book in the question. Reply with a JSON array only, each item: {"kind":"sba" or "case","stem":"...","options":["...","...","...","...","..."],"answer":0-4,"explanation":"two sentences on why it is best and why the others are less good","excerpt":number of the excerpt used,"quote":"8 to 25 words copied exactly, word for word, from that excerpt, which support the answer"}. For kind "sba" the stem is one direct question asking for the best or most likely answer. For kind "case" the stem is a full short clinical scenario with age, complaint and findings consistent with the excerpt, ending with a question such as the best treatment plan, the most appropriate next step or the best treatment option. Do not invent findings that change the answer given by the excerpt.`;
+async function paGenerate(topic, type){
+  const chunks = paChunks(topic, 5); if (!chunks.length) return [];
+  chunks.forEach(c => PA.used.add(c));
+  const ask = type === "case" ? "Write 5 questions, all of kind case." : type === "sba" ? "Write 5 questions, all of kind sba." : "Write 5 questions: 3 of kind sba and 2 of kind case.";
+  const t = await within(callAI([{role: "user", content: `${ask} One question from each excerpt.\n\n` + chunks.map((c, i) => `EXCERPT ${i + 1}\n${ocrFix(c.t).replace(/([a-z])- ([a-z])/g, "$1$2").slice(0, 1500)}`).join("\n\n")}], PA_SYS, {tokens: 8192, json: true}), 70000);
+  return paCheck(t, chunks);
+}
+async function paLoadBank(){ if (PA.bank) return PA.bank; try { PA.bank = JSON.parse(await decFile("q1.dat")); } catch { PA.bank = []; } return PA.bank; }
+function paFromBank(topic, type, n, shown){
+  if (type === "case") return [];
+  const key = topic ? tok(topic) : []; const list = PA.bank.filter(q => !shown.has(q.q) && (!key.length || key.some(k => tok(q.t + " " + q.q).includes(k))));
+  return shuffle(list).slice(0, n);
+}
+async function paFill(run){
+  if (run.loading || run.queue.length >= 3 || run.total && run.queue.length + run.i >= run.total) return; run.loading = true;
+  try {
+    let got = [];
+    if (aiReady()) for (let n = 0; n < 3 && !got.length; n++){ try { got = (await paGenerate(run.topic, run.type)).filter(q => !run.shown.has(q.q)); run.aiErr = ""; } catch (e) { run.aiErr = e.message || ""; break; } if (PA.run !== run) return; }
+    if (!got.length) got = paFromBank(run.topic, run.type, 5, run.shown);
+    if (PA.run !== run) return;
+    got = got.filter(q => !run.shown.has(q.q)); got.forEach(q => run.shown.add(q.q)); run.queue.push(...got); run.empty = !got.length;
+  } finally { run.loading = false; }
+  if (PA.run === run && run.waiting) paShow(run); else if (PA.run === run) paFill(run);
+}
+function paShow(run){
+  const box = $("#paArea");
+  if (run.i >= run.total) return paFinish(run);
+  const it = run.queue.shift();
+  if (!it){
+    if (run.loading || !run.empty){ run.waiting = true; box.innerHTML = '<p class="muted"><span class="dots"><i></i><i></i><i></i></span> Preparing your questions from the books…</p>'; paFill(run); return; }
+    run.waiting = false;
+    if (run.results.length){ run.total = run.results.length; return paFinish(run); }
+    box.innerHTML = `<p class="notice2" style="margin:0 0 12px">${esc(run.type === "case" ? "Case scenarios need the AI examiner, which is busy right now." : run.aiErr || "No questions could be prepared on this topic.")} Try again, or try other words.</p><button type="button" class="btn sm" id="paRetry">Try again</button>`;
+    $("#paRetry").onclick = () => { run.empty = false; run.waiting = true; paShow(run); }; return;
+  }
+  run.waiting = false; run.cur = it;
+  const idx = shuffle([0, 1, 2, 3, 4]); it.order = idx; it.ans = idx.indexOf(0);
+  box.innerHTML = `<div class="pabar"><span class="meta">Question ${run.i + 1} of ${run.total}</span><span class="pill">${it.kind === "case" ? "Case scenario" : "Best answer"}</span></div><div class="score-bar"><i style="width:${run.i / run.total * 100}%;background:var(--gold)"></i></div><h3 class="qq">${esc(it.q)}</h3>` + idx.map((j, k) => `<button type="button" class="paopt qopt" data-k="${k}"><b>${"ABCDE"[k]}</b><span>${esc(it.o[j])}</span></button>`).join("") + '<div id="paFb"></div>';
+  box.scrollIntoView({block: "nearest"}); paFill(run);
+}
+function paAnswer(k){
+  const run = PA.run, it = run && run.cur; if (!it || it.answered) return; it.answered = true;
+  const ok = k === it.ans; run.results.push({q: it.q, ok, topic: run.topic || it.t || "General", ref: it.ref, right: it.o[0]});
+  $$(".paopt").forEach((b, j) => { b.disabled = true; if (j === it.ans) b.classList.add("right"); else if (j === k) b.classList.add("bad"); });
+  $("#paFb").innerHTML = `<div class="pafb ${ok ? "ok" : ""}"><b>${ok ? "Correct" : "Not the best answer"}</b><p>${esc(it.x)}</p><details class="evbox" open><summary>Where is the evidence</summary><p class="paquote">“${esc(it.e)}”</p><span class="cite">${esc(it.ref)}</span></details></div><div class="actions" style="margin-top:12px"><button type="button" class="btn primary" id="paNext">${run.i + 1 >= run.total ? "See my result" : "Next question"}</button></div>`;
+  $("#paNext").onclick = () => { run.i++; paShow(run); };
+}
+function paFinish(run){
+  const n = run.results.length, good = run.results.filter(r => r.ok).length, pct = n ? Math.round(good / n * 100) : 0, wrong = run.results.filter(r => !r.ok);
+  if (n){ record("quiz", pct, run.topic ? topicOf(run.topic) : "General", 10 + Math.round(pct / 5)); }
+  $("#paArea").innerHTML = `<div class="viva-score"><h3>${good} of ${n} correct</h3><div class="score-bar"><i style="width:${pct}%;background:${pct >= 70 ? "var(--ok)" : pct >= 50 ? "var(--warn)" : "var(--hi)"}"></i></div><p><b>${pct}%</b></p></div>${wrong.length ? `<h3 class="sh">Review these</h3>${wrong.map(r => `<div class="ptask"><div class="ptxt"><b>${esc(r.q)}</b><span>Best answer: ${esc(r.right)} · ${esc(r.ref)}</span></div></div>`).join("")}` : ""}<div class="actions" style="margin-top:14px"><button type="button" class="btn primary" id="paAgain">More questions</button></div>`;
+  $("#paAgain").onclick = () => paStart();
+  PA.run = null;
+}
+async function paStart(){
+  const topic = $("#paTopic").value.trim(), type = $("#paType").value, total = +$("#paCount").value;
+  if (!INDEX){ toast("The textbooks are still loading. Try again in a few seconds."); return; }
+  if (topic && !search(topic, 200).some(c => tok(c.t).includes(tok(topic).sort((p, q) => idfOf(q) - idfOf(p))[0]))){ $("#paNote").textContent = "The textbooks have nothing on this. Try other words."; $("#paNote").hidden = false; return; }
+  $("#paNote").hidden = true; $("#paRun").hidden = false; $("#paTitle").textContent = topic || "All topics";
+  await paLoadBank();
+  const run = PA.run = {topic, type, total, i: 0, queue: [], results: [], shown: new Set(), waiting: true, loading: false, empty: false, aiErr: ""};
+  paShow(run); $("#paRun").scrollIntoView({block: "start", behavior: "smooth"});
+}
+function bindPartA(){
+  $("#paForm").addEventListener("submit", e => { e.preventDefault(); paStart(); });
+  $("#paChips").addEventListener("click", e => { const b = e.target.closest("button"); if (b){ $("#paTopic").value = b.textContent; $("#paTopic").focus(); } });
+  $("#paArea").addEventListener("click", e => { const b = e.target.closest(".paopt"); if (b) paAnswer(+b.dataset.k); });
+}
+/* ---------- study plan: rebuilt from today every time, so a missed day simply moves forward ---------- */
+const PLAN_COST = {case: 25, quiz: 15, ev: 10, exam: 30};
+const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const fromYmd = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d, 12); };
+const dayLabel = (s, o = {weekday: "short", day: "numeric", month: "short"}) => fromYmd(s).toLocaleDateString("en-GB", o);
+function planWeakTopics(){
+  const tm = {}; ST.events.filter(e => e.score != null && e.topic).forEach(e => { const t = tm[e.topic] || (tm[e.topic] = {s: 0, n: 0}); t.s += e.score; t.n++; });
+  const av = t => tm[t] ? tm[t].s / tm[t].n : 60;
+  return TOPICS.filter(t => BOOKCASES.some(c => c.topic === t)).sort((a, b) => av(a) - av(b) || TOPICS.indexOf(a) - TOPICS.indexOf(b)).map(t => ({t, score: av(t)}));
+}
+function planCaseDone(id, done){ return done["case:" + id] || ST.events.some(e => e.caseId === "b" + id && e.score != null); }
+/* Learn first, topic by topic and weakest first; then exam practice; a quiet last day. */
+function buildPlan(p){
+  const today = ymd(new Date()), days = [];
+  for (let d = fromYmd(today); ymd(d) < p.exam; d.setDate(d.getDate() + 1)) if (d.getDay() !== p.rest) days.push(ymd(d));
+  if (!days.length) return {days: [], covered: 0, total: BOOKCASES.length};
+  const done = p.done || {}, weak = planWeakTopics(), N = days.length;
+  const quiet = 1, practice = N - quiet > 1 ? Math.max(1, Math.round(N * .25)) : 0, learn = N - quiet - practice;
+  const cap = learn * p.mins, lists = weak.map(({t, score}) => ({t, w: BOOKCASES.filter(c => c.topic === t && !planCaseDone(c.id, done)).length * (score < 50 ? 1.6 : score < 70 ? 1.2 : 1) + 1, cases: BOOKCASES.filter(c => c.topic === t && !planCaseDone(c.id, done))}));
+  const sumW = lists.reduce((n, l) => n + l.w, 0) || 1, queue = []; let covered = 0;
+  lists.forEach(l => {
+    let room = cap * l.w / sumW; const add = x => { if (room < PLAN_COST[x.k] && x.k !== "ev") return false; room -= PLAN_COST[x.k]; queue.push({...x, topic: l.t}); return true; };
+    if (!done["ev:" + l.t] && room >= PLAN_COST.ev) add({k: "ev", id: "ev:" + l.t, label: `What the books say: ${l.t}`});
+    l.cases.some((c, i) => { if (!add({k: "case", id: "case:" + c.id, ref: c.id, label: `Case ${c.id} viva`})) return true; covered++; if ((i + 1) % 3 === 0 && !done[`quiz:${l.t}#${i}`]) add({k: "quiz", id: `quiz:${l.t}#${i}`, label: `Quiz: ${l.t}`}); return false; });
+  });
+  const out = days.map((d, i) => ({d, phase: i < learn ? "learn" : i < learn + practice ? "practice" : "quiet", tasks: []}));
+  let di = 0, used = 0;
+  queue.forEach(x => { while (di < learn - 1 && used && used + PLAN_COST[x.k] > p.mins){ di++; used = 0; } if (di < learn){ out[di].tasks.push(x); used += PLAN_COST[x.k]; } });
+  out.filter(x => x.phase === "practice").forEach((x, i) => {
+    let m = 0, k = 0; while (m + PLAN_COST.exam <= Math.max(p.mins, PLAN_COST.exam)){ const t = weak[(i + k) % Math.max(1, weak.length)]; if (!t) break; x.tasks.push({k: "exam", id: `exam:${x.d}:${k}`, topic: t.t, label: `Exam room: ${t.t}`}); m += PLAN_COST.exam; k++; }
+    if (m + PLAN_COST.quiz <= p.mins && (ST.wrong || []).length) x.tasks.push({k: "quiz", id: `mist:${x.d}`, topic: "wrong", label: "Quiz: my mistakes"});
+  });
+  out.filter(x => x.phase === "quiet").forEach(x => { x.tasks.push({k: "rest", id: `rest:${x.d}`, label: "Light review only, then rest well"}); });
+  return {days: out, covered, total: BOOKCASES.length};
+}
+/* today's list stays as it was this morning, even as tasks are ticked */
+function planToday(p){
+  const today = ymd(new Date());
+  if (p.todayKey !== today){ const b = buildPlan({...p, done: p.done}); const first = b.days[0]; p.todayKey = today; p.today = first && first.d === today ? first : {d: today, phase: "off", tasks: []}; try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch {} }
+  return p.today;
+}
+function planMark(id, on = true){ const p = ST.plan; if (!p) return; p.done = p.done || {}; if (on) p.done[id] = 1; else delete p.done[id]; p.savedAt = Date.now(); save(); }
+/* finishing the work ticks the task */
+function planNote(kind, topic, ref){
+  const p = ST.plan; if (!p || !p.today) return;
+  const hit = p.today.tasks.find(x => x.k === kind && !(p.done || {})[x.id] && (ref ? x.ref === ref : !topic || x.topic === topic || x.topic === "wrong"));
+  if (hit){ planMark(hit.id); renderPlan(); renderDashboard(); }
+}
+const PLAN_KIND = {case: "Viva", quiz: "Quiz", ev: "Evidence", exam: "Exam room", rest: "Rest"};
+function planTaskRow(x, withAction){
+  const done = (ST.plan.done || {})[x.id];
+  return `<div class="ptask ${done ? "done" : ""}"><label class="pcheck"><input type="checkbox" data-ptick="${esc(x.id)}" ${done ? "checked" : ""} aria-label="Mark ${esc(x.label)} as done"><i></i></label><div class="ptxt"><b>${esc(x.label)}</b><span>${PLAN_KIND[x.k]}${PLAN_COST[x.k] ? ` · about ${PLAN_COST[x.k]} min` : ""}</span></div>${withAction && x.k !== "rest" ? `<button type="button" class="btn sm" data-pgo="${esc(x.id)}">${done ? "Again" : "Start"}</button>` : ""}</div>`;
+}
+function renderPlan(){
+  const box = $("#planBox"); if (!box) return; const p = ST.plan, today = ymd(new Date());
+  $("#planSetup").hidden = !!p && !box.dataset.edit;
+  if (!p){ box.innerHTML = ""; return; }
+  if (p.exam <= today){ box.innerHTML = `<div class="pane"><div class="pane-b"><h2 style="margin:0 0 6px">${p.exam === today ? "Today is your exam. Good luck, Doctor." : "Your exam date has passed."}</h2><p class="muted" style="margin:0">Set a new date above to build another plan.</p></div></div>`; $("#planSetup").hidden = false; return; }
+  if (!BOOKCASES.length){ box.innerHTML = '<div class="pane"><div class="pane-b"><p class="muted" style="margin:0">Your cases are still loading. Your plan will appear in a moment.</p></div></div>'; return; }
+  const b = buildPlan(p), t = planToday(p), left = Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5);
+  const doneCases = BOOKCASES.filter(c => planCaseDone(c.id, p.done || {})).length, pct = Math.round(doneCases / Math.max(1, BOOKCASES.length) * 100);
+  const seg = k => b.days.filter(x => x.phase === k).length, sum = Math.max(1, b.days.length), rest = b.days.filter(x => x.d !== today);
+  const tDone = t.tasks.filter(x => (p.done || {})[x.id]).length, allDone = t.tasks.length && tDone === t.tasks.length;
+  const weeks = []; rest.forEach(x => { const d = fromYmd(x.d), mon = new Date(d); mon.setDate(d.getDate() - ((d.getDay() + 6) % 7)); const k = ymd(mon); let w = weeks.find(y => y.k === k); if (!w) weeks.push(w = {k, days: []}); w.days.push(x); });
+  const short = b.covered + doneCases < BOOKCASES.length;
+  box.innerHTML = `
+  <div class="phero cine"><div class="phero-main"><div class="wsm">Your exam · ${esc(dayLabel(p.exam, {weekday: "long", day: "numeric", month: "long", year: "numeric"}))}</div><div class="pcount"><b>${left}</b><span>${left === 1 ? "day" : "days"} to go</span></div></div>
+    <div class="phero-side"><div class="ring pring" style="--p:${pct}"><span>${pct}%</span></div><div><b>${doneCases} of ${BOOKCASES.length}</b><span>book cases done</span></div></div></div>
+  <div class="pphases" aria-label="Plan phases">${[["learn", "Learn"], ["practice", "Exam practice"], ["quiet", "Last day"]].filter(([k]) => seg(k)).map(([k, l]) => `<div class="pseg ${k}" style="flex:${seg(k)} 1 0"><i></i><b>${l}</b><span>${seg(k)} ${seg(k) === 1 ? "day" : "days"}</span></div>`).join("")}</div>
+  ${short ? `<p class="notice2" style="margin:0 0 14px">At ${p.mins} minutes a day your plan covers ${b.covered + doneCases} of the ${BOOKCASES.length} cases, weakest topics first. Add more time a day to cover more.</p>` : ""}
+  <div class="pane ptoday ${allDone ? "alldone" : ""}"><div class="pane-h"><h2>Today · ${esc(dayLabel(today))}</h2><span class="meta">${t.tasks.length ? `${tDone} of ${t.tasks.length} done` : ""}</span></div><div class="pane-b">${allDone ? '<p class="pwell">Today is done. Well done, Doctor.</p>' : ""}${t.tasks.length ? t.tasks.map(x => planTaskRow(x, true)).join("") : `<p class="muted" style="margin:0">${t.d === today && new Date().getDay() === p.rest ? "Your rest day. Enjoy it, and start again tomorrow." : "Nothing is planned for today."}</p>`}</div></div>
+  ${weeks.length ? `<div class="pane"><div class="pane-h"><h2>Coming up</h2><span class="meta">changes by itself if you miss a day</span></div><div class="pane-b">${weeks.map((w, i) => `<details class="pweek" ${i === 0 ? "open" : ""}><summary>Week of ${esc(dayLabel(w.k, {day: "numeric", month: "long"}))}<span class="meta">${w.days.length} ${w.days.length === 1 ? "day" : "days"}</span></summary>${w.days.map(x => `<div class="pday"><div class="pdate"><b>${esc(dayLabel(x.d, {weekday: "short"}))}</b><span>${esc(dayLabel(x.d, {day: "numeric", month: "short"}))}</span></div><div class="pdtxt">${x.tasks.length ? [...new Set(x.tasks.map(y => y.k === "rest" ? y.label : y.label))].map(esc).join("<br>") : '<span class="muted">Free day</span>'}</div></div>`).join("")}</details>`).join("")}</div></div>` : ""}
+  <div class="actions" style="justify-content:center;margin:6px 0 4px"><button type="button" class="btn sm" id="planEdit">Change my plan</button></div>`;
+}
+function renderPlanHome(){
+  const box = $("#planHome"); if (!box) return; const p = ST.plan, today = ymd(new Date());
+  if (!p || p.exam <= today || !BOOKCASES.length){ box.innerHTML = `<div class="pane-b planhome"><div><b>${p && p.exam <= today ? "Set your next exam date" : "Plan your road to the exam"}</b><span class="meta">A daily plan built around your exam date and your weakest topics.</span></div><button class="btn sm primary" data-go="plan">${p ? "Open plan" : "Build my plan"}</button></div>`; return; }
+  const t = planToday(p), n = t.tasks.filter(x => !(p.done || {})[x.id]).length, left = Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5);
+  box.innerHTML = `<div class="pane-b planhome"><div><b>${left} ${left === 1 ? "day" : "days"} to your exam</b><span class="meta">${!t.tasks.length ? "Nothing planned for today" : n ? `${n} ${n === 1 ? "task" : "tasks"} left today` : "Today is done"}</span></div><button class="btn sm primary" data-go="plan">Open today's plan</button></div>`;
+}
+function planGo(id){
+  const p = ST.plan, x = [(p.today || {}).tasks || []].flat().find(y => y.id === id); if (!x) return;
+  if (x.k === "case") openCase("b" + x.ref, "viva");
+  else if (x.k === "quiz"){ setView("quiz"); const box = $("#qTopics"); box.querySelectorAll("input").forEach(i => { i.checked = i.value === x.topic; }); box.dispatchEvent(new Event("change", {bubbles: true})); }
+  else if (x.k === "ev"){ setView("evidence"); $("#evTopic").value = x.topic; startEvidence(x.topic, true); planMark(x.id); renderPlanHome(); }
+  else if (x.k === "exam"){ setView("tutor"); const s = $("#tTopic"); if (s){ s.value = x.topic; s.dispatchEvent(new Event("change", {bubbles: true})); } }
+}
+function bindPlan(){
+  const min = new Date(); min.setDate(min.getDate() + 1); $("#planExam").min = ymd(min);
+  $("#planForm").addEventListener("submit", e => {
+    e.preventDefault(); const exam = $("#planExam").value;
+    if (!exam || exam <= ymd(new Date())){ toast("Choose an exam date after today."); $("#planExam").focus(); return; }
+    ST.plan = {exam, mins: +$("#planMins").value, rest: +$("#planRest").value, done: (ST.plan && ST.plan.done) || {}, savedAt: Date.now()};
+    delete $("#planBox").dataset.edit; save(); renderPlan(); renderPlanHome(); window.scrollTo(0, 0);
+  });
+  $("#v-plan").addEventListener("change", e => { const c = e.target.closest("[data-ptick]"); if (c){ planMark(c.dataset.ptick, c.checked); renderPlan(); renderPlanHome(); } });
+  $("#v-plan").addEventListener("click", e => {
+    const g = e.target.closest("[data-pgo]"); if (g){ planGo(g.dataset.pgo); return; }
+    if (e.target.closest("#planEdit")){ const p = ST.plan; $("#planExam").value = p.exam; $("#planMins").value = p.mins; $("#planRest").value = p.rest; $("#planBox").dataset.edit = "1"; $("#planSetup").hidden = false; $("#planSetup").scrollIntoView({block: "start", behavior: "smooth"}); }
+  });
+}
+/* Where is the evidence: the passages stay hidden until the resident asks, so they never give away the answer to a question */
+const ASKS_EVIDENCE = /evidence|reference|source|which book|what book|where is|دليل|إيفيدنس|ايفيدنس|مرجع|مصدر|كتاب/i;
+let evChat = null;
+const EV_WORDS = /\b(where|is|the|give|show|me|tell|what|does|do|say|says|want|need|please|about|on|for|of|evidence|references?|sources?|books?|textbooks?)\b/gi;
+function evidencePick(topic, x, prev){
+  /* a new subject in the resident's question replaces the topic; "where is the evidence?" alone stays on the last point */
+  const own = tok(x.replace(EV_WORDS, " ")), asked = ASKS_EVIDENCE.test(x) && own.length;
+  const rare = list => list.slice().sort((p, q) => idfOf(q) - idfOf(p))[0];
+  const key = rare(asked ? own : tok(topic)), first = asked ? own.join(" ") : topic + " " + x + " " + String(prev).slice(0, 400);
+  const seen = new Set(), on = [];
+  for (const q of [first, asked ? key : topic]) for (const c of search(q, 200)){ if (on.length >= 6) break; if (seen.has(c.b) || isRefList(c.t) || !tok(c.t).includes(key)) continue; seen.add(c.b); on.push(c); }
+  return on;
+}
+function startEvidence(topic, direct){
+  topic = topic.trim(); const note = $("#evNote"); note.hidden = true;
+  if (topic.length < 3){ toast("Write a topic first."); $("#evTopic").focus(); return; }
+  if (!INDEX){ toast("The textbook library is still loading. Try again in a few seconds."); return; }
+  const found = evidencePick(topic, "", "");
+  if (!found.length){ note.textContent = "The textbooks have nothing on this. Try other words."; note.hidden = false; return; }
+  $("#evPane").hidden = false; $("#evTitle").textContent = topic; $("#evAsk").hidden = !!direct;
+  /* the book passages appear straight away and do not depend on the AI */
+  const src = $("#evSources"); src.hidden = !direct; src.innerHTML = direct ? `<h3 class="sh" style="margin-top:0">From the books</h3>${hitsHtml(found, topic)}` : "";
+  if (!aiReady()){ evChat = null; $("#evChat").innerHTML = direct ? "" : `<p class="notice2">${NO_AI}</p>`; $("#evPane").scrollIntoView({block: "start", behavior: "smooth"}); return; }
+  evChat = mountChat($("#evChat"), {system: tutorSystem("THE TOPIC: " + topic, direct ? "evidence" : "topic"), topic: topicOf(topic), avatar: true, keep: 30, showEv: t => ASKS_EVIDENCE.test(t),
+    opening: direct ? `What do the textbooks say about ${topic}? Give me the evidence with each book and page.` : `Please examine me on this topic: ${topic}. Ask me your first question.`,
+    pick: (x, prev) => evidencePick(topic, x === (direct ? `What do the textbooks say about ${topic}? Give me the evidence with each book and page.` : `Please examine me on this topic: ${topic}. Ask me your first question.`) ? "" : x, prev)});
+  $("#evPane").scrollIntoView({block: "start", behavior: "smooth"});
+}
+function startMentor(){
+  const t = $("#myText").value.trim();
+  if (t.length < 30){ toast("Write your case first, so your mentor can read it. Do not write the patient's name."); $("#myText").focus(); return; }
+  if (!aiReady()){ toast(NO_AI); return; }
+  $("#myMentorPane").hidden = false;
+  const recs = MY.files.map(f => ({l: "", src: f.src})), rb = $("#myRecs"); rb.innerHTML = figHtml(recs); rb.hidden = !recs.length; rb.onclick = e => { const x = e.target.closest("figure"); if (x) openLbx(recs, +x.dataset.i); };
+  const topic = t ? topicOf(t) : "General";
+  mountChat($("#myChat"), {system: tutorSystem("THE RESIDENT'S CASE\n" + t.slice(0, 6000), "mentor"), topic, avatar: true, name: "BDI Mentor",
+    opening: "Here is my case. Tell me briefly what you understand so far, and ask me what I would like to discuss first.", keep: 30,
+    pick: (x, prev) => diverse(x + " " + String(prev).slice(0, 400) + " " + t.slice(0, 200) + " " + topic, /evidence|reference|source|study|studies|دليل|مرجع|مصدر|كتاب/i.test(x) ? 6 : 4)});
+  $("#myMentorPane").scrollIntoView({block: "start", behavior: "smooth"});
 }
 function runMyCase(text){
   const f = analyse(text), topic = topicOf(text), out = [];
@@ -2245,7 +2564,7 @@ function prepareBookCases(){
   const rec = BOOKSTORE.find(b => b.id === "cases");
   BOOKCASES = rec ? extractBookCases(rec.pages).map(c => ({...c, summary: ocrFix(c.summary), intro: ocrFix(c.intro), full: ocrFix(c.full), qs: c.qs.map(q => ({...q, q: ocrFix(q.q), a: ocrFix(q.a)}))})) : [];
   BOOKCASES.forEach(c => { c.topic = topicOf(c.full); });
-  buildQIndex(); refreshQuizUi(); renderBank(); renderDashboard();
+  buildQIndex(); refreshQuizUi(); renderBank(); renderDashboard(); if ($("#v-plan") && !$("#v-plan").hidden) renderPlan();
 }
 /* small BM25 over every book question+answer, for "related questions" */
 let QIDX = null;
@@ -2355,14 +2674,17 @@ function tutorSystem(caseBlock, mode){
   const lang = ($("#tLang") && $("#tLang").value) === "ar" ? "Write explanations in clear Modern Standard Arabic suitable for Egyptian residents; keep all orthodontic terms, measurements, headings and citations in English." : "British English.";
   const exam = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist and fellowship examiner at Bristol Dental Institute, examining a postgraduate resident. Conduct an oral examination built on the case below. Ask ONE question at a time. Never say the words Figure, page, chapter or book to the resident. Judge what the resident means, not the words used: accept synonyms and clinically equivalent wording, and challenge anything wrong or unsafe instead of letting it pass. If they name a finding the case text does not support, ask them to show you where they see it rather than confirming it. Never present the case or state findings yourself: open by asking the resident to study the patient details and all the records on their screen, then write a summary of the case. After every answer: begin the reply with exactly one tag — VERDICT:CORRECT, VERDICT:PARTIAL or VERDICT:WRONG — then say precisely what was right, what was missing or wrong, and what an examiner expects; then probe deeper (why, alternatives, evidence, what changes if the patient were older/younger, non-compliant, or had a different growth pattern, risks and consent). Escalate difficulty as the resident does well. After about 8 questions finish with a summary, the three main weaknesses, and a final line "SCORE: NN/100".`;
   const disc = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist leading a deep, Socratic seminar discussion with a postgraduate resident about one question from a case. Assess their answer honestly (begin with VERDICT:CORRECT, VERDICT:PARTIAL or VERDICT:WRONG on your first reply), explain, then challenge them with follow-up questions one at a time: reasoning, alternatives, evidence, controversies between textbooks, and clinical variations. Keep replies focused (under 250 words) and end each with a question unless the resident asks to stop.`;
-  return `${mode === "exam" ? exam : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
+  const mentor = `You are the BDI Mentor (always write this name in Latin letters exactly like this, even when the rest is Arabic), the resident's own consultant orthodontist, with full command of every area of orthodontics. This is a real two-way discussion of the resident's own case, like a trainee talking to their consultant in clinic. Answer what they actually ask, directly, first. They may ask anything: what to say here, why an answer is right, whether they can say something, what a term means, what the options are, or simply that they don't know. When they don't know, explain it simply and do not quiz them. When they give an opinion, say honestly what is right and what is wrong and why. Cover whatever the case needs: diagnosis, problem list, aims, options, mechanics, anchorage, risks, consent and retention. Ask a question back only when it genuinely moves the discussion on, not in every reply, and match the length of your reply to the question. When they ask for evidence or a reference, say what the textbooks state and give the book and page exactly as labelled in the excerpts; if the excerpts do not cover it, say the library does not cover it rather than guessing. You cannot see their photographs or radiographs, which stay private on their own device, and you must never ask them to send one: when a record matters, ask them what they see and work from that, and say when a description is too vague to judge. Never claim to see an image and never invent a finding. Ask them not to write the patient's name. Remind them once that clinical decisions belong to their supervising clinician. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
+  const topicExam = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist testing a resident on one topic, using the programme's textbooks. Ask ONE question at a time, starting with the basics and going deeper as they do well. Base your questions on the library excerpts, and do not put the answer inside your question. After each answer say briefly what was right and what was missing or wrong, then ask the next question. If they do not know, explain the answer simply, then move on. When they ask where the evidence is, or ask for a reference or source, stop questioning for that reply: answer about your last question or point, say what the textbooks state, and give each book and page exactly as labelled in the excerpts. If the excerpts do not support it, say plainly that the library does not cover it, and never guess a book or page. Then ask if they want to continue. Stay on the topic unless they ask to change it. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
+  const evidence = `You are the BDI Examiner (always write this name in Latin letters exactly like this, even when the rest is Arabic), a senior consultant orthodontist helping a resident find what the programme's textbooks say. Do not quiz them. State the main points on what they asked, and give the book and page for each point exactly as labelled in the excerpts. Say where books disagree. If the excerpts do not cover something, say plainly that the library does not cover it, and never guess a book or page. They may then ask about another part or another topic, and you answer the same way. Reply in the language the resident writes in, keeping orthodontic terms in English. Never use VERDICT or SCORE tags.`;
+  return `${mode === "exam" ? exam : mode === "mentor" ? mentor : mode === "topic" ? topicExam : mode === "evidence" ? evidence : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
 }
 /* One key serves every resident, so Google will sometimes answer "busy": move to the next model (each has its own limit), then wait and go round once more, within a fixed time, before telling the resident. */
 const GEM_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.0-flash"];
 let gemGood = "";
 const gemGone = new Set();
-async function callGemini(key, model, messages, system){
-  const body = JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}]})), generationConfig: {temperature: .6, maxOutputTokens: 1600}});
+async function callGemini(key, model, messages, system, opts = {}){
+  const body = JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}]})), generationConfig: {temperature: .6, maxOutputTokens: opts.tokens || 4096, ...(opts.json ? {responseMimeType: "application/json"} : {})}});
   const end = Date.now() + 75000; let last = "", busy = false;
   for (let round = 0; round < 2; round++){
     if (round) await sleep(2500 + Math.random() * 2500);
@@ -2384,12 +2706,12 @@ async function callGemini(key, model, messages, system){
   }
   throw new Error(busy ? "The examiner is very busy right now. Wait a minute and press Try again." : last || "The examiner could not answer. Press Try again.");
 }
-async function callAI(messages, system){
+async function callAI(messages, system, opts = {}){
   const prov = aiProv(), a = ST.ai || {};
   if (prov === "none") throw new Error(NO_AI);
-  if (prov === "inst") return callGemini(AIKEY.k, AIKEY.model, messages, system);
-  if (prov === "gemini") return callGemini(a.key, a.model, messages, system);
-  const r = await fetchT("https://api.anthropic.com/v1/messages", {method: "POST", headers: {"content-type": "application/json", "x-api-key": a.key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true"}, body: JSON.stringify({model: a.model || "claude-sonnet-5-5", max_tokens: 1600, system, messages})}, 60000);
+  if (prov === "inst") return callGemini(AIKEY.k, AIKEY.model, messages, system, opts);
+  if (prov === "gemini") return callGemini(a.key, a.model, messages, system, opts);
+  const r = await fetchT("https://api.anthropic.com/v1/messages", {method: "POST", headers: {"content-type": "application/json", "x-api-key": a.key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true"}, body: JSON.stringify({model: a.model || "claude-sonnet-5-5", max_tokens: opts.tokens || 4096, system, messages})}, 60000);
   const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error((j.error && j.error.message) || "API error " + r.status);
   return (j.content || []).map(p => p.text || "").join("") || "(empty reply)";
 }
@@ -2402,24 +2724,29 @@ function mountChat(host, o){
   host.innerHTML = `${o.avatar ? `<div style="display:flex;justify-content:flex-end"><label class="chk"><input type="checkbox" id="vc2" ${voiceOn ? "checked" : ""}> Examiner voice</label></div>` + avatarHtml() : ""}<div class="viva-panel chat" id="cm"></div><form class="ask" id="cf"><textarea id="ci" rows="3" placeholder="Your answer or question…  (Enter to send, Shift+Enter for a new line)"></textarea><div class="stackb"><button type="button" class="btn" id="cmic" hidden>🎤</button><button class="btn primary" id="cs">Send</button></div></form>`;
   const vc2 = host.querySelector("#vc2"); if (vc2) vc2.addEventListener("change", e => setVoice(e.target.checked));
   if (o.avatar){ fillVoices(); avMount(host.querySelector(".avatar-wrap")); }
+  if (o.name && host.querySelector(".avatar-name")) host.querySelector(".avatar-name").textContent = o.name;
   const av = host.querySelector(".avatar-wrap"), cm = host.querySelector("#cm"), ci = host.querySelector("#ci"), cf = host.querySelector("#cf");
   setupMic(ci, host.querySelector("#cmic"));
   const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; cm.appendChild(d); d.scrollIntoView({block: "nearest", behavior: "smooth"}); return d; };
   async function turn(userText, shown){
     if (busy) return; busy = true; cs_(true);
     if (shown !== null) bubble("student", esc(shown != null ? shown : userText));
-    const ctx = o.retrieve ? o.retrieve(userText) : "";
+    const lastReply = msgs.length ? msgs[msgs.length - 1].content : "";
+    const hits = o.pick ? o.pick(userText, lastReply) : null;
+    const ctx = hits ? excerpts(hits) : o.retrieve ? o.retrieve(userText) : "";
     const hint = o.nQ && shown !== null && !finished ? `\n\n[System: this reply answers question ${Math.min(o.nQ, ++sent)} of ${o.nQ}.]` : "";
     msgs.push({role: "user", content: userText + hint + ctx});
     const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> thinking…'); if (av) setMood(av, "think", "Thinking…");
     try {
-      const t = await callAI(msgs, o.system);
+      /* a long discussion keeps its opening and its most recent turns, so it never outgrows the AI's limits */
+      const t = await callAI(o.keep && msgs.length > o.keep + 1 ? [msgs[0], ...msgs.slice(-o.keep)] : msgs, o.system);
       if (!cm.isConnected){ busy = false; return; }  /* a newer exam replaced this one */
       /* the textbook excerpts were for this turn only: long exams stay fast and inside the key's limits */
       msgs[msgs.length - 1].content = userText + hint;
       msgs.push({role: "assistant", content: t});
       const vm = t.match(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)/i), v = vm ? vm[1].toLowerCase() : null, body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim();
       wait.innerHTML = (v ? `<div class="verdict ${v}">${{correct: "✓ Correct", partial: "◐ Needs refinement", wrong: "✗ Incorrect"}[v]}</div>` : "") + chatMd(body); asked++;
+      if (hits && hits.length && (!o.showEv || o.showEv(userText))){ const ev = document.createElement("details"); ev.className = "evbox"; ev.innerHTML = `<summary>Evidence from the books (${hits.length})</summary>${hitsHtml(hits, userText)}`; wait.appendChild(ev); }
       if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…");
       const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; if (av){ wait.appendChild(rb); AV.wrap = av; speak(body); }
       if (v && o.nQ && !finished && shown !== null && graded < o.nQ){ graded++; sum += {correct: 1, partial: .5, wrong: 0}[v]; const inf = $("#tInfo"); if (inf) inf.textContent = `Question ${Math.min(graded + 1, o.nQ)} of ${o.nQ} · graded so far: ${graded}`; }
@@ -2447,7 +2774,7 @@ function mountChat(host, o){
     const card = document.createElement("div"); card.className = "scorecard";
     card.innerHTML = `${timeUp ? "<b>Time is up.</b> " : ""}Final score: <b>${pct}%</b> — ${sum % 1 ? sum.toFixed(1) : sum} marks out of ${o.nQ} questions. You answered ${graded} of ${o.nQ}${un ? `; the ${un} unanswered question${un > 1 ? "s" : ""} counted as wrong` : ""}.`;
     cm.appendChild(card); card.scrollIntoView({block: "nearest", behavior: "smooth"});
-    record("tutor", pct, o.topic, 20 + Math.round(pct / 2));
+    record("tutor", pct, o.topic, 20 + Math.round(pct / 2)); planNote("exam", o.topic);
   }
   const cs_ = b => { host.querySelector("#cs").disabled = b; };
   cf.addEventListener("submit", e => { e.preventDefault(); const t = ci.value.trim(); if (!t) return; ci.value = ""; turn(t); });
@@ -2661,6 +2988,7 @@ async function fbPush(){
   if (!FB.ready || !FB.user) return;
   try {
     await FB.db.collection("users").doc(FB.user.uid).set({name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, updatedAt: Date.now()});
+    if (ST.plan) FB.db.collection("users").doc(FB.user.uid).set({plan: ST.plan}, {merge: true}).catch(() => {});
     await FB.db.collection("leaderboard").doc(FB.user.uid).set(myStats());
     setText("#fbStatus", "Synced " + new Date().toLocaleTimeString());
   } catch (e) { setText("#fbStatus", navigator.onLine === false ? "Offline — your progress is saved on this device and will sync later." : "Sync failed: " + (e.message || e)); }
@@ -2674,6 +3002,7 @@ async function fbPull(){
       ST.events.sort((a, b) => a.at - b.at); ST.events = ST.events.slice(-400);
       ST.xp = Math.max(ST.xp, r.xp || 0); if (!ST.name && r.name) ST.name = r.name;
       ST.wrong = [...new Set([...(ST.wrong || []), ...(r.wrong || [])])];
+      if (r.plan && (!ST.plan || (r.plan.savedAt || 0) > (ST.plan.savedAt || 0))) ST.plan = r.plan;
       try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch {}
       renderDashboard();
     }
@@ -2711,6 +3040,7 @@ function setView(v){
   stopSpeak(); if (v === "admin") renderAdmin();
   $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v || ((v === "case" || v === "session") && t.dataset.view === "cases"))));
   $$(".view").forEach(s => s.hidden = s.id !== "v-" + v);
+  if (v === "plan") renderPlan();
   window.scrollTo(0, 0);
 }
 function bindExt(){
@@ -2729,7 +3059,7 @@ function bind(){
     const t = e.target.closest("[data-view]"); if (t && t.classList.contains("tab")) setView(t.dataset.view);
     const g = e.target.closest("[data-go]"); if (g) setView(g.dataset.go);
     const c = e.target.closest("[data-case]"); if (c && c.dataset.case){ e.preventDefault(); if (c.dataset.case === "my") $("#myViva").click(); else openCase(c.dataset.case, c.dataset.tab); }
-    const q = e.target.closest(".qopt"); if (q) answerQ(+q.dataset.k);
+    const q = e.target.closest(".qopt:not(.paopt)"); if (q) answerQ(+q.dataset.k);
     const st = e.target.closest("#caseTabs .stab"); if (st) showCaseTab(st.dataset.tab);
   });
   $("#quizSetup").addEventListener("submit", startQuiz); $("#quizSetup").addEventListener("change", e => { if (e.target.value === "all" && e.target.checked) $("#qTopics").querySelectorAll("input").forEach(x => { if (x.value !== "all") x.checked = false; }); else if (e.target.closest("#qTopics") && e.target.checked) $("#qTopics").querySelector("input[value=all]").checked = false; updateAvail(); }); $("#qTime").addEventListener("change", () => { $("#qMinWrap").hidden = $("#qTime").value !== "custom"; }); $("#qAll").addEventListener("click", () => { $("#qCount").value = quizPool().length || 1; });
@@ -2738,9 +3068,17 @@ function bind(){
   $("#bkTopic").addEventListener("change", () => renderBank()); $("#bkSrc").addEventListener("change", () => renderBank());
   $("#bkMore").addEventListener("click", () => { bankShown += 36; renderBank(true); });
   $("#searchForm").addEventListener("submit", e => { e.preventDefault(); const q = $("#searchInput").value.trim(); if (!q) return; const h = search(q, 10); $("#searchStatus").textContent = h.length ? `${h.length} passages` : ""; $("#hits").innerHTML = hitsHtml(h, q); });
-  $("#myFile").addEventListener("change", async e => { const f = e.target.files[0]; if (!f) return; try { if (/\.pdf$/i.test(f.name)){ await ensurePdf(); const pdf = await pdfjsLib.getDocument({data: await f.arrayBuffer(), disableWorker:true, isEvalSupported:false}).promise; let s = ""; for (let i = 1; i <= pdf.numPages; i++){ const tc = await (await pdf.getPage(i)).getTextContent(); s += tc.items.map(x => x.str).join(" ") + "\n"; } $("#myText").value = s; } else $("#myText").value = await f.text(); } catch (er) { toast(er.message || "Could not read the file."); } e.target.value = ""; });
+  $("#myFile").addEventListener("change", async e => { const list = [...e.target.files]; e.target.value = ""; for (const f of list){ try { await addMyFile(f); } catch (er) { toast(er.message || "Could not read " + f.name); } } renderMyFiles(); });
+  $("#myFiles").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (b){ MY.files.splice(+b.dataset.rm, 1); renderMyFiles(); } });
+  $("#myMentor").addEventListener("click", startMentor);
+  bindPlan();
+  bindPartA();
+  $("#evForm").addEventListener("submit", e => { e.preventDefault(); startEvidence($("#evTopic").value, true); });
+  $("#evQuiz").addEventListener("click", () => startEvidence($("#evTopic").value, false));
+  $("#evChips").addEventListener("click", e => { const b = e.target.closest("button"); if (b){ $("#evTopic").value = b.textContent; $("#evTopic").focus(); } });
+  $("#evAsk").addEventListener("click", () => { if (evChat) evChat.turn("Where is the evidence?"); });
   $("#myRun").addEventListener("click", () => { const t = $("#myText").value.trim(); if (t.length < 30){ toast("Paste or upload a case first."); return; } runMyCase(t); ST.events.push({type:"plan", score:null, topic:topicOf(t), xp:10, at:Date.now()}); ST.xp += 10; save(); renderDashboard(); });
-  $("#myViva").addEventListener("click", () => { const t = $("#myText").value.trim(); curCase = {id:"my", title:"Your case", topic:$("#myViva").dataset.topic || "General", viva:GENERIC_VIVA, text:t}; $("#caseTitle").textContent = "Your case — viva"; $("#caseTopic").textContent = curCase.topic; setView("case"); curTab = "viva"; $$("#caseTabs .stab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === "viva"))); startViva(GENERIC_VIVA, t, curCase.topic, "my", $("#caseBody"), "your case"); });
+  $("#myViva").addEventListener("click", () => { const t = $("#myText").value.trim(); curCase = {id:"my", title:"Your case", topic:$("#myViva").dataset.topic || "General", viva:GENERIC_VIVA, text:t, stage: MY.files.filter(f => f.src).map(f => ({l: "", src: f.src}))}; $("#caseTitle").textContent = "Your case — viva"; $("#caseTopic").textContent = curCase.topic; setView("case"); curTab = "viva"; $$("#caseTabs .stab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === "viva"))); startViva(GENERIC_VIVA, t, curCase.topic, "my", $("#caseBody"), "your case"); });
   $("#cephForm").addEventListener("input", toolCeph); $("#spaceForm").addEventListener("input", toolSpace);
   $("#pName").addEventListener("change", e => { ST.name = e.target.value.trim(); save(); renderDashboard(); toast("Saved"); });
 }
