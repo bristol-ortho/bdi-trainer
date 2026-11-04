@@ -512,12 +512,12 @@ html[data-look="collegiate"] .coll-hero{padding:30px 0 0;margin:0 0 22px;color:v
 html[data-look="collegiate"] .coll-eyebrow{font:500 12.5px/1.4 "EB Garamond",Georgia,serif;letter-spacing:.14em;color:var(--gold)}
 html[data-look="collegiate"] .coll-hero h1{font:500 clamp(38px,6vw,58px)/1.05 var(--f-display);margin:8px 0 0;color:var(--ink)}
 html[data-look="collegiate"] .coll-line{font:italic 21px/1.3 "EB Garamond",Georgia,serif;color:#5b3a3f;margin:10px 0 0}
-html[data-look="collegiate"] .coll-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
-html[data-look="collegiate"] .coll-cell{display:flex;flex-direction:column;justify-content:flex-start;appearance:none;background:none;border:0;border-inline-start:1px solid var(--line-2);padding:14px 16px;text-align:start;cursor:pointer;font:400 19px/1.3 "EB Garamond",Georgia,serif;color:var(--ink);min-width:0}
-html[data-look="collegiate"] .coll-cell:first-child{border-inline-start:0;padding-inline-start:0}
-html[data-look="collegiate"] .coll-cell:hover{color:var(--gold)}
-html[data-look="collegiate"] .coll-cell:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
-html[data-look="collegiate"] .coll-cell b{display:block;font:500 12px/1.4 "EB Garamond",Georgia,serif;letter-spacing:.14em;color:var(--gold);margin-bottom:4px}
+.coll-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.coll-cell{display:flex;flex-direction:column;justify-content:flex-start;appearance:none;background:none;border:0;border-inline-start:1px solid var(--line-2);padding:14px 16px;text-align:start;cursor:pointer;font:400 19px/1.3 "EB Garamond",Georgia,serif;color:var(--ink);min-width:0}
+.coll-cell:first-child{border-inline-start:0;padding-inline-start:0}
+.coll-cell:hover{color:var(--gold)}
+.coll-cell:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.coll-cell b{display:block;font:500 12px/1.4 "EB Garamond",Georgia,serif;letter-spacing:.14em;color:var(--gold);margin-bottom:4px}
 html[data-look="collegiate"] .btn.primary{background:var(--night);border-color:var(--night);color:#f6efe2}
 html[data-look="collegiate"] .btn.primary:hover{background:var(--night-3)}
 html[data-look="collegiate"] .btn.gold{background:var(--night);border-color:var(--night);color:#f6efe2;box-shadow:none}
@@ -536,8 +536,8 @@ html[data-look="collegiate"] .brand h1{font-size:21px!important}
 html[data-look="collegiate"] .brand p{font-size:10.5px}
 html[data-look="collegiate"] .tabs{margin:0 -6px}
 html[data-look="collegiate"] .coll-hero{padding-top:20px}
-html[data-look="collegiate"] .coll-cell{padding:11px 9px;font-size:16px}
-html[data-look="collegiate"] .coll-cell b{font-size:10.5px;letter-spacing:.08em}}
+.coll-cell{padding:11px 9px;font-size:16px}
+.coll-cell b{font-size:10.5px;letter-spacing:.08em}}
 html[data-look="collegiate"] .look-classic,html[data-look="classic"] .look-coll,html[data-look="collegiate"] .navlbl{display:none!important}
 .look-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .look-opt{appearance:none;background:var(--surface);border:1px solid var(--line-2);border-radius:12px;padding:10px;text-align:start;cursor:pointer;color:var(--ink);font:inherit;min-width:0}
@@ -557,6 +557,22 @@ html[data-look="collegiate"] main.gut{flex:1 0 auto}
 .gate-main{position:relative}
 .gate-copy{position:absolute;left:0;right:0;bottom:0;margin:0}
 @media print{.copybar{display:none}}
+/* exam: the patient's details and records stay beside the examiner, never scrolled away */
+.exam-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;scroll-margin-top:140px}
+.exam-left,.exam-right{min-width:0;scroll-margin-top:140px}
+#tRun{scroll-margin-top:140px}
+.exam-left .recs{grid-template-columns:minmax(0,1fr)}
+.exam-left .exsheet{margin-top:0}
+.exam-grid .av{width:min(150px,42vw)}
+.exam-grid .avatar-wrap{padding-bottom:10px;margin-bottom:10px}
+.exam-pill{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;box-shadow:var(--sh-2)}
+@media (min-width:1100px){
+ .exam-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:start}
+ .exam-left{position:sticky;top:var(--stick,16px);max-height:calc(100vh - var(--stick,16px) - 16px);overflow:auto}
+ .exam-right .viva-panel{max-height:46vh;overflow:auto;padding-right:4px}
+ .exam-pill{display:none}
+}
+html[data-look="collegiate"]{--stick:136px}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -604,11 +620,10 @@ html[data-look="collegiate"] main.gut{flex:1 0 auto}
 <main class="gut"><div class="wrap">
 
 <section class="view" id="v-dashboard">
- <div class="welcome cine look-classic"><div class="wtxt"><div class="wsm" id="wGreet">Good day</div><h1><span id="helloC">Hello, Doctor</span><em>Think like the examiner.</em></h1></div>
-  <div class="actions pillbar"><button class="btn glow" data-go="cases">Practise a case</button><button class="btn" data-go="tutor">Exam room</button><button class="btn" data-go="quiz">Quiz</button></div>
+ <div class="welcome cine look-classic"><div class="wtxt"><div class="wsm">YOUR FELLOWSHIP PREPARATION</div><h1><span id="helloC">Good morning, Doctor.</span><em>A new era of dental education.</em></h1></div>
   <svg class="welcome-sky" viewBox="0 0 1190 366" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><use href="#bdi-sky"/></svg></div>
- <div class="pane look-classic" id="planHomeC" style="margin-bottom:18px"></div>
- <div class="coll-hero look-coll"><div class="coll-eyebrow">YOUR FELLOWSHIP PREPARATION</div><h1 id="hello">Good morning, Doctor.</h1><p class="coll-line">Think like the examiner.</p><div class="coll-row" id="planHome"></div></div>
+ <div class="coll-row look-classic" id="planHomeC" style="margin-bottom:18px"></div>
+ <div class="coll-hero look-coll"><div class="coll-eyebrow">YOUR FELLOWSHIP PREPARATION</div><h1 id="hello">Good morning, Doctor.</h1><p class="coll-line">A new era of dental education.</p><div class="coll-row" id="planHome"></div></div>
  <div class="statbar" id="statBar"></div>
  <div class="pane" id="progPane" hidden><div class="pane-h"><h2>Work on next</h2><span class="meta">your weakest topics</span></div><div class="pane-b" id="progBox"></div></div>
 </section>
@@ -637,7 +652,7 @@ html[data-look="collegiate"] main.gut{flex:1 0 auto}
    <div class="f"><label for="tLevel">Level</label><select id="tLevel"><option>F.Orth RCS exam</option></select></div>
    <div class="f"><label for="tLang">Language</label><select id="tLang"><option value="en">English</option><option value="ar">العربية (English terms)</option></select></div></div>
   <div class="actions"><button class="btn primary">Start exam</button></div></form></div></div>
- <div class="pane" id="tRun" hidden><div class="pane-h"><h2 id="tTitle"></h2><span class="clock" id="tClock" hidden></span></div><div class="pane-b"><div class="meta" id="tInfo"></div><div id="tSheet"></div><div class="recs" id="tRecs"></div><div id="tChat"></div></div></div>
+ <div class="pane" id="tRun" hidden><div class="pane-h"><h2 id="tTitle"></h2><span class="clock" id="tClock" hidden></span></div><div class="pane-b"><div class="meta" id="tInfo"></div><div class="exam-grid"><div class="exam-left"><div id="tSheet"></div><div class="recs" id="tRecs"></div></div><div class="exam-right" id="tChat"></div></div></div></div>
 </section>
 
 <section class="view" id="v-case" hidden>
@@ -1796,8 +1811,7 @@ function renderDashboard(){
   const L = levelInfo(ST.xp);
   const h = new Date().getHours(), nm = (ST.name || "").trim().replace(/^dr\.?\s+/i, "");
   $("#hello").textContent = `${h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}, ${nm ? "Dr " + nm : "Doctor"}.`;
-  $("#wGreet").textContent = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-  $("#helloC").textContent = nm ? `Hello, Dr ${nm}` : "Hello, Doctor";
+  $("#helloC").textContent = $("#hello").textContent;
   const g = ST.events.filter(e => e.score != null), sk = streak();
   const avg = g.length ? Math.round(g.reduce((s, e) => s + e.score, 0) / g.length) + "%" : "–";
   $("#statBar").innerHTML = `<div class="lv"><div class="ring" style="--p:${L.pct}"><span>${L.i + 1}</span></div><div style="min-width:0;flex:1"><h2>${esc(L.cur.n)}</h2><div class="xpbar"><i style="width:${L.pct}%"></i></div><div class="meta">${ST.xp.toLocaleString()} XP${L.nxt ? ` · next: ${esc(L.nxt.n)}` : ""}</div></div></div>` +
@@ -2130,15 +2144,32 @@ async function aiMark(q, answer){
   if (!Number.isFinite(score) || !j.feedback) return null;
   return {frac: score / 100, verdict: score >= 70 ? "correct" : score >= 40 ? "partial" : "wrong", hit: (j.covered || []).map(String), miss: (j.missing || []).map(String), words: answer.split(/\s+/).length, feedback: String(j.feedback)};
 }
+/* a new message scrolls its own panel; on a narrow screen it may move the page, but never at the opening, while the resident studies the records */
+function msgScroll(panel, el, opening){
+  if (getComputedStyle(panel).overflowY === "auto"){ panel.scrollTo({top: panel.scrollHeight, behavior: "smooth"}); return; }
+  if (!opening) el.scrollIntoView({block: "nearest", behavior: "smooth"});
+}
+/* on a narrow screen: one button that moves between the records and the examiner */
+function examPill(grid){
+  const left = grid.querySelector(".exam-left"), right = grid.querySelector(".exam-right"); if (!left || !right) return;
+  grid.querySelectorAll(".exam-pill").forEach(x => x.remove());
+  const b = document.createElement("button"); b.type = "button"; b.className = "btn primary exam-pill"; grid.appendChild(b);
+  let toRight = true;
+  const draw = () => { if (!b.isConnected){ removeEventListener("scroll", draw); return; } toRight = left.getBoundingClientRect().bottom > innerHeight * .55; b.textContent = toRight ? "Go to the examiner" : "Back to the records"; };
+  b.onclick = () => (toRight ? right : left).scrollIntoView({block: "start", behavior: "smooth"});
+  addEventListener("scroll", draw, {passive: true}); draw();
+}
 function startViva(qs, caseText, topic, caseId, box, title){
   const V = {qs, i:0, results:[], caseId, topic};
-  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Viva examination</h2><label class="chk"><input type="checkbox" id="voiceChk" ${voiceOn?"checked":""}> Examiner voice</label></div><div class="pane-b">${avatarHtml()}${curCase && curCase.book ? `<div class="expage">${sheetHtml(curCase.book)}${curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}</div>` : caseText ? `<details class="casebox" open><summary>Case presentation</summary><pre class="casetext">${esc(caseText)}</pre></details>${curCase && curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}` : ""}<div class="viva-panel" id="vv"></div><form class="ask" id="vf"><textarea id="va" rows="4" placeholder="Type your answer… (or press the mic and speak)"></textarea><div class="stackb"><button type="button" class="btn" id="mic" hidden>🎤</button><button class="btn primary">Answer</button></div></form></div></div>`;
+  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Viva examination</h2><label class="chk"><input type="checkbox" id="voiceChk" ${voiceOn?"checked":""}> Examiner voice</label></div><div class="pane-b">${curCase && curCase.book ? `<div class="exam-grid"><div class="exam-left">${sheetHtml(curCase.book)}${curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}</div><div class="exam-right">` : ""}${avatarHtml()}${curCase && curCase.book ? "" : caseText ? `<details class="casebox" open><summary>Case presentation</summary><pre class="casetext">${esc(caseText)}</pre></details>${curCase && curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}` : ""}<div class="viva-panel" id="vv"></div><form class="ask" id="vf"><textarea id="va" rows="4" placeholder="Type your answer… (or press the mic and speak)"></textarea><div class="stackb"><button type="button" class="btn" id="mic" hidden>🎤</button><button class="btn primary">Answer</button></div></form>${curCase && curCase.book ? "</div></div>" : ""}</div></div>`;
   const av = box.querySelector(".avatar-wrap"), vv = $("#vv"), vf = $("#vf"), va = $("#va");
   $("#voiceChk").addEventListener("change", e => setVoice(e.target.checked));
-  const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; vv.appendChild(d); d.scrollIntoView({block:"nearest", behavior:"smooth"}); return d; };
+  const inGrid = !!box.querySelector(".exam-grid");
+  const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; vv.appendChild(d); msgScroll(vv, d, inGrid && V.i === 0 && !V.results.length && cls !== "student"); return d; };
+  if (inGrid){ const g = box.querySelector(".exam-grid"); examPill(g); g.scrollIntoView({block: "start"}); }
   fillVoices(); avMount(av);
   const vr = $("#vvRecs"); if (vr) vr.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(curCase.stage, +f.dataset.i); };
-  const ask = () => { const q = V.qs[V.i]; setMood(av, "think", "Thinking…"); setTimeout(() => { if (!vv.isConnected) return; const m = bubble("exam", `<div class="qn">Question ${V.i + 1} of ${V.qs.length}</div>${q.figs ? `<div class="recs">${figHtml(q.figs)}</div>` : ""}${esc(q.q)}`); if (q.figs) m.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(q.figs, +f.dataset.i); }; speak(q.q); setMood(av, "neutral", "Waiting for your answer…"); vf.hidden = false; va.focus(); }, 500); };
+  const ask = () => { const q = V.qs[V.i]; setMood(av, "think", "Thinking…"); setTimeout(() => { if (!vv.isConnected) return; const m = bubble("exam", `<div class="qn">Question ${V.i + 1} of ${V.qs.length}</div>${q.figs ? `<div class="recs">${figHtml(q.figs)}</div>` : ""}${esc(q.q)}`); if (q.figs) m.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(q.figs, +f.dataset.i); }; speak(q.q); setMood(av, "neutral", "Waiting for your answer…"); vf.hidden = false; if (V.i || !inGrid) va.focus(); }, 500); };
   bubble("exam", V.caseIntro = curCase && curCase.book ? `Good afternoon. Take a moment to read the patient's details and look at the records in front of you. I will ask you ${qs.length} questions, and I will show you more records as we go.` : `Good afternoon. I have your case in front of me${title ? ` — <i>${esc(title)}</i>` : ""}. I will ask you ${qs.length} questions. Answer as you would in the exam: structured and specific.`);
   vf.hidden = true; setTimeout(ask, 400);
   vf.addEventListener("submit", e => {
@@ -2529,10 +2560,7 @@ function renderPlanHome(){
   const t = live ? planToday(p) : null, next = t && t.tasks.find(x => !(p.done || {})[x.id]), left = live ? Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5) : 0;
   const cell = (go, h, v) => `<button type="button" class="coll-cell" data-go="${go}"><b>${h}</b>${esc(v)}</button>`;
   box.innerHTML = cell("plan", "TODAY", !live ? "Build your plan" : next ? next.label : t.tasks.length ? "Today is done" : "Nothing planned") + cell("parta", "PART A", "Practise questions") + cell("plan", "EXAM", live ? `${left} ${left === 1 ? "day" : "days"}` : "Set your date");
-  const boxC = $("#planHomeC"); if (!boxC) return;
-  if (!live){ boxC.innerHTML = `<div class="pane-b planhome"><div><b>${p && p.exam <= today ? "Set your next exam date" : "Plan your road to the exam"}</b><span class="meta">A daily plan built around your exam date and your weakest topics.</span></div><button class="btn sm primary" data-go="plan">${p ? "Open plan" : "Build my plan"}</button></div>`; return; }
-  const n = t.tasks.filter(x => !(p.done || {})[x.id]).length;
-  boxC.innerHTML = `<div class="pane-b planhome"><div><b>${left} ${left === 1 ? "day" : "days"} to your exam</b><span class="meta">${!t.tasks.length ? "Nothing planned for today" : n ? `${n} ${n === 1 ? "task" : "tasks"} left today` : "Today is done"}</span></div><button class="btn sm primary" data-go="plan">Open today's plan</button></div>`;
+  const boxC = $("#planHomeC"); if (boxC) boxC.innerHTML = box.innerHTML;
 }
 function planGo(id){
   const p = ST.plan, x = [(p.today || {}).tasks || []].flat().find(y => y.id === id); if (!x) return;
@@ -2820,7 +2848,8 @@ function mountChat(host, o){
   if (o.name && host.querySelector(".avatar-name")) host.querySelector(".avatar-name").textContent = o.name;
   const av = host.querySelector(".avatar-wrap"), cm = host.querySelector("#cm"), ci = host.querySelector("#ci"), cf = host.querySelector("#cf");
   setupMic(ci, host.querySelector("#cmic"));
-  const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; cm.appendChild(d); d.scrollIntoView({block: "nearest", behavior: "smooth"}); return d; };
+  const inGrid = !!host.closest(".exam-grid");
+  const bubble = (cls, html, opening) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; cm.appendChild(d); msgScroll(cm, d, inGrid && opening); return d; };
   async function turn(userText, shown){
     if (busy) return; busy = true; cs_(true);
     if (shown !== null) bubble("student", esc(shown != null ? shown : userText));
@@ -2829,16 +2858,18 @@ function mountChat(host, o){
     const ctx = hits ? excerpts(hits) : o.retrieve ? o.retrieve(userText) : "";
     const hint = o.nQ && shown !== null && !finished ? `\n\n[System: this reply answers question ${Math.min(o.nQ, ++sent)} of ${o.nQ}.]` : "";
     msgs.push({role: "user", content: userText + hint + ctx});
-    const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> thinking…'); if (av) setMood(av, "think", "Thinking…");
+    const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> thinking…', shown === null); if (av) setMood(av, "think", "Thinking…");
+    const slow = setTimeout(() => { wait.innerHTML = '<span class="dots"><i></i><i></i><i></i></span> The service is busy, still working on it…'; }, 12000);
     try {
       /* a long discussion keeps its opening and its most recent turns, so it never outgrows the AI's limits */
-      const t = await callAI(o.keep && msgs.length > o.keep + 1 ? [msgs[0], ...msgs.slice(-o.keep)] : msgs, o.system);
+      const t = await callAI(o.keep && msgs.length > o.keep + 1 ? [msgs[0], ...msgs.slice(-o.keep)] : msgs, o.system).finally(() => clearTimeout(slow));
       if (!cm.isConnected){ busy = false; return; }  /* a newer exam replaced this one */
       /* the textbook excerpts were for this turn only: long exams stay fast and inside the key's limits */
       msgs[msgs.length - 1].content = userText + hint;
       msgs.push({role: "assistant", content: t});
       const vm = t.match(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)/i), v = vm ? vm[1].toLowerCase() : null, body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim();
       wait.innerHTML = (v ? `<div class="verdict ${v}">${{correct: "✓ Correct", partial: "◐ Needs refinement", wrong: "✗ Incorrect"}[v]}</div>` : "") + chatMd(body); asked++;
+      if (inGrid && getComputedStyle(cm).overflowY === "auto") cm.scrollTo({top: cm.scrollHeight, behavior: "smooth"});
       if (hits && hits.length && (!o.showEv || o.showEv(userText))){ const ev = document.createElement("details"); ev.className = "evbox"; ev.innerHTML = `<summary>Evidence from the books (${hits.length})</summary>${hitsHtml(hits, userText)}`; wait.appendChild(ev); }
       if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…");
       const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; if (av){ wait.appendChild(rb); AV.wrap = av; speak(body); }
@@ -2872,7 +2903,12 @@ function mountChat(host, o){
   const cs_ = b => { host.querySelector("#cs").disabled = b; };
   cf.addEventListener("submit", e => { e.preventDefault(); const t = ci.value.trim(); if (!t) return; ci.value = ""; turn(t); });
   ci.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); cf.requestSubmit(); } });
-  turn(o.opening, null);
+  /* a fixed first line needs no call to the AI, so the exam opens at once and cannot stall here */
+  if (o.greet){
+    msgs.push({role: "user", content: o.opening}, {role: "assistant", content: o.greet});
+    const g = bubble("exam", chatMd(o.greet), true); asked++;
+    if (av){ const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { AV.wrap = av; speak(o.greet); }; g.appendChild(rb); setMood(av, "neutral", "Go on…"); AV.wrap = av; speak(o.greet); }
+  } else turn(o.opening, null);
   return {turn, finish};
 }
 
@@ -2937,7 +2973,7 @@ function startTutor(ev){
   const scoreRules = scored ? `\n\nEXAM FORMAT\n- This is a timed, scored exam of exactly ${nQ} questions. Number them silently. Each of the resident's replies is tagged by the system with the number of the question it answers; grade only that reply with VERDICT:CORRECT, VERDICT:PARTIAL or VERDICT:WRONG as the first word.\n- When the tag says it is question ${nQ} of ${nQ}, grade it and do NOT ask any further question — the system will then close the exam.\n- Do not output a SCORE line yourself; the system computes the score from your verdicts. Unanswered questions count as wrong.` : "";
   const sys = tutorSystem(`CASE\n${noFig(bc.full).slice(0, 3200)}\n\nTHE BOOK'S OWN QUESTION-AND-ANSWER SEQUENCE FOR THIS CASE (use as the backbone and correct answers; adapt, do not read out):\n${qa}\n\nLevel: ${$("#tLevel").value}.${unseenRules}${scoreRules}`, mode === "disc" ? "discussion" : "exam");
   clearInterval(TUT.tick); $("#tClock").hidden = true;
-  $("#tTitle").textContent = unseen ? "Case examination" : "Case discussion"; $("#tRun").hidden = false;
+  $("#tTitle").textContent = unseen ? "Case examination" : "Case discussion"; $("#tRun").hidden = false; $("#tRun").scrollIntoView({block: "start"}); examPill($("#tRun .exam-grid"));
   $("#tInfo").textContent = scored ? `${nQ} questions${limit ? " · " + limit + " min" : " · no time limit"} · unanswered questions count as wrong.` : "Open discussion — no score.";
   $("#tSheet").innerHTML = sheetHtml(bc);
   $("#tChat").innerHTML = ""; $("#tRecs").innerHTML = '<span class="meta">Loading the patient\'s records…</span>';
@@ -2953,8 +2989,10 @@ function startTutor(ev){
     }
     box.innerHTML = list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Record ${i + 1} — tap to enlarge</figcaption></figure>`).join("");
     box.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(list, +f.dataset.i); };
+    $("#tRun").scrollIntoView({block: "start"});
     const chat = mountChat($("#tChat"), {system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
       opening: mode === "disc" ? "The patient's details and records are on my screen. Ask me to study them and give you my summary, then we'll discuss the case." : "Begin the examination. This is question 1 of " + nQ + ".",
+      greet: unseen && $("#tLang").value !== "ar" ? `${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}. Please study the patient's details and all the records on your screen, then write your summary of the case.` : "",
       retrieve: t => excerpts(diverse(t + " " + bc.topic, 4)),
       onEnd: () => { clearInterval(TUT.tick); }});
     if (limit){
