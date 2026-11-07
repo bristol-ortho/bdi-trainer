@@ -834,7 +834,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
   <div class="stack">
    <div class="pane"><div class="pane-h"><h2>Your account</h2></div><div class="pane-b" id="cloudBox"></div></div>
    <div class="pane" id="boardPane" hidden><div class="pane-h"><h2>Leaderboard</h2><span class="meta">top 25 by XP</span></div><div class="pane-b" id="boardBox"></div></div>
-   <div class="pane" id="remindPane" hidden><div class="pane-h"><h2>Study reminder</h2></div><div class="pane-b"><label class="chk"><input type="checkbox" id="remOn"> Remind me to study every day</label><div class="f" style="margin-top:10px;max-width:220px"><label for="remAt">Time</label><input type="time" id="remAt" value="20:00"></div><p class="status" id="remSt"></p></div></div>
+   <div class="pane" id="remindPane" hidden><div class="pane-h"><h2>Study reminder</h2></div><div class="pane-b"><label class="chk"><input type="checkbox" id="remOn"> Remind me to study every day</label><label class="chk" style="margin-top:8px"><input type="checkbox" id="remFact" checked> With one fact from the books each day, and its reference</label><div class="f" style="margin-top:10px;max-width:220px"><label for="remAt">Time</label><input type="time" id="remAt" value="20:00"></div><p class="status" id="remSt"></p></div></div>
    <div class="pane"><div class="pane-h"><h2>About</h2></div><div class="pane-b"><p class="hint" style="margin:0 0 8px">BDI Trainer is for education and exam preparation only. It is not medical advice and does not replace clinical judgement.</p><p style="margin:0"><a href="https://bristol-ortho.github.io/bdi-trainer/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></div></div>
   </div>
  </div>
@@ -2139,7 +2139,7 @@ async function ligFix(store){
     .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
     .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); } b.pages = out; }
 }
-function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} }
+function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} remindSchedule().catch(() => {}); }
 function renderLibrary(){
   const pg = BOOKSTORE.reduce((a, b) => a + b.pages.length, 0);
   $("#libMeta").textContent = BOOKSTORE.length ? `${BOOKSTORE.length} books · ${pg.toLocaleString()} pages` : "";
@@ -3535,23 +3535,44 @@ function remindShow(){
   if (!LN()){ pane.hidden = true; return; }
   pane.hidden = false;
   let r = {}; try { r = JSON.parse(localStorage.getItem("bdi.remind") || "{}"); } catch {}
-  $("#remOn").checked = !!r.on; if (r.at) $("#remAt").value = r.at;
+  $("#remOn").checked = !!r.on; if (r.at) $("#remAt").value = r.at; $("#remFact").checked = r.fact !== false;
   if (pane.dataset.bound) return; pane.dataset.bound = "1";
   const apply = async () => {
-    const on = $("#remOn").checked, at = $("#remAt").value || "20:00", n = LN(), st = $("#remSt");
+    const on = $("#remOn").checked, at = $("#remAt").value || "20:00", fact = $("#remFact").checked, n = LN(), st = $("#remSt");
     try {
-      await n.cancel({notifications: [{id: 1}]}).catch(() => {});
       if (on){
         const p = await n.requestPermissions();
-        if (p.display !== "granted"){ $("#remOn").checked = false; st.textContent = "Notifications are off for BDI Trainer. Turn them on in your phone's Settings."; return; }
-        const [h, m] = at.split(":").map(Number);
-        await n.schedule({notifications: [{id: 1, title: "Bristol Dental Institute", body: "Time for today's fellowship practice.", schedule: {on: {hour: h, minute: m}, allowWhileIdle: true}}]});
-        st.textContent = "You will be reminded every day at " + at + ".";
-      } else st.textContent = "";
-      localStorage.setItem("bdi.remind", JSON.stringify({on: $("#remOn").checked, at}));
+        if (p.display !== "granted"){ $("#remOn").checked = false; st.textContent = "Notifications are off for BDI Trainer. Turn them on in your phone's Settings."; }
+      }
+      localStorage.setItem("bdi.remind", JSON.stringify({on: $("#remOn").checked, at, fact}));
+      const k = await remindSchedule();
+      if ($("#remOn").checked) st.textContent = k ? `Every day at ${at} you will receive one fact from the books, with its reference.` : `You will be reminded every day at ${at}.`;
+      else if (on) return; else st.textContent = "";
     } catch (e) { st.textContent = "The reminder could not be set."; }
   };
-  $("#remOn").addEventListener("change", apply); $("#remAt").addEventListener("change", () => { if ($("#remOn").checked) apply(); });
+  $("#remOn").addEventListener("change", apply); $("#remFact").addEventListener("change", () => { if ($("#remOn").checked) apply(); else localStorage.setItem("bdi.remind", JSON.stringify({...JSON.parse(localStorage.getItem("bdi.remind") || "{}"), fact: $("#remFact").checked})); });
+  $("#remAt").addEventListener("change", () => { if ($("#remOn").checked) apply(); });
+}
+/* Evidence of the day: the next 30 days are scheduled on the phone, one fact each, taken from the Part A starter bank
+   (every fact there was checked word for word against the book, and carries its book and page). Re-planned each time the
+   library opens, so it keeps going while the app is used. The same day always gets the same fact. Returns true if facts were set. */
+const FACT_DAYS = 30;
+async function remindSchedule(){
+  const n = LN(); if (!n) return false;
+  let r = {}; try { r = JSON.parse(localStorage.getItem("bdi.remind") || "{}"); } catch {}
+  await n.cancel({notifications: [{id: 1}, ...Array.from({length: FACT_DAYS}, (_, i) => ({id: 100 + i}))]}).catch(() => {});
+  if (!r.on) return false;
+  const [h, m] = (r.at || "20:00").split(":").map(Number);
+  let bank = [];
+  if (r.fact !== false){ try { bank = PA.bank && PA.bank.length ? PA.bank : JSON.parse(await decFile("q1.dat")); } catch {} bank = (bank || []).filter(f => f && f.q && f.x && f.ref && f.o && f.o[0]); }
+  if (!bank.length){ await n.schedule({notifications: [{id: 1, title: "Bristol Dental Institute", body: "Time for today's fellowship practice.", schedule: {on: {hour: h, minute: m}, allowWhileIdle: true}}]}); return false; }
+  const now = new Date(), list = [];
+  for (let i = 0; i <= FACT_DAYS - 1; i++){
+    const d = new Date(now); d.setDate(d.getDate() + i); d.setHours(h, m, 0, 0); if (d <= now) continue;
+    const f = bank[(Math.floor(dayStart(d) / DAY) * 7) % bank.length];
+    list.push({id: 100 + i, title: `Evidence of the day · ${f.t}`, body: `${f.q}\n→ ${f.x.toLowerCase().includes(String(f.o[0]).toLowerCase()) ? "" : f.o[0] + ". "}${f.x}\n— ${f.ref}`, schedule: {at: d, allowWhileIdle: true}});
+  }
+  await n.schedule({notifications: list}); return true;
 }
 
 /* the student removes the account and all its data from inside the app (required by the app stores) */
