@@ -31,7 +31,7 @@
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-variant-numeric:lining-nums}
 [dir=rtl],[lang=ar]{font-family:"IBM Plex Sans Arabic",var(--f-body)}
 h1,h2,h3{margin:0;line-height:1.25;text-wrap:balance;font-weight:600;letter-spacing:-.005em}
 h1{font-family:var(--f-display);font-weight:600;letter-spacing:0}
@@ -108,7 +108,7 @@ main{padding-block:28px 64px;min-width:0}
 .item{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:13px 0;border-top:1px solid var(--line)}
 .item:first-child{border-top:0;padding-top:2px}
 .item h3{font-size:14.5px;font-weight:600}
-.meta{font-family:var(--f-body);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta{font-family:var(--f-body);font-size:12.5px;color:var(--muted);font-variant-numeric:lining-nums tabular-nums}
 .lead{color:var(--muted);max-width:72ch;margin:0 0 16px}
 .hint{font-size:13px;color:var(--muted);margin:6px 0 0}
 .status{font-size:13px;color:var(--muted)}
@@ -130,7 +130,7 @@ input:not([type=checkbox]):not([type=radio]):focus,select:focus,textarea:focus{o
 select{appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236e6960' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
 textarea{resize:vertical;min-height:64px;line-height:1.55}
 textarea.big{min-height:200px}
-input[type=number]{font-variant-numeric:tabular-nums}
+input[type=number]{font-variant-numeric:lining-nums tabular-nums}
 input[type=checkbox],input[type=radio]{accent-color:var(--gold);width:16px;height:16px;margin:0}
 ::placeholder{color:#a8a296}
 .chk{font-size:13.5px;color:var(--ink-2);display:inline-flex;gap:8px;align-items:center;cursor:pointer}
@@ -231,7 +231,7 @@ mark{background:#f3e3b4;padding:0 2px;border-radius:2px;color:inherit}
 .tw th{background:var(--sunk);font-weight:600;font-size:12.5px;color:var(--ink-2)}
 .answer code{font-family:var(--f-mono);font-size:.9em}
 .answer blockquote{margin:0 0 10px;padding:4px 12px;border-inline-start:3px solid var(--line);color:var(--muted)}
-.cite{font-size:11.5px;font-weight:500;background:var(--gold-soft);color:var(--gold-ink);padding:2px 7px;border-radius:5px;white-space:nowrap;border:1px solid #ecdcb2}
+.cite{font-size:12px;font-weight:500;background:var(--gold-soft);color:var(--gold-ink);padding:2px 7px;border-radius:5px;white-space:nowrap;border:1px solid #ecdcb2}
 .cite.gk{background:var(--sunk);color:var(--muted);border-color:var(--line)}
 .sources{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
 .src{border:1px solid var(--line);border-radius:var(--r-sm);margin:8px 0;background:var(--surface);transition:border-color .15s}
@@ -313,7 +313,7 @@ details.mini{margin-bottom:12px}details.mini summary,details summary.muted{curso
 .ask input{flex:1}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .timerbar{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;padding:10px 14px;background:var(--sunk);border-radius:var(--r-sm)}
-.clock{font-variant-numeric:tabular-nums;font-size:18px;font-weight:700;padding:3px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);letter-spacing:.02em}
+.clock{font-variant-numeric:lining-nums tabular-nums;font-size:18px;font-weight:700;padding:3px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);letter-spacing:.02em}
 .clock.low{color:var(--hi);border-color:var(--hi);background:var(--hi-soft)}
 .qa-box{border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px;margin:12px 0;background:var(--sunk)}
 .grade{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -587,6 +587,48 @@ html[data-look] body.locked .shell{display:none!important}
 html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--night);z-index:9999;pointer-events:none}
 /* room for the copyright bar under the sign-in form, so its last line is never covered */
 .gate-main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+/* design review fixes: icons, readable small text, AA contrast, finger-sized controls on touch screens */
+.ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px}
+.btn .ico+*,.btn .ico{margin-inline-end:6px}
+.btn.rec .ico rect{fill:currentColor}
+.brand p,.navlbl,.cine-sub,html[data-look="collegiate"] .brand p,.coll-cell b{font-size:12px}
+.eyebrow,.wsm,.flag,.viva-msg .qn,.exh span,.intro-sub{font-size:12px}
+.pill,.cite,.recs figcaption,.side-foot span{font-size:12px}
+.pill.d2{color:#80530a}
+html:not([data-look="collegiate"]) .coll-cell b{color:var(--gold-ink)}
+@media (pointer:coarse){
+  .btn,.tab,.stab{min-height:44px}
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select{min-height:44px}
+  details>summary{min-height:44px;padding-block:10px;box-sizing:border-box}
+  label.chk{min-height:44px;display:inline-flex;align-items:center;gap:8px}
+  .chips label,#quizSetup label{min-height:44px;display:inline-flex;align-items:center}
+  .pane-b a[target="_blank"]{display:inline-flex;align-items:center;min-height:44px}
+  .pcheck{position:relative}
+  .pcheck::after{content:"";position:absolute;inset:-9px}
+}
+/* the floating "records / examiner" button never covers the copyright line */
+@media (max-width:1099px){body:has(.exam-pill:not([hidden])) .copybar{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+/* design review 2026-11-07: tab bar hints, phone forms, reference chips, book list */
+nav.tabs.fade-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
+nav.tabs.fade-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 44px);mask-image:linear-gradient(90deg,transparent,#000 44px)}
+nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 44px,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,transparent,#000 44px,#000 calc(100% - 44px),transparent)}
+.src .cite{white-space:normal;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+#bookList .item{flex-wrap:nowrap}#bookList .item>div{min-width:0}#bookList .item>.pill{flex:none}
+.casetext b{font-weight:600;color:var(--ink)}
+@media (max-width:560px){
+ #pracBox>.actions:first-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ #pracBox>.actions:first-child>#bkFilter,#pracBox>.actions:first-child>#bkRandom{grid-column:1/-1}
+ #pracBox>.actions:first-child>select{width:100%!important}
+ #tutorForm .actions .btn.primary,#paForm>.btn,#planForm>.btn,#evForm>.btn{width:100%;flex:1 1 100%}
+ #quizSetup>.actions{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+ #quizSetup>.actions>.f{width:auto!important}
+ #quizSetup>.actions>.btn.primary,#quizSetup>.actions>.meta{grid-column:1/-1}
+ #quizSetup>.actions>.f:has(#qTime),#quizSetup>.actions>#qMinWrap{grid-column:1/-1}
+ #quizSetup>.actions>.btn.primary{width:100%}
+ #v-mycase .pane-b>.actions>.btn{flex:1 1 auto}
+ #v-mycase #myMentor{order:-1;flex-basis:100%}
+ #cephForm .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:end}
+}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -788,7 +830,7 @@ html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:e
 </div><footer class="copybar">© 2026 Bristol Dental Institute. All rights reserved.</footer></main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>window.BDI_VER={"examiner-idle.mp4": "c0a7906cb8", "examiner-talk.mp4": "889bd17f70", "examiner.jpg": "333b695e67", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "ccf3e8a9cc"};</script>
+<script>window.BDI_VER={"examiner-idle.mp4": "7c7fe52a58", "examiner-talk.mp4": "a97b96ddab", "examiner.jpg": "a523633d26", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "ccf3e8a9cc"};</script>
 <script src="config.js"></script>
 <script>/* Bristol Dental Institute — Orthodontic Fellowship Trainer: content (cases, viva rubrics, quiz bank) */
 const BOOKS = [
@@ -945,7 +987,7 @@ Ceph: ANB 3, MMPA 27, UI–MxP 108, LI–MnP 94, LI–APog 1 mm. IOTN DHC 4d, AC
  planPts:[["Extraction of first premolars (×4)","first premolar|four premolar|4 premolar|4 ?x ?premolar|premolar"],["Fixed appliances","fixed|brace|appliance"],["Anchorage","anchorage"],["Retention","retain|retention|retainer"],["Preserve incisor position / profile","profile|incisor|proclin|position"]],
  viva:[
  {q:"How do you analyse space, and what is your space requirement in this case?",
-  model:"Perform space analysis: crowding (9 mm upper, 7 mm lower), plus levelling curve of Spee, plus incisor movement requirements (retraction/proclination), plus expansion, minus space available, and any anchorage requirements. Here: ~9 mm and 7 mm crowding with minimal curve of Spee and no incisor change planned; this exceeds what can safely be gained by IPR/expansion, so extraction is needed.",
+  model:"Perform space analysis: crowding (9 mm upper, 7 mm lower), plus levelling curve of Spee, plus incisor movement requirements (2 mm of space for every 1 mm of incisor retraction), plus any anchorage loss allowed, minus space gained by expansion, distalisation or IPR. Here: ~9 mm and 7 mm crowding with minimal curve of Spee and no incisor change planned; this exceeds what can safely be gained by IPR/expansion, so extraction is needed.",
   pts:[["Crowding measurement","crowd"],["Curve of Spee","spee|level"],["Incisor position change","incisor|retract|procl"],["Expansion / distalisation limits","expan|distal"],["Conclusion: extraction needed","extract"]]},
  {q:"Which teeth would you extract and why?",
   model:"First premolars in all four quadrants: they are close to the crowding in the canine/incisor region, and their extraction gives the required space with the greatest facilitation to align the buccally placed canines. The buccal segments relationships stay Class I because the space is shared equally. Anchorage must then be planned for each arch.",
@@ -1519,31 +1561,31 @@ const QUIZ = [
 ["Cephalometrics","The normal interincisal angle is:",["90° ± 6","120° ± 10","135° ± 10","160° ± 10"],2,"Interincisal angle 135° ± 10°; large in Class II/2 and bimaxillary retroclination."],
 ["Class II division 1","The defining incisor feature of Class II division 1 is:",["Lower incisor edges lie posterior to the cingulum plateau of the upper incisors, with reduced overjet","Lower incisor edges lie posterior to the cingulum plateau of the upper incisors, with increased overjet","Lower incisor edges lie edge-to-edge with the upper incisors","Lower incisor edges lie anterior to the cingulum plateau of the upper incisors"],1,"BSI Class II/1: lower incisor edges lie posterior to the cingulum plateau of the upper incisors, with overjet increased. Reduced overjet describes Class II/2."],
 ["Class II division 1","Which is the most common skeletal contribution to Class II division 1?",["Maxillary prognathism","Retrognathic mandible","Bimaxillary prognathism","Increased SNA"],1,"Most commonly a retrognathic mandible, though variations exist."],
-["Class II division 1","Overjet over this value substantially increases the risk of incisor trauma:",["3 mm","5 mm","> 3.5 mm","> 9 mm only"],2,"Overjets above 3.5 mm are associated with increased trauma risk; risk higher with lip incompetence."],
+["Class II division 1","Overjet over this value substantially increases the risk of incisor trauma:",["> 1 mm","> 2 mm","> 3.5 mm","> 9 mm"],2,"Overjets above 3.5 mm are associated with increased trauma risk; risk higher with lip incompetence."],
 ["Class II division 1","Which feature makes a Class II division 1 more likely to relapse?",["Lip competence","Persisting lower lip trap behind upper incisors","Normal overbite","Class I molars"],1,"A lip trap continues to procline upper incisors; address by lip competence and retention."],
-["Class II division 2","Class II division 2 typically has:",["Proclined upper centrals","Retroclined upper centrals and low MMPA","Open bite","High lower lip line absent"],1,"Retroclined upper centrals, deep overbite, and often low angle with a high lower lip line."],
-["Class II division 2","What is the key to stable correction of Class II division 2?",["Lower incisor proclination","Correcting interincisal angle and lip line interaction","Extraction of upper first premolars always","Bite plane alone"],1,"Interincisal angle and lip line relationship determine stability; avoid proclining lower incisors."],
+["Class II division 2","Class II division 2 typically has:",["Proclined upper centrals","Retroclined upper centrals and low MMPA","Open bite","A low lower lip line"],1,"Retroclined upper centrals, deep overbite, and often low angle with a high lower lip line."],
+["Class II division 2","What is the key to stable correction of Class II division 2?",["Lower incisor proclination","Correcting interincisal angle and lip line interaction","Extraction of upper first premolars","Bite plane alone"],1,"Interincisal angle and lip line relationship determine stability; avoid proclining lower incisors."],
 ["Class III","In pseudo Class III, the patient characteristically:",["Cannot reach edge-to-edge incisors","Has a forward mandibular displacement on closure","Has open bite","Has Class II molars"],1,"There is a functional shift from RCP to ICP."],
-["Class III","The best timing for protraction facemask with RME is:",["After growth completes","Pre-pubertal / early mixed dentition","Only adults","At age 16"],1,"Sutural response is better in younger patients (about 8–10 years)."],
+["Class III","The best timing for protraction facemask with RME is:",["After growth completes","Pre-pubertal / early mixed dentition","Late permanent dentition","At age 16"],1,"Sutural response is better in younger patients (about 8–10 years)."],
 ["Class III","Surgical correction of a true Class III is delayed until:",["Age 10","Growth is complete","First molars erupt","Canines erupt"],1,"Surgery is postponed until growth cessation to avoid relapse."],
 ["Open bite","Which is a major cause of anterior open bite that is difficult to correct and relapses?",["Normal vertical growth","Persisting tongue thrust/digit habit with vertical growth pattern","Deep bite","Class I molars"],1,"Persisting habit and skeletal pattern contribute to relapse."],
 ["Open bite","Best treatment for severe skeletal open bite with vertical maxillary excess in an adult is:",["Anterior elastics only","Le Fort I impaction orthognathic surgery","Headgear only","Lower arch extractions"],1,"Surgical posterior maxillary impaction treats the skeletal cause."],
 ["Open bite","Non-surgical treatment of mild skeletal open bite is aided by:",["Molar intrusion with TADs","Molar extrusion","Cervical headgear","Class II elastics"],0,"TADs can intrude posterior teeth leading to mandibular autorotation."],
 ["Deep bite","Overbite reduction in a growing low-angle patient is best achieved by:",["Incisor extrusion","Differential eruption of molars (levelling)","Cervical headgear on high-angle","Anterior bite plane in an adult"],1,"Levelling and allowing molar eruption in growing low-angle patients."],
-["Deep bite","Complete overbite to palatal mucosa means:",["Overbite is average","Lower incisors contact palatal mucosa or upper cingulum","Open bite","Edge-to-edge relationship"],1,"The lower incisors bite into the palate; may be traumatic."],
+["Deep bite","A complete overbite means:",["The overbite is average","The lower incisors contact the upper incisors or the palatal mucosa","The incisors do not overlap vertically","The incisors meet edge to edge"],1,"In a complete overbite the lower incisors contact the upper incisors or the palatal mucosa; contact with the mucosa may be traumatic."],
 ["Crowding & extractions","Which factor favours extractions?",["Mild crowding, retrusive profile","Severe crowding, protrusive profile, Class I","Class III with retrusive profile","Open bite with mild crowding"],1,"Severe crowding with proclined incisors and protrusive profile favours extraction."],
 ["Crowding & extractions","Space analysis includes:",["Crowding only","Crowding, curve of Spee, incisor movement and anchorage","Skeletal pattern only","Overjet only"],1,"Space analysis includes crowding, levelling, incisor change, and anchorage needs."],
-["Crowding & extractions","As a rule of thumb, levelling a curve of Spee requires arch length of about:",["Nothing: levelling never needs space","1 mm per 1 mm depth of the curve","10 mm per 1 mm depth","Twice the crowding"],1,"Roughly 1 mm of arch length per 1 mm depth of the curve."],
+["Crowding & extractions","As a rule of thumb, levelling a curve of Spee requires arch length of about:",["3 mm per 1 mm depth of the curve","1 mm per 1 mm depth of the curve","5 mm per 1 mm depth of the curve","10 mm per 1 mm depth of the curve"],1,"Roughly 1 mm of arch length per 1 mm depth of the curve."],
 ["Crowding & extractions","Which is generally considered NOT an indication for extractions?",["Severe crowding","Mild crowding in a patient with a retrusive profile","Proclined lower incisors needing retraction","Large overjet camouflage"],1,"A retrusive profile with mild crowding argues against extraction."],
-["Impacted teeth","Parallax method: with a tube shift, a palatally placed canine on the radiograph moves:",["In the same direction as the tube shift","In the opposite direction","Not at all","Distally always"],0,"SLOB rule: Same Lingual, Opposite Buccal."],
+["Impacted teeth","Parallax method: with a tube shift, a palatally placed canine on the radiograph moves:",["In the same direction as the tube shift","In the opposite direction","Not at all","Mesially"],0,"SLOB rule: Same Lingual, Opposite Buccal."],
 ["Impacted teeth","Poor prognostic factor for an impacted canine includes:",["Young age","Canine angulation < 15° from midline","Angulation > 31° and overlap of lateral incisor beyond its midline","Position in sector 1"],2,"Increased angulation and overlap predict worse outcomes."],
-["Impacted teeth","Interceptive extraction of primary canine may improve canine position in about:",["0–5%","10%","60–80% (if early, mild displacement)","100%"],2,"It may help a high percentage in suitable cases (aged 10–13, mild displacement)."],
+["Impacted teeth","Interceptive extraction of primary canine may improve canine position in about:",["0–5%","10–20%","60–80%","100%"],2,"It may help a high percentage in suitable cases (aged 10–13, mild displacement)."],
 ["Impacted teeth","Root resorption of lateral incisors from ectopic canines is best assessed with:",["Bitewing","CBCT","Cephalometric view only","Photographs"],1,"CBCT provides 3D localisation and resorption assessment."],
 ["Surgical orthodontics","Pre-surgical orthodontic decompensation in Class III means:",["Proclining the lower incisors and retracting upper incisors","Retroclining lower incisors further","Extracting all premolars","Opening the bite"],0,"Remove dental compensation so surgery can correct the skeletal discrepancy."],
 ["Surgical orthodontics","Maxillary advancement is commonly performed through:",["BSSO","Le Fort I osteotomy","Genioplasty","Distraction of the condyle"],1,"Le Fort I osteotomy."],
-["Surgical orthodontics","A complication specific to BSSO is:",["Inferior alveolar nerve paraesthesia","Hearing loss","Visual loss","Facial nerve palsy always"],0,"Lower lip and chin numbness due to IAN involvement."],
+["Surgical orthodontics","A complication specific to BSSO is:",["Inferior alveolar nerve paraesthesia","Hearing loss","Visual loss","Infraorbital nerve paraesthesia"],0,"Lower lip and chin numbness due to IAN involvement."],
 ["Growth & timing","Peak pubertal growth in girls typically occurs at about:",["8 years","12 years","15 years","18 years"],1,"Girls: ~11–12 years; boys ~13–14 years."],
-["Growth & timing","Which skeletal maturity indicator is commonly used to time functional appliances?",["Cervical vertebral maturation (CVM)","Tooth wear","Bite force","Intercanine width"],0,"CVM staging on lateral ceph and hand-wrist radiographs."],
+["Growth & timing","Which skeletal maturity indicator is commonly used to time functional appliances?",["Cervical vertebral maturation (CVM)","Tooth wear","Bite force","Intercanine width"],0,"CVM staging on the lateral cephalogram; hand-wrist radiographs are an alternative."],
 ["Growth & timing","Mandibular growth tends to continue ______ than maxillary growth.",["Earlier","Later","At the same time","Not at all"],1,"Mandibular growth ends later than maxillary, relevant in Class III."],
 ["Growth & timing","Which stage is best for a functional appliance for Class II?",["Pre-pubertal","Around the pubertal growth spurt","Post-pubertal adult","Any time equally"],1,"Treatment at the pubertal growth spurt yields best response."],
 ["Functional appliances","Twin Block is:",["Fixed appliance","Removable, tooth-borne appliance with interlocking inclined planes","Extra-oral appliance","Palatal expansion device"],1,"Twin Block is removable with upper and lower acrylic blocks."],
@@ -1551,15 +1593,15 @@ const QUIZ = [
 ["Functional appliances","Herbst is classified as:",["Removable functional appliance","Fixed functional appliance","Headgear","Aligner"],1,"Fixed functional appliance; less compliance dependent."],
 ["Functional appliances","In a Twin Block, wear is recommended:",["Full-time (including eating)","At night only","2 hours daily","Only on weekends"],0,"Full-time wear gives best response."],
 ["Functional appliances","Which is a contraindication to functional appliances?",["Increased overjet","Class II with retrognathic mandible","Severe maxillary prognathism or poor compliance","Pubertal growth spurt"],2,"Poor compliance or primarily maxillary excess makes them less useful."],
-["Functional appliances","Bionator / Activator work mainly by:",["Moving the maxilla","Postural change and muscular forces transmitted","Torque on incisors","Surgery"],1,"They modify muscular forces and mandibular posture."],
+["Functional appliances","Bionator / Activator work mainly by:",["Moving the maxilla forwards","Holding the mandible forward so that muscle forces act on the teeth and jaws","Applying torque to the incisors","Expanding the palate"],1,"They modify muscular forces and mandibular posture."],
 ["Anchorage & mechanics","Anchorage is:",["Resistance to unwanted tooth movement","Force of retraction","Orthodontic wire","A type of retainer"],0,"Resistance to unwanted tooth movement."],
 ["Anchorage & mechanics","Which of these gives maximum anchorage?",["Reciprocal closure","Temporary anchorage devices (TADs)","Banding the second molars","Lower arch lingual arch"],1,"TADs give absolute anchorage."],
 ["Anchorage & mechanics","Newton's third law in orthodontics means:",["Every force has an equal and opposite reaction","Teeth move by constant velocity","Force is not needed","Bone resorbs on tension side"],0,"Reaction forces affect the anchor teeth."],
-["Anchorage & mechanics","Light continuous forces are preferred because:",["They are cheaper","Heavy forces cause hyalinisation and delayed tooth movement","They cause faster movement always","They avoid wires"],1,"Excessive force leads to hyalinisation and undermining resorption."],
+["Anchorage & mechanics","Light continuous forces are preferred because:",["They need fewer appointments","Heavy forces cause hyalinisation and delayed tooth movement","They remove the need for retention","They prevent all root resorption"],1,"Excessive force leads to hyalinisation and undermining resorption."],
 ["Anchorage & mechanics","On the pressure side of a moving tooth you will see:",["Bone deposition","Osteoclastic bone resorption","No change","Ankylosis"],1,"Pressure side: resorption; tension side: deposition."],
-["Retention & relapse","Which tooth movement has highest tendency to relapse?",["Rotated teeth","Labially tilted lower incisors","Space closure","Intrusion"],0,"Rotations, due to supracrestal fibres, are prone to relapse."],
+["Retention & relapse","Which tooth movement has highest tendency to relapse?",["Rotated teeth","Bodily movement of molars","Space closure","Molar intrusion"],0,"Rotations, due to supracrestal fibres, are prone to relapse."],
 ["Retention & relapse","Circumferential supracrestal fibrotomy (pericision) is used to reduce relapse of:",["Open bite","Rotations","Class II","Crossbite"],1,"CSF reduces rotational relapse."],
-["Retention & relapse","Retention should be:",["6 months only","Indefinite for bonded lower retainers by many protocols","Never needed","Stopped at debond"],1,"Most clinicians recommend long-term/indefinite retention."],
+["Retention & relapse","Current advice on the length of retention is generally:",["6 months","Long term, often indefinite","12 months","Until debond only"],1,"Most clinicians recommend long-term/indefinite retention."],
 ["Retention & relapse","Which retainer is most suited to prevent late lower incisor crowding?",["Hawley upper","Bonded canine-to-canine","Headgear","Twin Block"],1,"Bonded lower canine-to-canine retainer is popular."],
 ["Retention & relapse","Lower incisor relapse after proclination is explained by:",["Soft tissue pressures","The lack of growth","Overbite","Thumb-sucking"],0,"Soft tissue balance of lips and tongue."]
 ];
@@ -1825,7 +1867,7 @@ function streak(){
 }
 function renderDashboard(){
   const L = levelInfo(ST.xp);
-  const h = new Date().getHours(), nm = (ST.name || "").trim().replace(/^dr\.?\s+/i, "");
+  const h = new Date().getHours(), nm = (ST.name || "").trim().replace(/^dr\.?\s+/i, "").replace(/\s+/g, " ").replace(/(^|[\s-])([a-z])/g, (m, s, c) => s + c.toUpperCase());
   $("#hello").textContent = `${h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"}, ${nm ? "Dr " + nm : "Doctor"}.`;
   $("#helloC").textContent = $("#hello").textContent;
   const g = ST.events.filter(e => e.score != null), sk = streak();
@@ -1878,7 +1920,7 @@ function avTalk(wrap, on){
   const vt = wrap && wrap.querySelector(".vt"); if (!vt || !vt.src) return;
   if (on){ const p = vt.play(); if (p) p.catch(() => {}); } else vt.pause();
 }
-function avatarHtml(){ return `<div class="avatar-wrap"><div class="av" data-mood="neutral"><img src="examiner.jpg?v=${VER["examiner.jpg"] || "1"}" alt="BDI Examiner" width="640" height="800" decoding="async"><video class="vi" muted loop playsinline preload="auto" aria-hidden="true"></video><video class="vt" muted loop playsinline preload="auto" aria-hidden="true"></video><span class="sbars" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="avatar-name">BDI Examiner</div><div class="avatar-status"></div><div class="vrow"><label>Voice <select class="vsel"></select></label><button type="button" class="btn sm vtest">Test voice</button></div></div>`; }
+function avatarHtml(){ return `<div class="avatar-wrap"><div class="av" data-mood="neutral"><img src="examiner.jpg?v=${VER["examiner.jpg"] || "1"}" alt="BDI Examiner" width="640" height="800" decoding="async"><video class="vi" muted loop playsinline preload="auto" aria-hidden="true"></video><video class="vt" muted loop playsinline preload="auto" aria-hidden="true"></video><span class="sbars" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="avatar-name">BDI Examiner</div><div class="avatar-status"></div><div class="vrow"><button type="button" class="btn sm vtest">Test voice</button></div></div>`; }
 function setMood(box, mood, status){
   const wrap = box && (box.classList.contains("avatar-wrap") ? box : box.querySelector(".avatar-wrap")); if (!wrap) return;
   AV.wrap = wrap; wrap.querySelector(".av").dataset.mood = mood || "neutral";
@@ -1889,7 +1931,8 @@ const MALE_RE = /\b(ryan|guy|davis|christopher|eric|roger|brian|thomas|oliver|da
 function savedVoice(){ try { return localStorage.getItem("bdi.vname") || ""; } catch { return ""; } }
 function pickVoice(lang){
   const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
-  const sv = savedVoice(); if (sv){ const f = vs.find(v => v.name === sv); if (f){ VOICE_MALE = true; return f; } }
+  /* one examiner voice for everyone: Daniel (British English, male); devices without him get the closest British male voice */
+  if (lang !== "ar"){ const dan = vs.filter(v => /^daniel\b/i.test(v.name) && /^en[-_]GB/i.test(v.lang)); if (dan.length){ VOICE_MALE = true; return dan.find(v => /enhanced|premium/i.test(v.name)) || dan[0]; } }
   if (lang === "ar") { const ar = vs.filter(v => /^ar/i.test(v.lang)); return ar.find(v => MALE_RE.test(v.name)) || ar[0] || null; }
   const BAD = /compact|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|kathy|ralph|eddy|flo\b|grandma|grandpa|reed|rocko|sandy|shelley/i;
   const FEM = /female|samantha|serena|kate|moira|karen|zira|susan|hazel|aria|jenny|sonia|libby|maisie|michelle|ava|allison|victoria|tessa|fiona|martha|catherine|nicky|sara|emma|amy|joanna/i;
@@ -1909,7 +1952,7 @@ function pickVoice(lang){
 }
 function spoken(t){
   let x = String(t || "");
-  x = x.replace(/VERDICT\s*:\s*(CORRECT|PARTIAL|WRONG)/gi, " ").replace(/SCORE\s*:\s*\d+\s*\/\s*100/gi, " ")
+  x = x.replace(/VERDICT\s*:\s*(CORRECT|PARTIAL|WRONG)/gi, " ").replace(/SCORE\s*:\s*\d+\s*\/\s*\d+/gi, " ")
     .replace(/<[^>]+>/g, " ").replace(/\[[^\]]*\]/g, " ").replace(/\((?:[^()]*\b(?:p\.|pp\.|et al|19\d\d|20\d\d)[^()]*)\)/g, " ")
     .replace(/[*#_`>~]/g, "").replace(/^\s*[-•–]\s+/gm, "").replace(/^\s*\d+[.)]\s+/gm, "")
     .replace(/\be\.g\./gi, "for example").replace(/\bi\.e\./gi, "that is").replace(/\bvs\.?/gi, "versus").replace(/\betc\./gi, "and so on").replace(/\bcf\./gi, "compare")
@@ -1989,11 +2032,20 @@ function search(q, k = 6){
 }
 const BOOKOFF = {cases: 10};
 const cite = c => { const b = BOOKSTORE[c.b], o = BOOKOFF[b.id]; return o ? `${b.title}, p. ${c.page - o}` : `${b.title}, PDF p. ${c.page}`; };
+/* a short preview that starts at a whole word, around the first searched word, so it never opens mid-word */
+function snip(t, words){
+  t = t.replace(/\s+/g, " ").trim(); let at = 0;
+  const re = /[A-Za-z]{3,}/g; let m; while ((m = re.exec(t))){ if (words.has(tok(m[0])[0])){ at = m.index; break; } }
+  let s = Math.max(0, at - 40); if (s > 0){ const sp = t.indexOf(" ", s); s = sp < 0 || sp > at ? s : sp + 1; }
+  else { const first = t.search(/[A-Z(]/); if (first > 0 && first < 25 && /^[a-z]/.test(t)) s = first; }
+  let e = Math.min(t.length, s + 120); if (e < t.length){ const sp = t.lastIndexOf(" ", e); if (sp > s + 60) e = sp; }
+  return (s > 0 ? "…" : "") + t.slice(s, e) + (e < t.length ? "…" : "");
+}
 function hitsHtml(hits, q){
   if (!hits.length) return INDEX ? '<p class="muted">No passages found. Try other or fewer terms.</p>' : '<p class="muted">The textbook library is still loading — try again in a few seconds.</p>';
   const words = new Set(tok(q || ""));
   const hl = t => esc(t).replace(/[A-Za-z]{3,}/g, w => words.has(tok(w)[0]) ? `<mark>${w}</mark>` : w);
-  return hits.map(c => `<details class="src"><summary><span class="cite">${esc(cite(c))}</span> <span class="snip">${esc(c.t.slice(0, 110))}…</span></summary><div>${hl(c.t)}</div></details>`).join("");
+  return hits.map(c => `<details class="src"><summary><span class="cite">${esc(cite(c))}</span> <span class="snip">${esc(snip(c.t, words))}</span></summary><div>${hl(c.t)}</div></details>`).join("");
 }
 function parseBook(text){
   const segs = text.split(/\f?\[\[p (\d+)\]\]\n?/), pages = [];
@@ -2028,7 +2080,18 @@ async function loadLibrary(){
   BOOKSTORE = got.filter(Boolean);
   st.textContent = window.LIBFAIL.length ? "Some books could not be opened. Reload the page; if it persists, tell your supervisor." : "";
   BOOKSTORE.sort((a, b) => a.title.localeCompare(b.title));
-  await sleep(0); buildIndex(); renderLibrary(); afterLibrary();
+  await sleep(0); ligFix(BOOKSTORE); buildIndex(); renderLibrary(); afterLibrary();
+}
+/* some scanned books split words at the fi / ff / fl ligatures ("signi fi cant", "the fi rst") or after one letter ("r etainers");
+   rejoin a split only when the joined word is used elsewhere in the library, so real word gaps are left alone */
+function ligFix(store){
+  const vocab = new Set();
+  store.forEach(b => b.pages.forEach(p => { if (p) for (const w of p.match(/[A-Za-z]{3,}/g) || []) vocab.add(w.toLowerCase()); }));
+  const has = w => { w = w.toLowerCase(); return vocab.has(w) || (w.length > 5 && vocab.has(w.replace(/(ing|ed|es|s|ly|ers|er)$/, ""))); };
+  store.forEach(b => { b.pages = b.pages.map(p => p && p
+    .replace(/\b([A-Za-z]+) (ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, l, g, r) => has(l + g + r) ? l + g + r : has(g + r) ? l + " " + g + r : has(l + g) && has(r) ? l + g + " " + r : m)
+    .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
+    .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); });
 }
 function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } }
 function renderLibrary(){
@@ -2097,7 +2160,9 @@ async function stagedViva(bc){
 const figHtml = list => list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Patient record ${i + 1}" loading="lazy"><figcaption>Tap to enlarge</figcaption></figure>`).join("");
 const sheetHtml = bc => `<div class="exsheet"><div class="exh">Diagnostic Examination <span>Patient details</span></div><table>${caseSheet(bc).filter(([k, v]) => v).map(([k, v]) => `<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("") || '<tr><th>History</th><td>No written history for this case. Work from the records.</td></tr>'}</table></div>`;
 /* what a card may say before the examination: who the patient is and why they came, never the diagnosis */
-const sheetLine = bc => { const f = Object.fromEntries(caseSheet(bc)); return [[f.Sex, f.Age].filter(Boolean).join(", "), f.Complaint || "Patient details and records"].filter(Boolean).join(" — "); };
+const sheetLine = (bc, short) => { const f = Object.fromEntries(caseSheet(bc)); return [[f.Sex, f.Age].filter(Boolean).join(", "), f.Complaint || (short ? "" : "Patient details and records")].filter(Boolean).join(" — "); };
+/* shortens a label at a whole word, never mid-word */
+const clip = (s, n) => { s = String(s).replace(/\s+/g, " ").trim(); if (s.length <= n) return s; const cut = s.lastIndexOf(" ", n); return s.slice(0, cut > n * .6 ? cut : n).replace(/[\s,;:.—–-]+$/, "") + "…"; };
 const bookCase = bc => ({id: "b" + bc.id, title: "Case " + bc.id, topic: bc.topic, text: noFig(!bc.intro || bc.intro.startsWith(bc.summary.slice(0, 120)) ? (bc.intro || bc.summary) : bc.summary + "\n\n" + bc.intro), viva: bc.qs.map(q => ({q: noFig(q.q), model: noFig(q.a), page: q.page})), book: bc});
 const findCase = id => { if (/^b\d/.test(id)){ const bc = BOOKCASES.find(c => "b" + c.id === id); return bc ? bookCase(bc) : null; } return visCases().find(c => c.id === id) || null; };
 function renderBank(more){
@@ -2129,7 +2194,7 @@ function showCaseTab(tab){
   const canViva = c.book || c.id === "my"; $('#caseTabs [data-tab="viva"]').hidden = !canViva;
   if (tab === "viva" && !canViva){ tab = "read"; curTab = "read"; $$("#caseTabs .stab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === "read"))); }
   if (tab === "read"){
-    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2>${c.book ? `<span class="meta">Clinical Cases in Orthodontics, p. ${c.book.page - 10}</span>` : ""}</div><div class="pane-b"><pre class="casetext">${esc(c.text)}</pre>${c.book ? '<div class="recs" id="caseRecs"></div>' : ""}</div></div>
+    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2>${c.book ? `<span class="meta">Clinical Cases in Orthodontics, p. ${c.book.page - 10}</span>` : ""}</div><div class="pane-b"><pre class="casetext">${caseFmt(c.text)}</pre>${c.book ? '<div class="recs" id="caseRecs"></div>' : ""}</div></div>
       <div class="pane"><div class="pane-h"><h2>Textbook references</h2></div><div class="pane-b">${INDEX ? hitsHtml(search(c.topic + " " + c.text.slice(0, 160) + " treatment", 6), c.topic) : '<p class="muted">The textbook library is still loading — reopen this case in a few seconds.</p>'}</div></div>`;
     if (c.book) mountRecs($("#caseRecs"), c.book);
   } else if (tab === "viva"){
@@ -2226,10 +2291,18 @@ function finishViva(V, vv, av){
   ST.events.push({type:"viva", score:pct, topic:V.topic, xp, at:Date.now(), caseId:V.caseId}); const b = levelInfo(ST.xp).i; ST.xp += xp; save(); planNote("case", null, String(V.caseId || "").replace(/^b/, ""));
   toast(levelInfo(ST.xp).i > b ? `Level up — ${LEVELS[levelInfo(ST.xp).i].n}! (+${xp} XP)` : `+${xp} XP`); renderDashboard();
 }
+/* line icons instead of emoji, so they look the same on every phone and follow the theme colour */
+const ICON = {
+  mic: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  stop: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>',
+  speak: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>'
+};
 function setupMic(ta, btn){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR || !btn) return;
   btn.hidden = false; let rec = null, on = false, base = "";
-  const stop = () => { on = false; btn.classList.remove("rec"); btn.textContent = "🎤"; };
+  btn.setAttribute("aria-label", "Speak your answer"); btn.title = "Speak your answer";
+  const stop = () => { on = false; btn.classList.remove("rec"); btn.innerHTML = ICON.mic; btn.setAttribute("aria-label", "Speak your answer"); };
+  stop();
   const WHY = {"not-allowed": "The microphone is blocked. Allow it for this site: in Safari go to Safari ▸ Settings ▸ Websites ▸ Microphone; in Chrome/Edge click the lock icon in the address bar. On a Mac also switch on Dictation in System Settings ▸ Keyboard.", "service-not-allowed": "Voice typing is switched off on this device. On a Mac turn on Dictation in System Settings ▸ Keyboard, then reload.", "no-speech": "I did not hear anything — try again and speak after the red dot appears.", "audio-capture": "No microphone was found.", "network": "Voice typing needs an internet connection."};
   btn.addEventListener("click", () => {
     if (on){ try { rec && rec.stop(); } catch {} return; }
@@ -2237,13 +2310,13 @@ function setupMic(ta, btn){
     rec.lang = "en-US"; rec.interimResults = true; rec.continuous = false; base = ta.value ? ta.value.trim() + " " : "";
     rec.onresult = e => { let t = ""; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = base + t; };
     rec.onend = stop; rec.onerror = e => { stop(); toast(WHY[e.error] || "Voice typing stopped (" + (e.error || "error") + ")."); };
-    try { rec.start(); on = true; btn.classList.add("rec"); btn.textContent = "⏺"; toast("Listening… speak now, press again to stop."); } catch (e) { stop(); toast("Could not start the microphone."); }
+    try { rec.start(); on = true; btn.classList.add("rec"); btn.innerHTML = ICON.stop; btn.setAttribute("aria-label", "Stop speaking"); toast("Listening… speak now, press again to stop."); } catch (e) { stop(); toast("Could not start the microphone."); }
   });
 }
 
 /* ---------- seminar ---------- */
 function startSeminar(c, box){
-  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Seminar — propose your plan</h2></div><div class="pane-b"><pre class="casetext">${esc(c.text)}</pre><div class="f"><label for="sp">Your diagnosis, problem list and treatment plan</label><textarea id="sp" rows="9" placeholder="Write it as you would present it: diagnosis, problems, aims, options, plan, anchorage, retention…"></textarea></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="sb">Compare with the model plan</button></div><div id="sr"></div></div></div>`;
+  box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Seminar — propose your plan</h2></div><div class="pane-b"><pre class="casetext">${caseFmt(c.text)}</pre><div class="f"><label for="sp">Your diagnosis, problem list and treatment plan</label><textarea id="sp" rows="9" placeholder="Write it as you would present it: diagnosis, problems, aims, options, plan, anchorage, retention…"></textarea></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="sb">Compare with the model plan</button></div><div id="sr"></div></div></div>`;
   $("#sb").addEventListener("click", () => {
     const a = $("#sp").value.trim(); if (a.length < 40){ toast("Write a fuller plan first."); return; }
     const r = mark(a, c.planPts), pct = Math.round(r.frac * 100);
@@ -2287,7 +2360,7 @@ function initQuizUi(){ refreshQuizUi(); }
 function startQuiz(ev){
   ev.preventDefault();
   const pool = quizPool(), n = Math.max(1, Math.min(pool.length, +$("#qCount").value || 20));
-  if (!pool.length){ $("#qStatus").textContent = "No questions match that choice yet. Pick other topics or another source (book questions appear after the library has loaded)."; return; }
+  if (!pool.length){ $("#qStatus").textContent = INDEX ? "No questions match that choice. Pick other topics or another source." : "No questions match that choice yet. The book questions appear once the library has loaded — try again in a few seconds."; return; }
   $("#qStatus").textContent = "";
   Q.items = shuffle(pool).slice(0, n).map(x => { if (x.kind === "book") return x; const idx = shuffle(x.q[2].map((o, k) => k)); return {kind:"mcq", id:x.i, topic:x.q[0], q:x.q[1], opts:idx.map(k => x.q[2][k]), ans:idx.indexOf(x.q[3]), ex:x.q[4]}; });
   const tops = [...new Set(Q.items.map(i => i.topic))]; Q.topic = tops.length === 1 ? tops[0] : "Mixed";
@@ -2334,14 +2407,14 @@ function finishQuiz(timeUp){
   const N = Q.items.length, pct = Math.round(Q.right / N * 100), xp = 10 + Math.round(Q.right * 5), un = N - Q.answeredN;
   const mins = Math.max(1, Math.round((Date.now() - Q.startedAt) / 60000));
   $("#quizSetup").hidden = true;
-  $("#quizArea").innerHTML = `<div class="viva-score"><h3>${timeUp ? "Time is up" : "Quiz complete"}</h3><div class="score-bar"><i style="width:${pct}%;background:${pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--hi)'}"></i></div><p><b>${pct}%</b> — ${Math.round(Q.right * 10) / 10} correct out of ${N} questions (${esc(Q.topic)}). +${xp} XP</p><p class="muted small">You answered ${Q.answeredN} of ${N}${un ? `; the ${un} unanswered question${un === 1 ? "" : "s"} counted as wrong` : ""}. Time used: ${mins} min${Q.limit ? ` of ${Q.limit}` : ""}.</p><div class="actions"><button class="btn primary" id="qAgain">New quiz</button></div></div>`;
+  $("#quizArea").innerHTML = `<div class="viva-score"><h3>${timeUp ? "Time is up" : "Quiz complete"}</h3><div class="score-bar"><i style="width:${pct}%;background:${pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--hi)'}"></i></div><p><b>${pct}%</b> — ${Math.round(Q.right * 10) / 10} correct out of ${N} questions (${esc(Q.topic)}). +${xp} XP</p><p class="muted small">You answered ${Q.answeredN} of ${N}${un ? `; the ${un} unanswered question${un === 1 ? "" : "s"} counted as wrong` : ""}. Time used: ${Date.now() - Q.startedAt < 60000 ? "under 1 minute" : mins + (mins === 1 ? " minute" : " minutes")}${Q.limit ? ` of ${Q.limit}` : ""}.</p><div class="actions"><button class="btn primary" id="qAgain">New quiz</button></div></div>`;
   $("#qAgain").addEventListener("click", () => { $("#quizArea").innerHTML = ""; $("#quizMeta").textContent = ""; $("#quizSetup").hidden = false; updateAvail(); });
   const topic = Q.items.every(i => i.topic === Q.items[0].topic) ? Q.items[0].topic : "Mixed";
   record("quiz", pct, topic, xp); planNote("quiz", Q && Q.items && Q.items.every(i => i.topic === topic) ? topic : null);
 }
 
 /* ---------- my case analysis ---------- */
-const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : null; };
+const num = v => { const n = parseFloat(String(v == null ? "" : v).replace(/[−–]/g, "-")); return Number.isFinite(n) ? n : null; };
 function topicOf(t){
   if (/class\s*(ii|2)\s*(\/|div(ision)?\.?\s*)?\s*(2|ii)\b/i.test(t)) return "Class II division 2";
   if (/class\s*(iii|3)\b/i.test(t)) return "Class III";
@@ -2359,7 +2432,7 @@ function analyse(text){
   const f = {
     age: grab(text, /(\d{1,2})[\s-]*(?:year|yr)/i), sna: grab(text, /\bSNA\s*[:=]?\s*(\d{2,3}(?:\.\d)?)/i), snb: grab(text, /\bSNB\s*[:=]?\s*(\d{2,3}(?:\.\d)?)/i),
     anb: grab(text, /\bANB\s*[:=]?\s*(-?−?\d{1,2}(?:\.\d)?)/i), snmx: grab(text, /SN\s*[-–]?\s*MxP\s*[:=]?\s*(\d{1,2})/i), mmpa: grab(text, /\bMMPA\s*[:=]?\s*(\d{1,2})/i),
-    li: grab(text, /LI\s*[-–]?\s*MnP\s*[:=]?\s*(\d{2,3})/i), ui: grab(text, /UI\s*[-–]?\s*MxP\s*[:=]?\s*(\d{2,3})/i), oj: grab(text, /overjet\s*(?:of|is|:)?\s*(-?\d+(?:\.\d)?)\s*mm/i), ob: grab(text, /overbite\s*(?:of|is|:)?\s*(\d+(?:\.\d)?)\s*mm/i)
+    li: grab(text, /LI\s*[-–]?\s*MnP\s*[:=]?\s*(\d{2,3})/i), ui: grab(text, /UI\s*[-–]?\s*MxP\s*[:=]?\s*(\d{2,3})/i), oj: /reverse\s+overjet/i.test(text) ? (v => v == null ? null : -Math.abs(v))(grab(text, /overjet\s*(?:of|is|:)?\s*([-−]?\d+(?:\.\d)?)\s*mm/i)) : grab(text, /overjet\s*(?:of|is|:)?\s*([-−]?\d+(?:\.\d)?)\s*mm/i), ob: grab(text, /overbite\s*(?:of|is|:)?\s*([-−]?\d+(?:\.\d)?)\s*mm/i)
   };
   if (f.anb == null){ const m = text.match(/\bANB\s*[:=]?\s*[-−–]\s*(\d+)/i); if (m) f.anb = -num(m[1]); }
   return f;
@@ -2438,7 +2511,21 @@ async function paGenerate(topic, type){
   const t = await within(callAI([{role: "user", content: `${topic ? `Topic: ${topic}. ` : ""}${ask} One question from each excerpt.\n\n` + chunks.map((c, i) => `EXCERPT ${i + 1}\n${paClean(c.t).slice(0, 1500)}`).join("\n\n")}], PA_SYS, {tokens: 8192, json: true}), 70000);
   return paCheck(t, chunks, topic);
 }
-async function paLoadBank(){ if (PA.bank) return PA.bank; try { PA.bank = JSON.parse(await decFile("q1.dat")); } catch { PA.bank = []; } return PA.bank; }
+/* corrections to the starter bank: options that gave the answer away, or allowed two right answers (the first option is the right one) */
+const PA_FIX = {
+  "What is the average reported duration of treatment to align an impacted canine": {o: ["About 29 months", "About 6 months", "About 12 months", "About 48 months", "About 60 months"]},
+  "Buccal ectopia of canines compared with palatal displacement": {o: ["About one fifth as frequent", "About twice as frequent", "Equally frequent", "About five times as frequent", "About half as frequent"]},
+  "What is the most common cause of dilaceration": {o: ["Developmental origin", "Trauma to the predecessor", "Cysts", "Supernumerary teeth", "Inherited syndromes"]},
+  "Which is NOT listed as a form of supernumerary tooth": {o: ["Dilacerated", "Conical", "Tuberculate", "Odontome", "Supplemental"]},
+  "Fixed palatal arch appliances to stop digit sucking": {o: ["6–12 months", "2–4 weeks", "2–3 years", "18–24 months", "3–4 years"]},
+  "Oligodontia is the term used": {o: ["More than six", "More than two", "More than ten", "More than eight", "More than four"]},
+  "Which syndrome is associated with tooth agenesis": {o: ["Ectodermal dysplasia", "Marfan syndrome", "Cleidocranial dysplasia", "Gardner syndrome", "Beckwith–Wiedemann syndrome"]},
+  "Implant placement in hypodontia is generally delayed until": {o: ["18 years", "12 years", "15 years", "30 years", "21 years"]},
+  "Evidence on the aetiology of molar–incisor hypomineralization": {o: ["Polychlorinated biphenyl/dioxin exposure", "Fluoride in drinking water", "Thumb sucking", "Orthodontic treatment", "High sugar intake"]},
+  "Third molars erupt best after second molar extraction": {o: ["45 degrees to the occlusal plane", "10 degrees to the occlusal plane", "30 degrees to the occlusal plane", "70 degrees to the occlusal plane", "90 degrees to the occlusal plane"]},
+  "Radiographic evidence of third molar development": {o: ["Less than 6 years to 14 years", "12–18 years", "18–25 years", "2–4 years", "8–10 years"]}
+};
+async function paLoadBank(){ if (PA.bank) return PA.bank; try { PA.bank = JSON.parse(await decFile("q1.dat")); } catch { PA.bank = []; } PA.bank.forEach(q => { const k = Object.keys(PA_FIX).find(s => (q.q || "").startsWith(s)); if (k) Object.assign(q, PA_FIX[k]); }); return PA.bank; }
 function paFromBank(topic, type, n, shown){
   if (type === "case") return [];
   const list = PA.bank.filter(q => !shown.has(q.q) && (!topic || paOnTopic(q.t + " " + q.q, topic)));
@@ -2453,7 +2540,8 @@ async function paFill(run){
     if (PA.run !== run) return;
     got = got.filter(q => !run.shown.has(q.q)); got.forEach(q => run.shown.add(q.q)); run.queue.push(...got); run.empty = !got.length;
   } finally { run.loading = false; }
-  if (PA.run === run && run.waiting) paShow(run); else if (PA.run === run) paFill(run);
+  /* refill only while new questions keep coming: when a round brings none, stop instead of asking again and again */
+  if (PA.run === run && run.waiting) paShow(run); else if (PA.run === run && !run.empty) paFill(run);
 }
 function paShow(run){
   const box = $("#paArea");
@@ -2465,7 +2553,7 @@ function paShow(run){
     if (run.loading || !run.empty){ run.waiting = true; box.innerHTML = '<p class="muted"><span class="dots"><i></i><i></i><i></i></span> Preparing your questions from the books…</p>'; paFill(run); return; }
     run.waiting = false;
     if (run.results.length){ run.total = run.results.length; return paFinish(run); }
-    box.innerHTML = `<p class="notice2" style="margin:0 0 12px">${esc(run.type === "case" ? "Case scenarios need the AI examiner, which is busy right now." : run.aiErr || "No questions could be prepared on this topic.")} Try again, or try other words.</p><button type="button" class="btn sm" id="paRetry">Try again</button>`;
+    box.innerHTML = `<p class="notice2" style="margin:0 0 12px">${esc(run.type === "case" ? "The case scenarios could not be prepared just now." : run.aiErr || "No questions could be prepared on this topic.")} Try again, or try other words.</p><button type="button" class="btn sm" id="paRetry">Try again</button>`;
     $("#paRetry").onclick = () => { run.empty = false; run.waiting = true; paShow(run); }; return;
   }
   run.waiting = false; run.cur = it;
@@ -2644,7 +2732,10 @@ function startMentor(){
   $("#myMentorPane").scrollIntoView({block: "start", behavior: "smooth"});
 }
 function runMyCase(text){
-  const f = analyse(text), topic = topicOf(text), out = [];
+  const f = analyse(text), out = [];
+  let topic = topicOf(text);
+  /* numbers alone can show the topic when the words do not */
+  if (topic === "General orthodontics"){ if (f.oj != null && f.oj < 0 || /reverse\s*overjet|anterior\s*cross\s*-?bite/i.test(text)) topic = "Class III"; else if (f.ob != null && f.ob < 0) topic = "Open bite"; else if (f.oj != null && f.oj > 6) topic = "Class II division 1"; }
   out.push(`<h2>Detected findings</h2><div class="chips">${Object.entries(f).filter(([k, v]) => v != null).map(([k, v]) => `<span class="pill">${k.toUpperCase()} ${v}</span>`).join("") || '<span class="muted">No numeric findings recognised — use labels such as SNA 82, ANB 4, overjet 6 mm.</span>'}</div>`);
   const d = [];
   if (f.anb != null){
@@ -2654,8 +2745,8 @@ function runMyCase(text){
   }
   if (f.mmpa != null){ d.push(`MMPA ${f.mmpa}° → ${f.mmpa > 31 ? "increased" : f.mmpa < 23 ? "reduced" : "average"} vertical proportions; expected LI–MnP ≈ ${120 - f.mmpa}°` + (f.li != null ? `, measured ${f.li}° (${f.li - (120 - f.mmpa) > 5 ? "proclined for MMPA" : f.li - (120 - f.mmpa) < -5 ? "retroclined for MMPA" : "appropriate"})` : "")); }
   if (f.ui != null) d.push(`UI–MxP ${f.ui}° (norm 109 ± 6): ${f.ui > 115 ? "proclined" : f.ui < 103 ? "retroclined" : "normal"}`);
-  if (f.oj != null) d.push(`Overjet ${f.oj} mm: ${f.oj < 0 ? "reverse" : f.oj > 3.5 ? "increased — trauma risk (>3.5 mm)" : "normal"}`);
-  if (f.ob != null) d.push(`Overbite ${f.ob} mm: ${f.ob > 4 ? "increased" : "average"}`);
+  if (f.oj != null) d.push(`Overjet ${f.oj} mm: ${f.oj < 0 ? "reverse" : f.oj === 0 ? "edge to edge" : f.oj < 2 ? "reduced" : f.oj > 3.5 ? "increased — trauma risk (>3.5 mm)" : "normal"}`);
+  if (f.ob != null) d.push(`Overbite ${f.ob} mm: ${f.ob < 0 ? "anterior open bite" : f.ob === 0 ? "no vertical overlap" : f.ob < 2 ? "reduced" : f.ob > 4 ? "increased" : "average"}`);
   out.push(`<h2>Derived interpretation</h2>${d.length ? "<ul>" + d.map(x => `<li>${esc(x)}</li>`).join("") + "</ul>" : '<p class="muted">Not enough measurements.</p>'}`);
   const near = visCases().find(c => c.topic === topic) || visCases()[0];
   out.push(`<h2>Detected topic: ${esc(topic)}</h2><p>A structured plan an examiner expects (headings to cover):</p><ol><li>Diagnostic summary (age, sex, incisor class, skeletal AP/vertical/transverse, dental, soft tissue)</li><li>Problem list — pathology first, then developmental</li><li>Aims of treatment</li><li>Options with advantages and disadvantages, including no treatment</li><li>Recommended plan: extractions/space, anchorage, appliances, sequence, duration</li><li>Retention and stability; risks and consent</li></ol><p>Closest case in the bank: <a href="#" data-case="${near.id}" data-tab="model">${esc(near.title)}</a> (see its model answer, or run its viva).</p>`);
@@ -2690,9 +2781,9 @@ function toolCeph(){
 }
 function toolSpace(){
   const g = id => num($(id).value) || 0;
-  const need = g("#s_crowd") + g("#s_spee") * 1 + g("#s_inc") + g("#s_ant") - g("#s_exp");
+  const need = g("#s_crowd") + g("#s_spee") * 1 + g("#s_inc") * 2 + g("#s_ant") - g("#s_exp");
   const o = need > 8 ? "Large requirement — extractions likely (e.g. first premolars give ~14 mm per arch)." : need > 4 ? "Moderate requirement — borderline; consider the profile, incisor position and anchorage." : need >= 0 ? "Small requirement — non-extraction approaches (IPR, expansion) usually feasible." : "Space surplus — spacing will remain unless closed.";
-  $("#spaceOut").innerHTML = `<p>Net space requirement: <b>${need.toFixed(1)} mm</b></p><p>${o}</p><p class="muted small">Space needed = crowding + levelling (≈1 mm per mm depth of curve of Spee) + incisor retraction (positive) or proclination (negative) − space gained by expansion/distalisation/IPR. Decision still depends on profile, skeletal pattern and anchorage.</p>`;
+  $("#spaceOut").innerHTML = `<p>Net space requirement: <b>${need.toFixed(1)} mm</b></p><p>${o}</p><p class="muted small">Space needed = crowding + levelling (≈1 mm per mm depth of curve of Spee) + 2 mm for every 1 mm of incisor retraction (positive) or proclination (negative) − space gained by expansion/distalisation/IPR. Decision still depends on profile, skeletal pattern and anchorage.</p>`;
 }
 
 /* ================= book cases, deep discussion, AI tutor, cloud sync ================= */
@@ -2762,13 +2853,13 @@ function openSession(id){
 function renderSession(){
   const S_ = SES, bc = S_.bc, box = $("#sesBody");
   if (S_.i < 0){
-    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2><span class="meta">from Clinical Cases in Orthodontics, p. ${bc.page - 10}</span></div><div class="pane-b"><pre class="casetext">${esc(bc.summary)}</pre><div class="recs" id="sesRecs"></div><details><summary class="muted">Full case text (history, examination, findings)</summary><pre class="casetext">${esc(noFig(bc.intro))}</pre></details><p class="muted">${bc.qs.length} questions follow. Answer each one in your own words <b>before</b> revealing the book's answer. You will then see what other books in your library say, and can go deeper.</p><div class="actions"><button class="btn primary" id="sesGo">Begin</button></div></div></div>`;
+    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2><span class="meta">from Clinical Cases in Orthodontics, p. ${bc.page - 10}</span></div><div class="pane-b"><pre class="casetext">${caseFmt(bc.summary)}</pre><div class="recs" id="sesRecs"></div><details><summary class="muted">Full case text (history, examination, findings)</summary><pre class="casetext">${esc(noFig(bc.intro))}</pre></details><p class="muted">${bc.qs.length} questions follow. Answer each one in your own words <b>before</b> revealing the book's answer. You will then see what other books in your library say, and can go deeper.</p><div class="actions"><button class="btn primary" id="sesGo">Begin</button></div></div></div>`;
     mountRecs($("#sesRecs"), bc); $("#sesGo").addEventListener("click", () => { S_.i = 0; renderSession(); }); return;
   }
   if (S_.i >= bc.qs.length){ finishSession(); return; }
   const q = bc.qs[S_.i];
   box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Question ${S_.i + 1} of ${bc.qs.length}</h2><span class="meta">Case ${esc(bc.id)}</span></div><div class="pane-b">
-    <details class="mini"><summary>Case presentation</summary><pre class="casetext">${esc(bc.summary)}</pre></details>
+    <details class="mini"><summary>Case presentation</summary><pre class="casetext">${caseFmt(bc.summary)}</pre></details>
     <div class="recs" id="sesRecs"></div>
     <h3 class="qq" dir="auto">${esc(noFig(q.q))}</h3>
     <div class="f"><textarea id="sesAns" rows="5" placeholder="Your answer… be specific; think like an examiner."></textarea></div>
@@ -2980,12 +3071,12 @@ function mountChat(host, o){
       /* the textbook excerpts were for this turn only: long exams stay fast and inside the key's limits */
       msgs[msgs.length - 1].content = userText + hint;
       msgs.push({role: "assistant", content: t});
-      const vm = t.match(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)/i), v = vm ? vm[1].toLowerCase() : null, body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim();
+      const vm = t.match(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)/i), v = vm ? vm[1].toLowerCase() : null, body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*\d+\s*/gi, "").trim();
       wait.innerHTML = (v ? `<div class="verdict ${v}">${{correct: "✓ Correct", partial: "◐ Needs refinement", wrong: "✗ Incorrect"}[v]}</div>` : "") + chatMd(body); asked++;
       if (inGrid && getComputedStyle(cm).overflowY === "auto") cm.scrollTo({top: cm.scrollHeight, behavior: "smooth"});
       if (hits && hits.length && (!o.showEv || o.showEv(userText))){ const ev = document.createElement("details"); ev.className = "evbox"; ev.innerHTML = `<summary>Evidence from the books (${hits.length})</summary>${hitsHtml(hits, userText)}`; wait.appendChild(ev); }
       if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…");
-      const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; if (av){ wait.appendChild(rb); AV.wrap = av; speak(body); }
+      const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.innerHTML = ICON.speak + "Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; if (av){ wait.appendChild(rb); AV.wrap = av; speak(body); }
       if (v && o.nQ && !finished && shown !== null && graded < o.nQ){ graded++; sum += {correct: 1, partial: .5, wrong: 0}[v]; const inf = $("#tInfo"); if (inf) inf.textContent = `Question ${Math.min(graded + 1, o.nQ)} of ${o.nQ} · graded so far: ${graded}`; }
       const sc = t.match(/SCORE:\s*(\d{1,3})\s*\/\s*100/i);
       if (sc && o.exam && !o.nQ && !o.done){ o.done = true; const p = Math.min(100, +sc[1]); record("tutor", p, o.topic, 20 + Math.round(p / 2)); }
@@ -3007,7 +3098,7 @@ function mountChat(host, o){
     const pct = Math.round(sum / o.nQ * 100), un = Math.max(0, o.nQ - graded);
     msgs.push({role: "user", content: `[System: the exam is over${timeUp ? " because the time limit has been reached" : ""}. Do not ask any more questions. In a short spoken closing: say what the resident did well, the three main weaknesses, and then reveal the actual diagnosis and the treatment that was carried out in the book. The resident answered ${graded} of ${o.nQ} questions; their score is ${pct} out of 100.]`});
     const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> closing the exam…');
-    try { const t = await callAI(msgs, o.system); const body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*100/i, "").trim(); wait.innerHTML = chatMd(body); if (av){ AV.wrap = av; speak(body); } const rb2 = document.createElement("button"); rb2.type = "button"; rb2.className = "btn sm"; rb2.textContent = "🔊 Hear again"; rb2.style.marginTop = "8px"; rb2.onclick = () => speak(body); wait.appendChild(rb2); } catch (e) { wait.innerHTML = '<span class="bad">The closing comments could not be loaded, but your score is saved.</span>'; }
+    try { const t = await callAI(msgs, o.system); const body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*\d+\s*/gi, "").trim(); wait.innerHTML = chatMd(body); if (av){ AV.wrap = av; speak(body); } const rb2 = document.createElement("button"); rb2.type = "button"; rb2.className = "btn sm"; rb2.innerHTML = ICON.speak + "Hear again"; rb2.style.marginTop = "8px"; rb2.onclick = () => speak(body); wait.appendChild(rb2); } catch (e) { wait.innerHTML = '<span class="bad">The closing comments could not be loaded, but your score is saved.</span>'; }
     const card = document.createElement("div"); card.className = "scorecard";
     card.innerHTML = `${timeUp ? "<b>Time is up.</b> " : ""}Final score: <b>${pct}%</b> — ${sum % 1 ? sum.toFixed(1) : sum} marks out of ${o.nQ} questions. You answered ${graded} of ${o.nQ}${un ? `; the ${un} unanswered question${un > 1 ? "s" : ""} counted as wrong` : ""}.`;
     cm.appendChild(card); card.scrollIntoView({block: "nearest", behavior: "smooth"});
@@ -3020,7 +3111,7 @@ function mountChat(host, o){
   if (o.greet){
     msgs.push({role: "user", content: o.opening}, {role: "assistant", content: o.greet});
     const g = bubble("exam", chatMd(o.greet), true); asked++;
-    if (av){ const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.textContent = "🔊 Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { AV.wrap = av; speak(o.greet); }; g.appendChild(rb); setMood(av, "neutral", "Go on…"); AV.wrap = av; speak(o.greet); }
+    if (av){ const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.innerHTML = ICON.speak + "Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { AV.wrap = av; speak(o.greet); }; g.appendChild(rb); setMood(av, "neutral", "Go on…"); AV.wrap = av; speak(o.greet); }
   } else turn(o.opening, null);
   return {turn, finish};
 }
@@ -3065,7 +3156,7 @@ function initTutorUi(){
 }
 function fillTutorCases(){
   const tp = $("#tTopic").value, list = BOOKCASES.filter(c => !tp || c.topic === tp);
-  $("#tCase").innerHTML = '<option value="">Random case' + (tp ? " in this topic" : "") + '</option>' + list.map(c => `<option value="${esc(c.id)}">Case ${esc(c.id)} — ${esc(sheetLine(c).slice(0, 55))}</option>`).join("");
+  $("#tCase").innerHTML = '<option value="">Random case' + (tp ? " in this topic" : "") + '</option>' + list.map(c => `<option value="${esc(c.id)}">Case ${esc(c.id)}${sheetLine(c, true) ? " — " + esc(clip(sheetLine(c, true), 60)) : ""}</option>`).join("");
 }
 function tutorFormUi(){
   const m = $("#tMode").value, scored = m !== "disc", tm = $("#tTime").value;
@@ -3231,7 +3322,7 @@ async function renderAdmin(){
 const myStats = () => { const g = ST.events.filter(e => e.score != null); return {name: ST.name || (FB.user && FB.user.email.split("@")[0]) || "Resident", xp: ST.xp, level: levelInfo(ST.xp).cur.n, avg: g.length ? Math.round(g.reduce((s, e) => s + e.score, 0) / g.length) : null, activities: ST.events.length, updatedAt: Date.now()}; };
 function fbSchedule(){ if (!FB.ready || !FB.user) return; clearTimeout(FB.timer); FB.timer = setTimeout(fbPush, 2500); }
 async function fbPush(){
-  if (!FB.ready || !FB.user) return;
+  if (!FB.ready || !FB.user || FB.deleting) return;
   try {
     await FB.db.collection("users").doc(FB.user.uid).set({name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, updatedAt: Date.now()});
     if (ST.plan) FB.db.collection("users").doc(FB.user.uid).set({plan: ST.plan}, {merge: true}).catch(() => {});
@@ -3321,11 +3412,13 @@ async function deleteAccount(){
   try {
     await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, pw));
   } catch (e) { b.disabled = false; st.textContent = /password|credential/i.test(e.code + e.message) ? "The password is not correct." : "Could not confirm your password. Check your internet and try again."; return; }
-  stopWatch();
+  stopWatch(); clearTimeout(FB.timer); FB.deleting = true;
   const db = FB.db, id = u.uid;
-  await Promise.all([db.collection("leaderboard").doc(id).delete(), db.collection("users").doc(id).delete(), db.collection("sessions").doc(id).delete(), db.collection("requests").doc(id).delete(), db.collection("approved").doc(u.email.toLowerCase()).delete()].map(p => p.catch(() => {})));
+  /* the progress rows first, while the account still counts as approved; the access entry last */
+  await Promise.all([db.collection("leaderboard").doc(id).delete(), db.collection("users").doc(id).delete(), db.collection("sessions").doc(id).delete(), db.collection("requests").doc(id).delete()].map(p => p.catch(() => {})));
+  await db.collection("approved").doc(u.email.toLowerCase()).delete().catch(() => {});
   try { await u.delete(); }
-  catch (e) { b.disabled = false; st.textContent = "Your account could not be deleted. Check your internet and try again."; return; }
+  catch (e) { FB.deleting = false; b.disabled = false; st.textContent = "Your account could not be deleted. Check your internet and try again."; return; }
   try { ["bdi.uid", "bdi.sid", "bdi.gem", KEY].forEach(k => localStorage.removeItem(k)); } catch {}
   ST = {name: "", xp: 0, events: [], wrong: []};
   toast("Your account has been deleted.");
@@ -3337,9 +3430,25 @@ function setView(v){
   $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v || ((v === "case" || v === "session") && t.dataset.view === "cases"))));
   $$(".view").forEach(s => s.hidden = s.id !== "v-" + v);
   if (v === "plan") renderPlan();
+  tabsInView();
   window.scrollTo(0, 0);
 }
+/* phone tab bar: keep the open section in view and fade the edge that has more sections behind it */
+function tabsFade(){
+  const n = $("nav.tabs"); if (!n) return;
+  const more = n.scrollWidth - n.clientWidth > 2;
+  n.classList.toggle("fade-l", more && n.scrollLeft > 4);
+  n.classList.toggle("fade-r", more && n.scrollLeft < n.scrollWidth - n.clientWidth - 4);
+}
+function tabsInView(){
+  const n = $("nav.tabs"), a = n && n.querySelector('.tab[aria-selected="true"]');
+  if (n && a && n.scrollWidth > n.clientWidth){ const nr = n.getBoundingClientRect(), ar = a.getBoundingClientRect(); n.scrollLeft += (ar.left - nr.left) - (nr.width - ar.width) / 2; }
+  tabsFade();
+}
+/* case text: the label at the start of a line ("Complaint:", "Medical history:") in bold, so the history reads at a glance */
+const caseFmt = t => esc(t).replace(/^([A-Z][A-Za-z\u2013\- ]{2,28}):/gm, "<b>$1:</b>");
 function bindExt(){
+  { const n = $("nav.tabs"); if (n){ n.addEventListener("scroll", tabsFade, {passive: true}); addEventListener("resize", tabsFade); setTimeout(tabsFade, 300); } }
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-bc]"); if (b){ e.preventDefault(); openSession(b.dataset.bc); }
   });
