@@ -587,6 +587,8 @@ html[data-look] body.locked .shell{display:none!important}
 html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--night);z-index:9999;pointer-events:none}
 /* room for the copyright bar under the sign-in form, so its last line is never covered */
 .gate-main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+/* experts review 2026-11-07: focus ring visible on the dark bars */
+html[data-look="collegiate"] .side :focus-visible,.lbx :focus-visible{outline-color:var(--gold-2)}
 /* design review fixes: icons, readable small text, AA contrast, finger-sized controls on touch screens */
 .ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px}
 .btn .ico+*,.btn .ico{margin-inline-end:6px}
@@ -629,6 +631,26 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
  #v-mycase #myMentor{order:-1;flex-basis:100%}
  #cephForm .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:end}
 }
+/* "continue where you stopped" banner */
+.resume{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:0 0 14px}
+.resume .actions{display:flex;gap:8px}
+/* book page reader that opens over the current screen */
+.cite.go{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.cite.go:hover{filter:brightness(.96)}
+.sheet-bd{position:fixed;inset:0;background:rgba(20,10,12,.45);z-index:300}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:301;max-height:86vh;display:flex;flex-direction:column;background:var(--surface);color:var(--ink);border-radius:16px 16px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);transform:translateY(100%);transition:transform .2s ease-out;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.open{transform:none}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none}}
+@media (min-width:900px){.sheet{left:50%;right:auto;width:760px;transform:translate(-50%,100%)}.sheet.open{transform:translate(-50%,0)}}
+.sheet-h{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px max(16px,env(safe-area-inset-left,0px)) 10px;border-bottom:1px solid var(--line)}
+.sheet-h b{display:block;font-size:15px;line-height:1.3}
+.sheet-h .meta{font-size:12px}
+.sheet-tools{display:flex;gap:6px;flex:none}
+.sheet-b{overflow:auto;padding:14px max(18px,env(safe-area-inset-left,0px));line-height:1.7;max-width:70ch;width:100%;margin:0 auto;-webkit-overflow-scrolling:touch}
+.sheet-b p{margin:0 0 .8em}
+.sheet-b mark{background:var(--gold-soft);color:inherit;padding:0 2px;border-radius:3px}
+.sheet-f{display:flex;gap:8px;justify-content:space-between;padding:10px max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line)}
+html.sheet-on body{overflow:hidden}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -656,7 +678,7 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
 <aside class="side">
  <div class="brand"><svg class="brand-sky" viewBox="0 0 1190 366" aria-hidden="true"><use href="#bdi-sky"/></svg><div style="min-width:0"><h1>Bristol Dental Institute</h1><p>Fellowship trainer</p></div></div>
  <div class="navlbl">Training</div>
- <nav class="tabs" role="tablist" aria-label="Sections">
+ <nav class="tabs" aria-label="Sections">
   <button class="tab" data-view="dashboard" aria-selected="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
   <button class="tab" data-view="cases" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1z"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M8 12h8M8 16h5"/></svg>Cases</button>
   <button class="tab" data-view="tutor" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4.5"/></svg>Exam room</button>
@@ -686,7 +708,7 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
 
 <section class="view" id="v-cases" hidden>
  <div class="phead"><div><div class="eyebrow">Case bank</div><h1>Cases</h1><p>Written study cases with model answers, and every numbered case from <i>Clinical Cases in Orthodontics</i> — search, filter by topic, or take a random case.</p></div></div>
- <div id="pracBox"><div class="actions" style="margin-bottom:16px"><input type="text" id="bkFilter" placeholder="Search cases: open bite, canine, twin block…" style="flex:1 1 240px"><select id="bkTopic" style="width:210px"><option value="">All topics</option></select><select id="bkSrc" style="width:180px"><option value="">All cases</option><option value="p">Institute cases</option><option value="b">Book cases</option></select><button class="btn primary" id="bkRandom" type="button">Random case</button><span class="meta" id="bkCount"></span></div><div class="bank" id="bankGrid"></div><div class="actions" style="justify-content:center;margin-top:18px"><button class="btn" id="bkMore" hidden>Show more cases</button></div></div>
+ <div id="pracBox"><div class="actions" style="margin-bottom:16px"><input type="text" id="bkFilter" aria-label="Search cases" placeholder="Search cases: open bite, canine, twin block…" style="flex:1 1 240px"><select id="bkTopic" aria-label="Topic" style="width:210px"><option value="">All topics</option></select><select id="bkSrc" aria-label="Case source" style="width:180px"><option value="">All cases</option><option value="p">Institute cases</option><option value="b">Book cases</option></select><button class="btn primary" id="bkRandom" type="button">Random case</button><span class="meta" id="bkCount"></span></div><div class="bank" id="bankGrid"></div><div class="actions" style="justify-content:center;margin-top:18px"><button class="btn" id="bkMore" hidden>Show more cases</button></div></div>
 </section>
 
 <section class="view" id="v-session" hidden>
@@ -732,7 +754,7 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
  <div class="phead"><div><div class="eyebrow">Case analysis</div><h1>My case</h1><p>Write your case and discuss it with your own mentor. Ask anything, say when you don't know, and ask for the evidence: answers come with references from the textbooks. Photographs, radiographs and PDF pages stay private on your device. Do not write the patient's name.</p></div></div>
  <div class="ws">
   <div class="pane"><div class="pane-h"><h2>Your case presentation</h2></div><div class="pane-b">
-   <textarea id="myText" class="big" placeholder="e.g. 13-year-old girl, Class II division 1, overjet 8 mm, overbite 5 mm, SNA 82, SNB 76, ANB 6, MMPA 28, LI-MnP 98 ..."></textarea>
+   <textarea id="myText" aria-label="Your case" class="big" placeholder="e.g. 13-year-old girl, Class II division 1, overjet 8 mm, overbite 5 mm, SNA 82, SNB 76, ANB 6, MMPA 28, LI-MnP 98 ..."></textarea>
    <div id="myFiles" class="myfiles"></div>
    <p class="muted small" id="myPrivate" hidden style="margin:10px 0 0">These stay on your device and are not sent anywhere. Your mentor cannot see them: describe what you see and it will guide you.</p>
    <div class="actions" style="margin-top:12px"><label class="btn">Add photos, X-rays or PDF<input type="file" id="myFile" multiple accept="image/*,.pdf,.txt,.md,text/plain,application/pdf" hidden></label><button class="btn primary" id="myMentor">Start with my mentor</button><button class="btn" id="myRun">Quick analysis</button></div>
@@ -789,7 +811,7 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
 
 <section class="view" id="v-library" hidden>
  <div class="phead"><div><div class="eyebrow">Reference</div><h1>Library</h1><p>The Institute's textbooks, searchable in full. Citations show the page number.</p></div><span class="meta" id="libMeta"></span></div>
- <div class="cols"><div class="pane"><div class="pane-h"><h2>Search the books</h2></div><div class="pane-b"><form class="ask" id="searchForm" style="margin-top:0"><input type="text" id="searchInput" placeholder="e.g. twin block timing pubertal growth spurt"><button class="btn primary">Search</button></form><p class="status" id="searchStatus"></p><div id="hits"></div></div></div>
+ <div class="cols"><div class="pane"><div class="pane-h"><h2>Search the books</h2></div><div class="pane-b"><form class="ask" id="searchForm" style="margin-top:0"><input type="text" id="searchInput" aria-label="Search the books" placeholder="e.g. twin block timing pubertal growth spurt"><button class="btn primary">Search</button></form><p class="status" id="searchStatus"></p><div id="hits"></div></div></div>
   <div class="pane"><div class="pane-h"><h2>Books</h2></div><div class="pane-b">
    <p class="status" id="libStatus"></p><div class="list" id="bookList"></div>
    <div id="libEmpty" hidden><h3>Library not available</h3><p class="hint">The reference books could not be loaded right now. Check your internet connection and try again. If it still does not load, contact the programme administrator.</p></div>
@@ -2045,7 +2067,7 @@ function hitsHtml(hits, q){
   if (!hits.length) return INDEX ? '<p class="muted">No passages found. Try other or fewer terms.</p>' : '<p class="muted">The textbook library is still loading — try again in a few seconds.</p>';
   const words = new Set(tok(q || ""));
   const hl = t => esc(t).replace(/[A-Za-z]{3,}/g, w => words.has(tok(w)[0]) ? `<mark>${w}</mark>` : w);
-  return hits.map(c => `<details class="src"><summary><span class="cite">${esc(cite(c))}</span> <span class="snip">${esc(snip(c.t, words))}</span></summary><div>${hl(c.t)}</div></details>`).join("");
+  return hits.map(c => `<details class="src"><summary><span class="snip">${esc(snip(c.t, words))}</span></summary><div><span class="cite">${esc(cite(c))}</span> ${hl(c.t)}</div></details>`).join("");
 }
 function parseBook(text){
   const segs = text.split(/\f?\[\[p (\d+)\]\]\n?/), pages = [];
@@ -2093,7 +2115,7 @@ function ligFix(store){
     .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
     .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); });
 }
-function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } }
+function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} }
 function renderLibrary(){
   const pg = BOOKSTORE.reduce((a, b) => a + b.pages.length, 0);
   $("#libMeta").textContent = BOOKSTORE.length ? `${BOOKSTORE.length} books · ${pg.toLocaleString()} pages` : "";
@@ -2250,7 +2272,7 @@ function startViva(qs, caseText, topic, caseId, box, title){
   const av = box.querySelector(".avatar-wrap"), vv = $("#vv"), vf = $("#vf"), va = $("#va");
   $("#voiceChk").addEventListener("change", e => setVoice(e.target.checked));
   const inGrid = !!box.querySelector(".exam-grid");
-  const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; vv.appendChild(d); msgScroll(vv, d, inGrid && V.i === 0 && !V.results.length && cls !== "student"); return d; };
+  const bubble = (cls, html) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.dir = "auto"; d.innerHTML = html; vv.appendChild(d); msgScroll(vv, d, inGrid && V.i === 0 && !V.results.length && cls !== "student"); return d; };
   if (inGrid){ const g = box.querySelector(".exam-grid"); examPill(g); g.scrollIntoView({block: "start"}); }
   fillVoices(); avMount(av);
   const vr = $("#vvRecs"); if (vr) vr.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(curCase.stage, +f.dataset.i); };
@@ -2330,6 +2352,25 @@ function startSeminar(c, box){
 }
 
 /* ---------- quiz ---------- */
+/* an unfinished quiz, Part A practice or exam is kept on the device, so closing the app (or a phone call) does not lose it */
+const RUN_KEY = "bdi.run";
+function getRun(){ try { const r = JSON.parse(localStorage.getItem(RUN_KEY) || "null"); if (!r || Date.now() - r.at > 864e5) return null; if (r.uid && FB.user && r.uid !== FB.user.uid) return null; return r; } catch { return null; } }
+function saveRun(kind, data){ document.querySelectorAll(".resume").forEach(x => x.remove()); try { localStorage.setItem(RUN_KEY, JSON.stringify({kind, data, at: Date.now(), uid: FB.user ? FB.user.uid : ""})); } catch {} }
+function clearRun(kind){ try { const r = getRun(); if (!kind || !r || r.kind === kind) localStorage.removeItem(RUN_KEY); } catch {} document.querySelectorAll(".resume").forEach(x => x.remove()); }
+function offerResume(){
+  document.querySelectorAll(".resume").forEach(x => x.remove());
+  const r = getRun(); if (!r) return;
+  const d = r.data || {}, view = r.kind === "quiz" ? "quiz" : r.kind === "parta" ? "parta" : "tutor";
+  const what = r.kind === "quiz" ? `quiz — question ${(d.i || 0) + 1} of ${(d.items || []).length}` : r.kind === "parta" ? `Part A practice — question ${(d.i || 0) + 1} of ${d.total}` : `exam on Case ${d.caseId}` + (d.form && +d.form.nq ? ` — ${d.chat ? d.chat.graded : 0} of ${d.form.nq} answered` : "");
+  for (const host of [$("#v-dashboard"), $("#v-" + view)]){
+    if (!host) continue;
+    const b = document.createElement("div"); b.className = "resume notice2";
+    b.innerHTML = `<span>You have an unfinished ${esc(what)}.</span><span class="actions"><button type="button" class="btn sm primary" data-resume>Continue</button><button type="button" class="btn sm" data-drop>Discard</button></span>`;
+    b.querySelector("[data-resume]").onclick = () => { const run = getRun(); if (!run){ clearRun(); return; } document.querySelectorAll(".resume").forEach(x => x.remove()); setView(run.kind === "quiz" ? "quiz" : run.kind === "parta" ? "parta" : "tutor"); (run.kind === "quiz" ? resumeQuiz : run.kind === "parta" ? resumePA : resumeExam)(run.data); };
+    b.querySelector("[data-drop]").onclick = () => clearRun(r.kind);
+    host.prepend(b);
+  }
+}
 const Q = {items:[], i:0, right:0, topic:"", answered:false, answeredN:0, limit:0, endAt:0, tick:null, startedAt:0};
 const fmtT = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
 const autoMinutes = items => Math.max(15, Math.ceil(items.reduce((m, x) => m + (x.kind === "book" ? 2.5 : 1), 0)));
@@ -2367,13 +2408,22 @@ function startQuiz(ev){
   Q.i = 0; Q.right = 0; Q.answeredN = 0; stopQuizTimer(); Q.startedAt = Date.now();
   const tm = $("#qTime").value; Q.limit = tm === "auto" ? autoMinutes(Q.items) : tm === "custom" ? Math.max(1, +$("#qMin").value || 15) : 0;
   $("#quizSetup").hidden = true; window.scrollTo(0, 0);
-  if (Q.limit){ Q.endAt = Date.now() + Q.limit * 60000; Q.tick = setInterval(() => { const left = Q.endAt - Date.now(), el = $("#qClock"); if (el){ el.textContent = fmtT(left); el.classList.toggle("low", left < 60000); } if (left <= 0) finishQuiz(true); }, 500); }
-  renderQ();
+  if (Q.limit) Q.endAt = Date.now() + Q.limit * 60000;
+  startQuizTimer(); renderQ();
+}
+function startQuizTimer(){ stopQuizTimer(); if (Q.limit) Q.tick = setInterval(() => { const left = Q.endAt - Date.now(), el = $("#qClock"); if (el){ el.textContent = fmtT(left); el.classList.toggle("low", left < 60000); } if (left <= 0) finishQuiz(true); }, 500); }
+function resumeQuiz(d){
+  if (!d || !d.items || !d.items.length){ clearRun("quiz"); return; }
+  Object.assign(Q, {items: d.items, i: d.i, right: d.right, answeredN: d.answeredN, limit: d.limit, endAt: d.endAt, startedAt: d.startedAt, topic: d.topic});
+  $("#quizSetup").hidden = true; window.scrollTo(0, 0);
+  if (Q.limit && Q.endAt <= Date.now()){ finishQuiz(true); return; }
+  startQuizTimer(); renderQ();
 }
 function qMeta(){ $("#quizMeta").textContent = `Question ${Q.i + 1} of ${Q.items.length} · ${Q.answeredN} answered · ${Math.round(Q.right * 10) / 10} correct`; }
 const clockHtml = () => Q.limit ? `<div class="timerbar"><span class="meta">Time limit ${Q.limit} min · unanswered questions count as wrong</span><span class="clock" id="qClock">${fmtT(Q.endAt - Date.now())}</span></div>` : "";
 function renderQ(){
   const it = Q.items[Q.i]; Q.answered = false; qMeta();
+  saveRun("quiz", {items: Q.items, i: Q.i, right: Q.right, answeredN: Q.answeredN, limit: Q.limit, endAt: Q.endAt, startedAt: Q.startedAt, topic: Q.topic});
   if (it.kind === "book"){
     $("#quizArea").innerHTML = clockHtml() + `<p class="meta">Clinical Cases in Orthodontics · Case ${esc(it.caseId)} · ${esc(it.topic)}</p><h3 class="qq">${esc(it.q)}</h3><textarea id="qbAns" rows="5" placeholder="Write your answer as you would say it in the viva…"></textarea><div class="actions" style="margin-top:10px"><button class="btn primary" id="qbShow">Check my answer</button></div><div id="qFb"></div>`;
     $("#qbShow").addEventListener("click", showBookQ); return;
@@ -2403,7 +2453,7 @@ function answerQ(k){
   qMeta();
 }
 function finishQuiz(timeUp){
-  stopQuizTimer();
+  stopQuizTimer(); clearRun("quiz");
   const N = Q.items.length, pct = Math.round(Q.right / N * 100), xp = 10 + Math.round(Q.right * 5), un = N - Q.answeredN;
   const mins = Math.max(1, Math.round((Date.now() - Q.startedAt) / 60000));
   $("#quizSetup").hidden = true;
@@ -2557,6 +2607,7 @@ function paShow(run){
     $("#paRetry").onclick = () => { run.empty = false; run.waiting = true; paShow(run); }; return;
   }
   run.waiting = false; run.cur = it;
+  saveRun("parta", {topic: run.topic, type: run.type, total: run.total, i: run.i, results: run.results, shown: [...run.shown], cur: it});
   const idx = shuffle([0, 1, 2, 3, 4]); it.order = idx; it.ans = idx.indexOf(0);
   box.innerHTML = `<div class="pabar"><span class="meta">Question ${run.i + 1} of ${run.total}</span><span class="pill">${it.kind === "case" ? "Case scenario" : "Best answer"}</span></div><div class="score-bar"><i style="width:${run.i / run.total * 100}%;background:var(--gold)"></i></div><h3 class="qq">${esc(it.q)}</h3>` + idx.map((j, k) => `<button type="button" class="paopt qopt" data-k="${k}"><b>${"ABCDE"[k]}</b><span>${esc(it.o[j])}</span></button>`).join("") + '<div id="paFb"></div>';
   box.scrollIntoView({block: "nearest"}); paFill(run);
@@ -2568,7 +2619,17 @@ function paAnswer(k){
   $("#paFb").innerHTML = `<div class="pafb ${ok ? "ok" : ""}"><b>${ok ? "Correct" : "Not the best answer"}</b><p>${esc(it.x)}</p><details class="evbox" open><summary>Where is the evidence</summary><p class="paquote">“${esc(it.e)}”</p><span class="cite">${esc(it.ref)}</span></details></div><div class="actions" style="margin-top:12px"><button type="button" class="btn primary" id="paNext">${run.i + 1 >= run.total ? "See my result" : "Next question"}</button></div>`;
   $("#paNext").onclick = () => { run.i++; paShow(run); };
 }
+async function resumePA(d){
+  if (!d || !d.cur){ clearRun("parta"); return; }
+  if (!INDEX){ toast("The textbooks are still loading. Try again in a few seconds."); return; }
+  await paLoadBank();
+  $("#paNote").hidden = true; $("#paRun").hidden = false; $("#paTitle").textContent = d.topic || "All topics";
+  const cur = Object.assign({}, d.cur); delete cur.answered;
+  const run = PA.run = {topic: d.topic, type: d.type, total: d.total, i: d.i, queue: [cur], results: d.results || [], shown: new Set(d.shown || []), waiting: true, loading: false, empty: false, aiErr: ""};
+  paShow(run); $("#paRun").scrollIntoView({block: "start"});
+}
 function paFinish(run){
+  clearRun("parta");
   const n = run.results.length, good = run.results.filter(r => r.ok).length, pct = n ? Math.round(good / n * 100) : 0, wrong = run.results.filter(r => !r.ok);
   if (n){ record("quiz", pct, run.topic ? topicOf(run.topic) : "General", 10 + Math.round(pct / 5)); }
   $("#paArea").innerHTML = `<div class="viva-score"><h3>${good} of ${n} correct</h3><div class="score-bar"><i style="width:${pct}%;background:${pct >= 70 ? "var(--ok)" : pct >= 50 ? "var(--warn)" : "var(--hi)"}"></i></div><p><b>${pct}%</b></p></div>${wrong.length ? `<h3 class="sh">Review these</h3>${wrong.map(r => `<div class="ptask"><div class="ptxt"><b>${esc(r.q)}</b><span>Best answer: ${esc(r.right)} · ${esc(r.ref)}</span></div></div>`).join("")}` : ""}<div class="actions" style="margin-top:14px"><button type="button" class="btn primary" id="paAgain">More questions</button></div>`;
@@ -2898,7 +2959,8 @@ function finishSession(){
 /* ---------- AI tutor (optional, user's own key) ---------- */
 /* the Institute's Gemini key lives in Firestore secrets/ai, readable only by approved residents (same rule as the library key) */
 let AIKEY = null;
-const NO_AI = "The AI examiner has not been set up yet — please tell your supervisor.";
+const NO_AI_SETUP = "The AI examiner has not been set up yet — please tell your supervisor.";
+let NO_AI = NO_AI_SETUP;
 const aiProv = () => (ST.ai && ST.ai.key && ST.ai.provider && ST.ai.provider !== "free") ? ST.ai.provider : AIKEY ? "inst" : "none";
 const aiReady = () => aiProv() !== "none";
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -3042,14 +3104,14 @@ function chatMd(s){
 }
 function mountChat(host, o){
   const msgs = []; let busy = false, asked = 0, graded = 0, sum = 0, sent = 0, finished = false;
-  host.innerHTML = `${o.avatar ? `<div style="display:flex;justify-content:flex-end"><label class="chk"><input type="checkbox" id="vc2" ${voiceOn ? "checked" : ""}> Examiner voice</label></div>` + avatarHtml() : ""}<div class="viva-panel chat" id="cm"></div><form class="ask" id="cf"><textarea id="ci" rows="3" placeholder="Your answer or question…  (Enter to send, Shift+Enter for a new line)"></textarea><div class="stackb"><button type="button" class="btn" id="cmic" hidden>🎤</button><button class="btn primary" id="cs">Send</button></div></form>`;
+  host.innerHTML = `${o.avatar ? `<div style="display:flex;justify-content:flex-end"><label class="chk"><input type="checkbox" id="vc2" ${voiceOn ? "checked" : ""}> Examiner voice</label></div>` + avatarHtml() : ""}<div class="viva-panel chat" id="cm" role="log" aria-live="polite"></div><form class="ask" id="cf"><textarea id="ci" rows="3" aria-label="Your answer" dir="auto" placeholder="Your answer or question…  (Enter to send, Shift+Enter for a new line)"></textarea><div class="stackb"><button type="button" class="btn" id="cmic" hidden>🎤</button><button class="btn primary" id="cs">Send</button></div></form>`;
   const vc2 = host.querySelector("#vc2"); if (vc2) vc2.addEventListener("change", e => setVoice(e.target.checked));
   if (o.avatar){ fillVoices(); avMount(host.querySelector(".avatar-wrap")); }
   if (o.name && host.querySelector(".avatar-name")) host.querySelector(".avatar-name").textContent = o.name;
   const av = host.querySelector(".avatar-wrap"), cm = host.querySelector("#cm"), ci = host.querySelector("#ci"), cf = host.querySelector("#cf");
   setupMic(ci, host.querySelector("#cmic"));
   const inGrid = !!host.closest(".exam-grid");
-  const bubble = (cls, html, opening) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.innerHTML = html; cm.appendChild(d); msgScroll(cm, d, inGrid && opening); return d; };
+  const bubble = (cls, html, opening) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.dir = "auto"; d.innerHTML = html; cm.appendChild(d); msgScroll(cm, d, inGrid && opening); return d; };
   async function turn(userText, shown){
     if (busy) return; busy = true; cs_(true);
     if (shown !== null) bubble("student", esc(shown != null ? shown : userText));
@@ -3077,6 +3139,7 @@ function mountChat(host, o){
       if (hits && hits.length && (!o.showEv || o.showEv(userText))){ const ev = document.createElement("details"); ev.className = "evbox"; ev.innerHTML = `<summary>Evidence from the books (${hits.length})</summary>${hitsHtml(hits, userText)}`; wait.appendChild(ev); }
       if (av) setMood(av, v === "correct" ? "happy" : v === "wrong" ? "concern" : "neutral", v === "correct" ? "Excellent." : v === "wrong" ? "Let's review this." : "Go on…");
       const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.innerHTML = ICON.speak + "Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { if (av) AV.wrap = av; speak(body); }; if (av){ wait.appendChild(rb); AV.wrap = av; speak(body); }
+      const snapAfter = () => { if (o.onSave && !finished) o.onSave({msgs, asked, graded, sum, sent, html: cm.innerHTML}); }; setTimeout(snapAfter, 0);
       if (v && o.nQ && !finished && shown !== null && graded < o.nQ){ graded++; sum += {correct: 1, partial: .5, wrong: 0}[v]; const inf = $("#tInfo"); if (inf) inf.textContent = `Question ${Math.min(graded + 1, o.nQ)} of ${o.nQ} · graded so far: ${graded}`; }
       const sc = t.match(/SCORE:\s*(\d{1,3})\s*\/\s*100/i);
       if (sc && o.exam && !o.nQ && !o.done){ o.done = true; const p = Math.min(100, +sc[1]); record("tutor", p, o.topic, 20 + Math.round(p / 2)); }
@@ -3092,25 +3155,37 @@ function mountChat(host, o){
     if (o.nQ && !finished && graded >= o.nQ) setTimeout(() => finish(false), 400);
   }
   async function finish(timeUp){
-    if (finished || !o.nQ) return; finished = true; if (o.onEnd) o.onEnd();
+    if (finished || !o.nQ) return; finished = true; if (o.onEnd) o.onEnd(); if (o.onSave) o.onSave(null);
     while (busy) await sleep(300);
     ci.disabled = true; cs_(true);
     const pct = Math.round(sum / o.nQ * 100), un = Math.max(0, o.nQ - graded);
+    record("tutor", pct, o.topic, 20 + Math.round(pct / 2)); planNote("exam", o.topic); /* saved before the closing reply, which can take long */
     msgs.push({role: "user", content: `[System: the exam is over${timeUp ? " because the time limit has been reached" : ""}. Do not ask any more questions. In a short spoken closing: say what the resident did well, the three main weaknesses, and then reveal the actual diagnosis and the treatment that was carried out in the book. The resident answered ${graded} of ${o.nQ} questions; their score is ${pct} out of 100.]`});
     const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> closing the exam…');
     try { const t = await callAI(msgs, o.system); const body = t.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/SCORE:\s*\d+\s*\/\s*\d+\s*/gi, "").trim(); wait.innerHTML = chatMd(body); if (av){ AV.wrap = av; speak(body); } const rb2 = document.createElement("button"); rb2.type = "button"; rb2.className = "btn sm"; rb2.innerHTML = ICON.speak + "Hear again"; rb2.style.marginTop = "8px"; rb2.onclick = () => speak(body); wait.appendChild(rb2); } catch (e) { wait.innerHTML = '<span class="bad">The closing comments could not be loaded, but your score is saved.</span>'; }
     const card = document.createElement("div"); card.className = "scorecard";
     card.innerHTML = `${timeUp ? "<b>Time is up.</b> " : ""}Final score: <b>${pct}%</b> — ${sum % 1 ? sum.toFixed(1) : sum} marks out of ${o.nQ} questions. You answered ${graded} of ${o.nQ}${un ? `; the ${un} unanswered question${un > 1 ? "s" : ""} counted as wrong` : ""}.`;
     cm.appendChild(card); card.scrollIntoView({block: "nearest", behavior: "smooth"});
-    record("tutor", pct, o.topic, 20 + Math.round(pct / 2)); planNote("exam", o.topic);
   }
   const cs_ = b => { host.querySelector("#cs").disabled = b; };
   cf.addEventListener("submit", e => { e.preventDefault(); const t = ci.value.trim(); if (!t) return; ci.value = ""; turn(t); });
   ci.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); cf.requestSubmit(); } });
+  /* back after the app was closed: the same conversation, scores and question count, without asking the AI again */
+  if (o.resume){
+    const r = o.resume; msgs.push(...(r.msgs || [])); asked = r.asked || 0; graded = r.graded || 0; sum = r.sum || 0; sent = r.sent || 0;
+    cm.innerHTML = r.html || ""; cm.querySelectorAll(".viva-msg button, .scorecard").forEach(b => b.remove());
+    cm.querySelectorAll(".viva-msg").forEach(m => { if (m.querySelector(".dots") || m.querySelector(".bad")) m.remove(); });
+    while (cm.lastElementChild && cm.lastElementChild.classList.contains("student")) cm.lastElementChild.remove();
+    bubble("exam", "<i>Welcome back. Your answers so far are kept — carry on from where you stopped.</i>", true);
+    const inf = $("#tInfo"); if (inf && o.nQ && graded) inf.textContent = `Question ${Math.min(graded + 1, o.nQ)} of ${o.nQ} · graded so far: ${graded}`;
+    cm.scrollTop = cm.scrollHeight;
+    if (o.nQ && graded >= o.nQ) setTimeout(() => finish(false), 400);
+  } else
   /* a fixed first line needs no call to the AI, so the exam opens at once and cannot stall here */
   if (o.greet){
     msgs.push({role: "user", content: o.opening}, {role: "assistant", content: o.greet});
     const g = bubble("exam", chatMd(o.greet), true); asked++;
+    if (o.onSave) setTimeout(() => o.onSave({msgs, asked, graded, sum, sent, html: cm.innerHTML}), 0);
     if (av){ const rb = document.createElement("button"); rb.type = "button"; rb.className = "btn sm"; rb.innerHTML = ICON.speak + "Hear again"; rb.style.marginTop = "8px"; rb.onclick = () => { AV.wrap = av; speak(o.greet); }; g.appendChild(rb); setMood(av, "neutral", "Go on…"); AV.wrap = av; speak(o.greet); }
   } else turn(o.opening, null);
   return {turn, finish};
@@ -3138,11 +3213,12 @@ async function recordFigs(bc){
   return (await loadFigs(bc.id.split(".")[0])) ? caseRecords(bc) : [];
 }
 function openLbx(list, i){
-  const box = document.createElement("div"); box.className = "lbx"; document.body.appendChild(box);
-  const draw = () => { box.innerHTML = `<img src="${list[i].src}" alt="Record ${i + 1}"><button aria-label="Close">✕</button>${list.length > 1 ? '<button class="nv" aria-label="Previous">‹</button><button class="nv r" aria-label="Next">›</button>' : ""}`; };
-  draw();
-  box.addEventListener("click", e => { const b = e.target.closest("button"); if (b){ if (b.classList.contains("nv")){ i = (i + (b.classList.contains("r") ? 1 : list.length - 1)) % list.length; box.classList.remove("z"); draw(); } else box.remove(); } else if (e.target.tagName === "IMG") box.classList.toggle("z"); else box.remove(); });
-  const esc2 = e => { if (e.key === "Escape"){ box.remove(); document.removeEventListener("keydown", esc2); } }; document.addEventListener("keydown", esc2);
+  const back = document.activeElement, box = document.createElement("div"); box.className = "lbx"; box.setAttribute("role", "dialog"); box.setAttribute("aria-modal", "true"); box.setAttribute("aria-label", "Record viewer"); document.body.appendChild(box);
+  const draw = () => { box.innerHTML = `<img src="${list[i].src}" alt="Record ${i + 1}"><button aria-label="Close">✕</button>${list.length > 1 ? '<button class="nv" aria-label="Previous">‹</button><button class="nv r" aria-label="Next">›</button>' : ""}`; box.querySelector("button").focus({preventScroll: true}); };
+  const close = () => { box.remove(); document.removeEventListener("keydown", esc2); ovDone(); if (back && back.isConnected && back.focus) back.focus({preventScroll: true}); };
+  box.closeLbx = close; draw(); ovOpen();
+  box.addEventListener("click", e => { const b = e.target.closest("button"); if (b){ if (b.classList.contains("nv")){ i = (i + (b.classList.contains("r") ? 1 : list.length - 1)) % list.length; box.classList.remove("z"); draw(); } else close(); } else if (e.target.tagName === "IMG") box.classList.toggle("z"); else close(); });
+  const esc2 = e => { if (!box.isConnected) return document.removeEventListener("keydown", esc2); if (e.key === "Escape") close(); else if (e.key === "Tab"){ const f = [...box.querySelectorAll("button")]; const k = f.indexOf(document.activeElement); e.preventDefault(); f[(k + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus(); } }; document.addEventListener("keydown", esc2);
 }
 let TUT = {tick: null};
 window.BDI_DBG = {recordFigs, cases: () => BOOKCASES};
@@ -3162,13 +3238,20 @@ function tutorFormUi(){
   const m = $("#tMode").value, scored = m !== "disc", tm = $("#tTime").value;
   $("#tNqW").hidden = !scored; $("#tTimeW").hidden = !scored; $("#tMinW").hidden = !scored || tm !== "custom";
 }
-function startTutor(ev){
-  ev.preventDefault();
+function resumeExam(d){
+  if (!d || !d.form){ clearRun("exam"); return; }
+  const f = d.form, set = (id, v) => { const e = $(id); if (e && v != null) e.value = v; };
+  set("#tMode", f.mode); set("#tTopic", f.tp); set("#tNq", f.nq); set("#tTime", f.tm); set("#tMin", f.min); set("#tLang", f.lang); set("#tLevel", f.level);
+  startTutor(null, d);
+}
+function startTutor(ev, resume){
+  if (ev) ev.preventDefault();
   if (!aiReady()){ toast(NO_AI); return; }
   if (!BOOKCASES.length){ toast("The case book is not loaded yet — wait a moment."); return; }
-  const id = $("#tCase").value, tp = $("#tTopic").value, mode = $("#tMode").value;
+  const id = resume ? resume.caseId : $("#tCase").value, tp = $("#tTopic").value, mode = $("#tMode").value;
   const pool = BOOKCASES.filter(c => !tp || c.topic === tp);
-  const bc = id ? BOOKCASES.find(c => c.id === id) : rnd(pool.length ? pool : BOOKCASES);
+  if (resume && !BOOKCASES.some(c => c.id === id)){ clearRun("exam"); toast("That exam's case is no longer in the book, so it cannot be continued."); return; }
+  const bc = (id && BOOKCASES.find(c => c.id === id)) || rnd(pool.length ? pool : BOOKCASES);
   const scored = mode !== "disc", unseen = mode === "unseen";
   const nQ = scored ? +$("#tNq").value : 0;
   const tm = $("#tTime").value, limit = !scored ? 0 : tm === "auto" ? Math.max(15, nQ * 2) : tm === "custom" ? Math.max(1, +$("#tMin").value || 20) : 0;
@@ -3194,13 +3277,15 @@ function startTutor(ev){
     box.innerHTML = list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Record ${i + 1} — tap to enlarge</figcaption></figure>`).join("");
     box.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(list, +f.dataset.i); };
     $("#tRun").scrollIntoView({block: "start"});
-    const chat = mountChat($("#tChat"), {system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
+    const endAt = limit ? (resume && resume.end ? resume.end : Date.now() + limit * 60000) : 0;
+    const form = {mode, tp, nq: $("#tNq").value, tm, min: $("#tMin").value, lang: $("#tLang").value, level: $("#tLevel").value};
+    const chat = mountChat($("#tChat"), {resume: resume && resume.chat, onSave: scored && (s => s ? saveRun("exam", {form, caseId: bc.id, end: endAt, chat: s}) : clearRun("exam")), system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
       opening: mode === "disc" ? "The patient's details and records are on my screen. Ask me to study them and give you my summary, then we'll discuss the case." : "Begin the examination. This is question 1 of " + nQ + ".",
       greet: unseen && $("#tLang").value !== "ar" ? `${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}. Please study the patient's details and all the records on your screen, then write your summary of the case.` : "",
       retrieve: t => excerpts(diverse(t + " " + bc.topic, 4)),
       onEnd: () => { clearInterval(TUT.tick); }});
     if (limit){
-      const end = Date.now() + limit * 60000, ck = $("#tClock"); ck.hidden = false;
+      const end = endAt, ck = $("#tClock"); ck.hidden = false;
       const upd = () => { const left = end - Date.now(); ck.textContent = fmtT(left); ck.classList.toggle("low", left < 60000); if (left <= 0){ clearInterval(TUT.tick); chat.finish(true); } };
       upd(); TUT.tick = setInterval(upd, 500);
     }
@@ -3228,11 +3313,39 @@ async function gateStart(){
   } catch (e) { gShow('<p class="bad">Could not reach the sign-in service. Check your internet connection and try again.</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button></div>'); return; }
   FB.auth.onAuthStateChanged(gateAuth);
 }
+/* ---------- working without internet (phone app only) ----------
+   After a normal sign-in the library key is kept in the phone's Keychain for 14 days. Without internet the app then
+   opens the books, quizzes, tools and the study plan; the examiner needs internet. Signing out, being removed by the
+   supervisor, opening the account on another device or deleting the account removes the kept key. */
+const SS = () => IN_APP && window.Capacitor.Plugins && window.Capacitor.Plugins.SecureStorage;
+const OFF_DAYS = 14;
+async function keepKey(uid, raw){ const s = SS(); if (!s || !raw) return; try { await s.internalSetItem({prefixedKey: "bdi_libkey", data: JSON.stringify({uid, k: raw, until: Date.now() + OFF_DAYS * 864e5, seen: Date.now()}), sync: false, access: 1}); } catch {} }
+async function cachedKey(uid){ const s = SS(); if (!s) return null; try { const r = await s.internalGetItem({prefixedKey: "bdi_libkey", sync: false}); const d = r && r.data ? JSON.parse(r.data) : null; if (!d || d.uid !== uid) return null;
+  /* a clock set back (earlier than the last opening) does not extend the 14 days */
+  const now = Date.now(); if (now > d.until || now < (d.seen || 0) - 36e5){ await dropKey(); return null; }
+  try { await s.internalSetItem({prefixedKey: "bdi_libkey", data: JSON.stringify(Object.assign({}, d, {seen: Math.max(now, d.seen || 0)})), sync: false, access: 1}); } catch {} return d.k; } catch { return null; } }
+async function dropKey(){ const s = SS(); if (!s) return; try { await s.internalRemoveItem({prefixedKey: "bdi_libkey", sync: false}); } catch {} }
+async function enterOffline(u){
+  if (!IN_APP || !u) return false;
+  const raw = await cachedKey(u.uid); if (!raw) return false;
+  try { LIBKEY = await crypto.subtle.importKey("raw", b64u(raw), "AES-GCM", false, ["decrypt"]); } catch { return false; }
+  NO_AI = "The examiner needs an internet connection. Connect and open the app again.";
+  FB.user = u; FB.offline = true; ENTERED = true; FB.ready = true; document.body.classList.remove("locked");
+  try { if (localStorage.getItem("bdi.uid") !== u.uid){ ST = {name: u.displayName || "", xp: 0, events: [], wrong: []}; localStorage.setItem("bdi.uid", u.uid); save(); $("#pName").value = ST.name; } } catch {}
+  $("#tabAdmin").hidden = true; renderBank(); renderDashboard(); renderAccount(); setView("dashboard", false);
+  const n = document.createElement("div"); n.className = "notice2 offline-note";
+  n.textContent = "You are offline. The books, quizzes, Part A starter questions, tools and your study plan work as usual. The examiner and new Part A questions need internet. Your progress is saved on this phone and syncs when you are back online.";
+  $("#v-dashboard").prepend(n);
+  loadLibrary();
+  addEventListener("online", () => { if (n.querySelector("[data-recon]")) return; const r = document.createElement("button"); r.type = "button"; r.className = "btn sm primary"; r.dataset.recon = ""; r.textContent = "Back online: reconnect"; r.style.marginTop = "8px"; r.onclick = () => location.reload(); n.append(document.createElement("br"), r); toast("Back online. Tap Reconnect on the dashboard when you finish what you are doing."); });
+  return true;
+}
 async function gateAuth(u){
   stopWatch();
-  if (!u){ if (ENTERED){ location.reload(); return; } gateLogin(); return; }
+  if (!u){ dropKey(); if (ENTERED){ location.reload(); return; } gateLogin(); return; }
   FB.user = u;
-  try { await u.reload(); u = FB.auth.currentUser; if (u.emailVerified) await u.getIdToken(true); } catch {}
+  if (IN_APP && navigator.onLine === false && await enterOffline(u)) return;
+  try { await within(u.reload(), 8000); u = FB.auth.currentUser || u; if (u.emailVerified) await within(u.getIdToken(true), 8000); } catch {}
   if (!u.emailVerified){ gateVerify(u); return; }
   gateCheck(u);
 }
@@ -3259,8 +3372,9 @@ async function gateCheck(u){
   try {
     const a = await within(FB.db.collection("approved").doc(email).get());
     if (a.exists){ enter(u); return; }
+    dropKey(); /* not approved (or approval removed): the kept key must not open the app offline */
     await within(FB.db.collection("requests").doc(u.uid).set({email, name: u.displayName || "", at: Date.now()}));
-  } catch (e) { gShow(`<p class="bad">${esc(gErr(e))}</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button><button class="btn" id="gOut">Sign out</button></div>`); $("#gOut").addEventListener("click", () => FB.auth.signOut()); return; }
+  } catch (e) { if (await enterOffline(u)) return; gShow(`<p class="bad">${esc(gErr(e))}</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button><button class="btn" id="gOut">Sign out</button></div>`); $("#gOut").addEventListener("click", () => FB.auth.signOut()); return; }
   gShow(`<p><b>Your request has been sent.</b></p><p>Your account <b>${esc(email)}</b> is waiting for approval by your supervisor. You will get in automatically once approved — you can leave this page open.</p><div class="btnrow"><button class="btn" id="gOut">Sign out</button></div>`);
   $("#gOut").addEventListener("click", () => FB.auth.signOut());
   FB.unsubAppr = FB.db.collection("approved").doc(email).onSnapshot(s => { if (s.exists){ stopWatch(); enter(u); } }, () => {});
@@ -3270,13 +3384,13 @@ async function enter(u){
   try {
     const k = await within(FB.db.collection("secrets").doc("lib").get());
     if (!k.exists && !FB.admin) throw new Error("The library key has not been set yet. Please tell your supervisor.");
-    if (k.exists) LIBKEY = await crypto.subtle.importKey("raw", b64u(k.data().k), "AES-GCM", false, ["decrypt"]);
+    if (k.exists){ LIBKEY = await crypto.subtle.importKey("raw", b64u(k.data().k), "AES-GCM", false, ["decrypt"]); keepKey(u.uid, k.data().k); }
     try { const ai = await within(FB.db.collection("secrets").doc("ai").get(), 10000); if (ai.exists && ai.data().k) AIKEY = ai.data(); } catch {}
     /* one id per browser: a second tab is the same device and must not close the first */
     try { SID = localStorage.getItem("bdi.sid") || ""; } catch {}
     if (!SID){ SID = Math.random().toString(36).slice(2) + Date.now().toString(36); try { localStorage.setItem("bdi.sid", SID); } catch {} }
     await within(FB.db.collection("sessions").doc(u.uid).set({sid: SID, at: Date.now()}));
-    const kick = why => { GATE_NOTE = why; ENTERED = false; stopWatch(); LIBKEY = null; FB.auth.signOut().then(() => location.reload()); try { sessionStorage.setItem("bdi.note", why); } catch {} };
+    const kick = why => { dropKey(); GATE_NOTE = why; ENTERED = false; stopWatch(); LIBKEY = null; FB.auth.signOut().then(() => location.reload()); try { sessionStorage.setItem("bdi.note", why); } catch {} };
     FB.unsubSess = FB.db.collection("sessions").doc(u.uid).onSnapshot(s => { const d = s.data(); if (d && d.sid !== SID) kick("This account was opened on another device, so this session was closed. Each account works on one device at a time."); }, () => {});
     if (!FB.admin) FB.unsubAppr = FB.db.collection("approved").doc(u.email.toLowerCase()).onSnapshot(s => { if (!s.exists) kick("Your access has been withdrawn."); }, () => {});
     try { if (localStorage.getItem("bdi.uid") !== u.uid){ ST = {name: u.displayName || "", xp: 0, events: [], wrong: []}; localStorage.setItem("bdi.uid", u.uid); save(); $("#pName").value = ST.name; renderDashboard(); } } catch {}
@@ -3285,7 +3399,7 @@ async function enter(u){
     $("#tabAdmin").hidden = !FB.admin; renderBank(); renderDashboard(); renderAccount(); setView(LIBKEY ? "dashboard" : "admin");
     if (LIBKEY) loadLibrary().then(() => fbPull()); else fbPull();
     if (FB.admin) renderAdmin();
-  } catch (e) { gShow(`<p class="bad">${esc(e.message || "Could not open the library.")}</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button><button class="btn" id="gOut">Sign out</button></div>`); $("#gOut").addEventListener("click", () => FB.auth.signOut()); }
+  } catch (e) { if (e && e.code === "permission-denied") dropKey(); else if (await enterOffline(u)) return; gShow(`<p class="bad">${esc(e.message || "Could not open the library.")}</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button><button class="btn" id="gOut">Sign out</button></div>`); $("#gOut").addEventListener("click", () => FB.auth.signOut()); }
 }
 /* ---- admin page ---- */
 async function renderAdmin(){
@@ -3350,7 +3464,7 @@ async function loadBoard(){
   if (!FB.ready || !FB.user) return;
   try {
     const s = await FB.db.collection("leaderboard").orderBy("xp", "desc").limit(25).get();
-    $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Average score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${r.xp}</td><td>${r.avg == null ? "–" : r.avg + "%"}</td></tr>`; }).join("") + "</table></div>";
+    $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Average score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${esc(r.xp)}</td><td>${r.avg == null ? "–" : esc(r.avg) + "%"}</td></tr>`; }).join("") + "</table></div>";
   } catch (e) { $("#boardBox").innerHTML = `<p class="bad">Could not load the leaderboard: ${esc(e.message || e)}</p>`; }
 }
 /* Design choice: kept on this device; applied before first paint by the head script */
@@ -3419,15 +3533,81 @@ async function deleteAccount(){
   await db.collection("approved").doc(u.email.toLowerCase()).delete().catch(() => {});
   try { await u.delete(); }
   catch (e) { FB.deleting = false; b.disabled = false; st.textContent = "Your account could not be deleted. Check your internet and try again."; return; }
+  dropKey(); clearRun();
   try { ["bdi.uid", "bdi.sid", "bdi.gem", KEY].forEach(k => localStorage.removeItem(k)); } catch {}
   ST = {name: "", xp: 0, events: [], wrong: []};
   toast("Your account has been deleted.");
 }
 
 /* ---------- ui ---------- */
-function setView(v){
+/* ---------- book page reader: every citation opens its page over the current screen ---------- */
+function citeTarget(text){
+  const t = String(text || "").trim(); if (!BOOKSTORE.length) return null;
+  const b = BOOKSTORE.find(x => t.toLowerCase().startsWith(x.title.toLowerCase().slice(0, 18)));
+  if (!b) return null;
+  const pdf = t.match(/PDF\s*p+\.\s*(\d+)/i), pr = t.match(/\bp+\.\s*(\d+)/i);
+  let page = pdf ? +pdf[1] : pr ? +pr[1] + (BOOKOFF[b.id] || 0) : 0;
+  if (!page || page < 1 || page > b.pages.length) return null;
+  return {b, page};
+}
+let FS = 17; try { FS = +localStorage.getItem("bdi.fs") || 17; } catch {}
+function openSheet(b, page, mark){
+  let sh = document.querySelector(".sheet");
+  if (!sh){ sh = document.createElement("div"); sh.className = "sheet"; sh.setAttribute("role", "dialog"); sh.setAttribute("aria-modal", "true"); sh.setAttribute("aria-labelledby", "sheetT"); sh.back = document.activeElement; document.body.appendChild(sh); const sl = $(".shell"); if (sl) sl.inert = true; ovOpen();
+    const bd = document.createElement("div"); bd.className = "sheet-bd"; bd.onclick = closeSheet; document.body.appendChild(bd); }
+  const draw = () => {
+    const raw = (b.pages[page - 1] || "").replace(/\r/g, ""), words = new Set(tok(mark || ""));
+    const paras = raw.split(/\n{2,}|\n(?=[•\-–]\s)/).map(p => p.replace(/\s*\n\s*/g, " ").trim()).filter(Boolean);
+    /* the quoted sentence is marked as one piece when it is on the page; otherwise the searched words are marked */
+    const quote = String(mark || "").replace(/[“”"]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+    const whole = quote.length > 15 && paras.some(p => p.toLowerCase().includes(quote));
+    const hl = s => { if (whole){ const i = s.toLowerCase().indexOf(quote); return i < 0 ? esc(s) : esc(s.slice(0, i)) + "<mark>" + esc(s.slice(i, i + quote.length)) + "</mark>" + esc(s.slice(i + quote.length)); }
+      return esc(s).replace(/[A-Za-z]{4,}/g, w => words.has(tok(w)[0]) ? `<mark>${w}</mark>` : w); };
+    const off = BOOKOFF[b.id] || 0, label = off ? `p. ${page - off}` : `PDF p. ${page}`;
+    sh.innerHTML = `<div class="sheet-h"><div><b id="sheetT">${esc(b.title)}</b><span class="meta">${label}</span></div><div class="sheet-tools"><button type="button" class="btn sm" data-fs="-1" aria-label="Smaller text">A−</button><button type="button" class="btn sm" data-fs="1" aria-label="Larger text">A+</button><button type="button" class="btn sm" data-x aria-label="Close">Close</button></div></div>
+      <div class="sheet-b" style="font-size:${FS}px">${paras.map(p => `<p>${hl(p)}</p>`).join("") || '<p class="muted">This page has no text.</p>'}</div>
+      <div class="sheet-f"><button type="button" class="btn" data-page="-1" ${page <= 1 ? "disabled" : ""}>‹ Previous page</button><button type="button" class="btn" data-page="1" ${page >= b.pages.length ? "disabled" : ""}>Next page ›</button></div>`;
+    sh.querySelector(".sheet-b").scrollTop = 0;
+    const m = sh.querySelector("mark"); if (m) m.scrollIntoView({block: "center"});
+  };
+  sh.onclick = e => { const x = e.target.closest("button"); if (!x) return;
+    if (x.hasAttribute("data-x")) return closeSheet();
+    if (x.dataset.page){ page = Math.min(b.pages.length, Math.max(1, page + +x.dataset.page)); draw(); }
+    if (x.dataset.fs){ FS = Math.min(24, Math.max(14, FS + +x.dataset.fs)); try { localStorage.setItem("bdi.fs", FS); } catch {} sh.querySelector(".sheet-b").style.fontSize = FS + "px"; } };
+  draw(); document.documentElement.classList.add("sheet-on"); requestAnimationFrame(() => sh.classList.add("open"));
+  sh.querySelector("[data-x]").focus({preventScroll: true});
+}
+function closeSheet(){ const sh = document.querySelector(".sheet"), bd = document.querySelector(".sheet-bd"); const back = sh && sh.back; if (sh) sh.remove(); if (bd) bd.remove(); document.documentElement.classList.remove("sheet-on"); const sl = $(".shell"); if (sl) sl.inert = false; if (sh) ovDone(); if (back && back.isConnected && back.focus) back.focus({preventScroll: true}); }
+document.addEventListener("click", e => {
+  const c = e.target.closest(".cite:not(.gk)"); if (!c || c.closest(".sheet")) return;
+  const t = citeTarget(c.textContent); if (!t){ if (!INDEX) toast("The textbooks are still loading — try again in a few seconds."); return; }
+  e.preventDefault(); e.stopPropagation();
+  const box = c.closest(".pafb, .qa-box, .viva-msg, details, li, p"); const quote = box && box.querySelector(".paquote");
+  openSheet(t.b, t.page, quote ? quote.textContent : "");
+}, true);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && document.querySelector(".sheet")) closeSheet(); if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches(".cite[tabindex]")){ e.preventDefault(); e.target.click(); } });
+new MutationObserver(() => { if (!BOOKSTORE.length) return; document.querySelectorAll(".cite:not(.gk):not([tabindex])").forEach(c => { if (citeTarget(c.textContent)){ c.tabIndex = 0; c.setAttribute("role", "button"); c.title = "Open this page"; c.classList.add("go"); } else c.tabIndex = -1; }); }).observe(document.body, {childList: true, subtree: true});
+
+/* the phone's back button (and the browser's) goes to the previous screen; an open picture or book page closes first */
+const NAV = {d: 0, cur: "dashboard"};
+function navPush(v){ if (NAV.cur === v && history.state && history.state.v === v) return; try { history.pushState({v, d: ++NAV.d}, "", "#" + v); } catch {} }
+function ovOpen(){ if (history.state && history.state.o) return; try { history.pushState({v: NAV.cur, d: ++NAV.d, o: 1}, "", "#" + NAV.cur); } catch {} }
+function ovDone(){ if (NAV.popping || !(history.state && history.state.o)) return; NAV.skip = true; history.back(); }
+function closeOverlay(){ if (document.querySelector(".sheet")){ closeSheet(); return true; } const l = document.querySelector(".lbx"); if (l){ l.closeLbx ? l.closeLbx() : l.remove(); return true; } return false; }
+addEventListener("popstate", e => {
+  const st = e.state || {v: "dashboard", d: 0};
+  if (NAV.skip){ NAV.skip = false; NAV.d = st.d || 0; return; }
+  NAV.popping = true; let was = false; try { was = closeOverlay(); } finally { NAV.popping = false; }
+  if (was){ NAV.d = st.d || 0; if (st.v && st.v !== NAV.cur) setView(st.v, false); return; }
+  NAV.d = st.d || 0; setView(st.v || "dashboard", false);
+});
+try { const A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if (A) A.addListener("backButton", () => { if (closeOverlay()) return; if (NAV.d > 0) history.back(); else A.minimizeApp(); });
+} catch {}
+function setView(v, push = true){
   stopSpeak(); if (v === "admin") renderAdmin();
-  $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === v || ((v === "case" || v === "session") && t.dataset.view === "cases"))));
+  if (push) navPush(v); NAV.cur = v;
+  $$(".tab").forEach(t => { const on = t.dataset.view === v || ((v === "case" || v === "session") && t.dataset.view === "cases"); t.setAttribute("aria-selected", String(on)); if (on) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   $$(".view").forEach(s => s.hidden = s.id !== "v-" + v);
   if (v === "plan") renderPlan();
   tabsInView();
@@ -3489,7 +3669,8 @@ function bind(){
 }
 async function boot(){
   initQuizUi(); renderBank(); bind(); renderDashboard(); $("#pName").value = ST.name || ""; toolCeph(); toolSpace(); renderAccount();
-  setView("dashboard");
+  setView("dashboard", false);
+  try { history.replaceState({v: "dashboard", d: 0}, "", location.pathname + location.search); } catch {}
   try { const n = sessionStorage.getItem("bdi.note"); if (n){ GATE_NOTE = n; sessionStorage.removeItem("bdi.note"); } } catch {}
   gateStart();
   try { if (!IN_APP && "serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(() => {}); } catch {}
