@@ -2016,10 +2016,14 @@ function tok(s){
   }
   return out;
 }
-function buildIndex(){
-  const chunks = [], post = new Map(); let total = 0;
-  BOOKSTORE.forEach((b, bi) => b.pages.forEach((txt, pi) => {
-    const body = (txt || "").replace(/[ \t]+/g, " ").trim(); if (body.length < 40) return;
+/* long library work runs in short slices (about 25 ms), so the screen never freezes; the results are the same as one pass */
+const slice = st => performance.now() - st.t > 25 ? sleep(0).then(() => { st.t = performance.now(); }) : null;
+async function buildIndex(){
+  const chunks = [], post = new Map(), store = BOOKSTORE, st = {t: performance.now()}; let total = 0;
+  for (let bi = 0; bi < store.length; bi++) for (let pi = 0; pi < store[bi].pages.length; pi++){
+    const y = slice(st); if (y) await y;
+    const txt = store[bi].pages[pi];
+    const body = (txt || "").replace(/[ \t]+/g, " ").trim(); if (body.length < 40) continue;
     for (let s = 0; s < body.length; s += 950){
       const t = body.slice(s, s + 1200), ci = chunks.length, terms = tok(t), tf = new Map();
       terms.forEach(w => tf.set(w, (tf.get(w) || 0) + 1));
@@ -2027,7 +2031,7 @@ function buildIndex(){
       chunks.push({b:bi, page:pi + 1, t, len:terms.length}); total += terms.length;
       if (s + 1200 >= body.length) break;
     }
-  }));
+  }
   INDEX = {chunks, post, avg: total / Math.max(1, chunks.length)};
 }
 function search(q, k = 6){
@@ -2090,18 +2094,18 @@ async function loadLibrary(){
   BOOKSTORE = got.filter(Boolean);
   st.textContent = window.LIBFAIL.length ? "Some books could not be opened. Reload the page; if it persists, tell your supervisor." : "";
   BOOKSTORE.sort((a, b) => a.title.localeCompare(b.title));
-  await sleep(0); ligFix(BOOKSTORE); buildIndex(); renderLibrary(); afterLibrary();
+  await sleep(0); await ligFix(BOOKSTORE); await buildIndex(); renderLibrary(); await sleep(0); afterLibrary();
 }
 /* some scanned books split words at the fi / ff / fl ligatures ("signi fi cant", "the fi rst") or after one letter ("r etainers");
    rejoin a split only when the joined word is used elsewhere in the library, so real word gaps are left alone */
-function ligFix(store){
-  const vocab = new Set();
-  store.forEach(b => b.pages.forEach(p => { if (p) for (const w of p.match(/[A-Za-z]{3,}/g) || []) vocab.add(w.toLowerCase()); }));
+async function ligFix(store){
+  const vocab = new Set(), st = {t: performance.now()};
+  for (const b of store) for (const p of b.pages){ const y = slice(st); if (y) await y; if (p) for (const w of p.match(/[A-Za-z]{3,}/g) || []) vocab.add(w.toLowerCase()); }
   const has = w => { w = w.toLowerCase(); return vocab.has(w) || (w.length > 5 && vocab.has(w.replace(/(ing|ed|es|s|ly|ers|er)$/, ""))); };
-  store.forEach(b => { b.pages = b.pages.map(p => p && p
+  for (const b of store){ const out = []; for (const p of b.pages){ const y = slice(st); if (y) await y; out.push(p && p
     .replace(/\b([A-Za-z]+) (ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, l, g, r) => has(l + g + r) ? l + g + r : has(g + r) ? l + " " + g + r : has(l + g) && has(r) ? l + g + " " + r : m)
     .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
-    .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); });
+    .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); } b.pages = out; }
 }
 function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} }
 function renderLibrary(){
