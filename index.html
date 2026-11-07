@@ -635,6 +635,10 @@ button,a,.btn,.tab,summary,[role=button]{touch-action:manipulation}
 button,.btn,.tab{-webkit-user-select:none;user-select:none}
 @media (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=file]),textarea,select{font-size:max(16px,1em)!important}}
 .shell,#gate,html[data-look="collegiate"] .shell{min-height:100dvh}
+
+/* press feedback on everything tappable, the same small press the buttons already have */
+.bcase:active,.coll-cell:active,.chk:active,.src:active,.recs figure:active{transform:translateY(1px)}
+.tab:active,.stab:active,.cite.go:active,summary:active{opacity:.75}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -805,7 +809,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
 
 <section class="view" id="v-admin" hidden>
  <div class="phead"><div><div class="eyebrow">Only you can see this page</div><h1>Access control</h1></div></div>
- <div class="pane"><div class="pane-b" id="adminBox">Loading…</div></div>
+ <div class="pane"><div class="pane-b" id="adminBox"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading…</div></div>
 </section>
 
 <section class="view" id="v-account" hidden>
@@ -2077,11 +2081,11 @@ async function decFile(name, tries = 2){
 async function loadLibrary(){
   const st = $("#libStatus"); BOOKSTORE = []; window.LIBFAIL = [];
   try { indexedDB.deleteDatabase("bdi-library"); } catch {}
-  let done = 0; st.textContent = `Loading the library… 0 of ${BOOKS.length} books`;
+  let done = 0; st.innerHTML = `<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading the library… 0 of ${BOOKS.length} books`;
   const got = await Promise.all(BOOKS.map(async b => {
     try { const pages = parseBook(await decFile(b.file)); return {id: b.id, title: b.title, pages}; }
     catch (e) { window.LIBFAIL.push(b.id); return null; }
-    finally { st.textContent = `Loading the library… ${++done} of ${BOOKS.length} books`; }
+    finally { st.innerHTML = `<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading the library… ${++done} of ${BOOKS.length} books`; }
   }));
   BOOKSTORE = got.filter(Boolean);
   st.textContent = window.LIBFAIL.length ? "Some books could not be opened. Reload the page; if it persists, tell your supervisor." : "";
@@ -2206,7 +2210,7 @@ function showCaseTab(tab){
   } else if (tab === "viva"){
     if (c.book){
       box.innerHTML = '<div class="pane"><div class="pane-b"><span class="skel" style="width:60%"></span><span class="skel"></span><span class="skel" style="width:80%"></span></div></div>';
-      stagedViva(c.book).then(v => { if (curCase !== c || curTab !== "viva") return; if (!v.stage.length){ box.innerHTML = '<div class="pane"><div class="pane-b"><p class="notice2" style="margin:0">The records for this case could not be loaded, so the viva cannot start. Check your connection and open the case again.</p></div></div>'; return; } c.stage = v.stage; startViva(v.qs, "", c.topic, c.id, box, c.title); }).catch(oops);
+      stagedViva(c.book).then(v => { if (curCase !== c || curTab !== "viva") return; if (!v.stage.length){ box.innerHTML = '<div class="pane"><div class="pane-b"><p class="notice2" style="margin:0">The records for this case could not be loaded, so the viva cannot start. Check your connection. <button class="btn sm" type="button" id="vivaRetry">Try again</button></p></div></div>'; $("#vivaRetry").onclick = () => showCaseTab("viva"); return; } c.stage = v.stage; startViva(v.qs, "", c.topic, c.id, box, c.title); }).catch(oops);
     } else startViva(c.viva, c.text, c.topic, c.id, box, c.title);
   }
   else if (tab === "seminar") startSeminar(c, box);
@@ -3247,7 +3251,7 @@ function startTutor(ev, resume){
   $("#tTitle").textContent = unseen ? "Case examination" : "Case discussion"; $("#tRun").hidden = false; $("#tRun").scrollIntoView({block: "start"}); examPill($("#tRun .exam-grid"));
   $("#tInfo").textContent = scored ? `${nQ} questions${limit ? " · " + limit + " min" : " · no time limit"} · unanswered questions count as wrong.` : "Open discussion — no score.";
   $("#tSheet").innerHTML = sheetHtml(bc);
-  $("#tChat").innerHTML = ""; $("#tRecs").innerHTML = '<span class="meta">Loading the patient\'s records…</span>';
+  $("#tChat").innerHTML = ""; $("#tRecs").innerHTML = '<span class="meta"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading the patient\'s records…</span>';
   /* the examiner speaks only after the details and records are on the screen */
   const run = TUT.run = {};
   const begin = () => recordFigs(bc).catch(() => []).then(list => {
@@ -3255,7 +3259,7 @@ function startTutor(ev, resume){
     const box = $("#tRecs");
     if (!list.length){
       box.innerHTML = '<p class="notice2" style="margin:0">The records for this case could not be loaded, so the exam has not started. <button class="btn sm" type="button" id="tRecRetry">Try again</button></p>';
-      $("#tRecRetry").onclick = () => { box.innerHTML = '<span class="meta">Loading the patient\'s records…</span>'; begin(); };
+      $("#tRecRetry").onclick = () => { box.innerHTML = '<span class="meta"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading the patient\'s records…</span>'; begin(); };
       return;
     }
     box.innerHTML = list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Record ${i + 1} — tap to enlarge</figcaption></figure>`).join("");
@@ -3364,7 +3368,7 @@ async function gateCheck(u){
   FB.unsubAppr = FB.db.collection("approved").doc(email).onSnapshot(s => { if (s.exists){ stopWatch(); enter(u); } }, () => {});
 }
 async function enter(u){
-  gShow('<p class="muted">Opening your library…</p>');
+  gShow('<p class="muted"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Opening your library…</p>');
   try {
     const k = await within(FB.db.collection("secrets").doc("lib").get());
     if (!k.exists && !FB.admin) throw new Error("The library key has not been set yet. Please tell your supervisor.");
@@ -3449,7 +3453,7 @@ async function loadBoard(){
   try {
     const s = await FB.db.collection("leaderboard").orderBy("xp", "desc").limit(25).get();
     $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Average score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${esc(r.xp)}</td><td>${r.avg == null ? "–" : esc(r.avg) + "%"}</td></tr>`; }).join("") + "</table></div>";
-  } catch (e) { $("#boardBox").innerHTML = `<p class="bad">Could not load the leaderboard: ${esc(e.message || e)}</p>`; }
+  } catch (e) { $("#boardBox").innerHTML = `<p class="bad">Could not load the leaderboard: ${esc(e.message || e)} <button class="btn sm" type="button" id="boardRetry">Try again</button></p>`; $("#boardRetry").onclick = () => { $("#boardBox").innerHTML = `<p class="muted"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading…</p>`; loadBoard(); }; }
 }
 /* Design choice: kept on this device; applied before first paint by the head script */
 function lookNow(){ return document.documentElement.dataset.look === "classic" ? "classic" : "collegiate"; }
