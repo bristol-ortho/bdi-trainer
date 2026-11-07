@@ -3030,7 +3030,7 @@ function gemRace(key, models, makeBody, onText){
           const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
           if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw Object.assign(new Error("The examiner key is not valid. Please tell your supervisor."), {fatal: true});
           /* a model that does not accept the fast setting is asked again without it */
-          if (r.status === 400 && /thinking/i.test(msg) && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
+          if (r.status === 400 && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
           if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; return; }
           if (r.status === 429 || r.status >= 500){ busy = true; return; }
           if (!r.ok) throw Object.assign(new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again."), {fatal: true});
@@ -3077,7 +3077,7 @@ async function callGemini(key, model, messages, system, opts = {}){
         const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
         if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw new Error("The examiner key is not valid. Please tell your supervisor.");
         /* a model that does not accept the fast setting is asked again without it */
-        if (r.status === 400 && /thinking/i.test(msg) && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
+        if (r.status === 400 && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
         if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; break; }
         if (r.status === 429 || r.status >= 500){ busy = true; break; }
         if (!r.ok) throw new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again.");
