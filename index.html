@@ -2072,11 +2072,15 @@ let LIBKEY = null;
 const b64u = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 /* each encrypted file is fetched under a content version from the build, so the browser and the service worker cache it until it really changes */
 const VER = window.BDI_VER || {};
+/* the encrypted book files start downloading while the sign-in is checked; they can only be opened with the key */
+const PREF = {};
+function prefetchLib(){ try { for (const b of BOOKS) if (!PREF[b.file]) PREF[b.file] = fetchT(b.file + "?v=" + (VER[b.file] || "1"), {}, 120000).then(r => r.ok ? r.arrayBuffer() : null).catch(() => null); } catch {} }
 async function decFile(name, tries = 2){
   for (let n = 0; ; n++){
     try {
-      const r = await fetchT(name + "?v=" + (VER[name] || "1"), {}, 120000); if (!r.ok) throw new Error(name + " " + r.status);
-      const buf = new Uint8Array(await r.arrayBuffer());
+      const pre = PREF[name] ? await PREF[name] : null; delete PREF[name];
+      let ab = pre; if (!ab){ const r = await fetchT(name + "?v=" + (VER[name] || "1"), {}, 120000); if (!r.ok) throw new Error(name + " " + r.status); ab = await r.arrayBuffer(); }
+      const buf = new Uint8Array(ab);
       const pt = await crypto.subtle.decrypt({name: "AES-GCM", iv: buf.slice(0, 12)}, LIBKEY, buf.slice(12));
       return await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
     } catch (e) { if (n >= tries - 1) throw e; await sleep(800); }
@@ -3337,7 +3341,10 @@ async function gateAuth(u){
   if (!u){ dropKey(); if (ENTERED){ location.reload(); return; } gateLogin(); return; }
   FB.user = u;
   if (IN_APP && navigator.onLine === false && await enterOffline(u)) return;
-  try { await within(u.reload(), 8000); u = FB.auth.currentUser || u; if (u.emailVerified) await within(u.getIdToken(true), 8000); } catch {}
+  prefetchLib();
+  /* the account check and the fresh sign-in token are needed only until the email is confirmed; a saved token that already says so is enough (no network) */
+  let verified = false; try { verified = u.emailVerified && (await within(u.getIdTokenResult(), 8000)).claims.email_verified === true; } catch {}
+  if (!verified) try { await within(u.reload(), 8000); u = FB.auth.currentUser || u; if (u.emailVerified) await within(u.getIdToken(true), 8000); } catch {}
   if (!u.emailVerified){ gateVerify(u); return; }
   gateCheck(u);
 }
@@ -3374,14 +3381,14 @@ async function gateCheck(u){
 async function enter(u){
   gShow('<p class="muted"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Opening your library…</p>');
   try {
-    const k = await within(FB.db.collection("secrets").doc("lib").get());
-    if (!k.exists && !FB.admin) throw new Error("The library key has not been set yet. Please tell your supervisor.");
-    if (k.exists){ LIBKEY = await crypto.subtle.importKey("raw", b64u(k.data().k), "AES-GCM", false, ["decrypt"]); keepKey(u.uid, k.data().k); }
-    try { const ai = await within(FB.db.collection("secrets").doc("ai").get(), 10000); if (ai.exists && ai.data().k) AIKEY = ai.data(); } catch {}
     /* one id per browser: a second tab is the same device and must not close the first */
     try { SID = localStorage.getItem("bdi.sid") || ""; } catch {}
     if (!SID){ SID = Math.random().toString(36).slice(2) + Date.now().toString(36); try { localStorage.setItem("bdi.sid", SID); } catch {} }
-    await within(FB.db.collection("sessions").doc(u.uid).set({sid: SID, at: Date.now()}));
+    /* the library key, the examiner key and this device are asked for at the same time */
+    const [k, ai] = await Promise.all([within(FB.db.collection("secrets").doc("lib").get()), within(FB.db.collection("secrets").doc("ai").get(), 10000).catch(() => null), within(FB.db.collection("sessions").doc(u.uid).set({sid: SID, at: Date.now()}))]);
+    if (!k.exists && !FB.admin) throw new Error("The library key has not been set yet. Please tell your supervisor.");
+    if (k.exists){ LIBKEY = await crypto.subtle.importKey("raw", b64u(k.data().k), "AES-GCM", false, ["decrypt"]); keepKey(u.uid, k.data().k); }
+    try { if (ai && ai.exists && ai.data().k) AIKEY = ai.data(); } catch {}
     const kick = why => { dropKey(); GATE_NOTE = why; ENTERED = false; stopWatch(); LIBKEY = null; FB.auth.signOut().then(() => location.reload()); try { sessionStorage.setItem("bdi.note", why); } catch {} };
     FB.unsubSess = FB.db.collection("sessions").doc(u.uid).onSnapshot(s => { const d = s.data(); if (d && d.sid !== SID) kick("This account was opened on another device, so this session was closed. Each account works on one device at a time."); }, () => {});
     if (!FB.admin) FB.unsubAppr = FB.db.collection("approved").doc(u.email.toLowerCase()).onSnapshot(s => { if (!s.exists) kick("Your access has been withdrawn."); }, () => {});
