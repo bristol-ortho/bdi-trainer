@@ -182,7 +182,7 @@ mark{background:#f3e3b4;padding:0 2px;border-radius:2px;color:inherit}
 .tile .l{font-size:12px;color:var(--muted);font-weight:500}
 .srs{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
 .srs p{margin:0;min-width:0;flex:1 1 200px}.srs b{display:block;font-size:15px}.srs .meta{display:block;margin-top:3px;line-height:1.45}
-.srs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}.srs-week{margin:10px 0 4px}
+.srs-cases{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}.srs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}.srs-week{margin:10px 0 4px}
 .trow{display:grid;grid-template-columns:minmax(0,150px) 1fr 64px;gap:12px;align-items:center;font-size:13.5px;margin:10px 0}
 .trow>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .trow .meta{text-align:right}
@@ -1882,7 +1882,10 @@ function srsMark(key, g){
   if (g >= 1){ if (!cur || cur.b >= SRS_DAYS.length) return; const b = cur.b + 1; s[key] = {b, due: b < SRS_DAYS.length ? dayStart(now) + SRS_DAYS[b] * DAY : 0, at: now}; }
   else { const b = g > 0 && cur && cur.b < SRS_DAYS.length ? Math.max(0, cur.b - 1) : 0; s[key] = {b, due: dayStart(now) + SRS_DAYS[b] * DAY, at: now}; }
 }
-const srsDue = () => { const now = Date.now(); return Object.keys(ST.srs || {}).filter(k => { const r = ST.srs[k]; return r.b < SRS_DAYS.length && r.due <= now; }); };
+/* "c:b<case>" = a book case whose viva went badly: the whole case comes back with its records (never a case question on its own) */
+const srsDueAll = () => { const now = Date.now(); return Object.keys(ST.srs || {}).filter(k => { const r = ST.srs[k]; return r.b < SRS_DAYS.length && r.due <= now; }); };
+const srsDue = () => srsDueAll().filter(k => !k.startsWith("c:"));
+const srsDueCases = () => srsDueAll().filter(k => k.startsWith("c:")).map(k => k.slice(2)).filter(id => findCase(id));
 const srsNext = () => Object.values(ST.srs || {}).filter(r => r.b < SRS_DAYS.length).reduce((m, r) => Math.min(m, r.due), Infinity);
 /* earlier mistakes (before spaced review existed) start as due today */
 if (!ST.srs){ ST.srs = {}; (ST.wrong || []).forEach(i => { ST.srs["m:" + i] = {b: 0, due: dayStart(Date.now()), at: 1}; }); }
@@ -1911,9 +1914,10 @@ function renderDashboard(){
   const tm = {}; g.forEach(e => { const t = tm[e.topic] || (tm[e.topic] = {s: 0, n: 0}); t.s += e.score; t.n++; });
   const weak = Object.entries(tm).map(([k, v]) => [k, Math.round(v.s / v.n)]).sort((a, b) => a[1] - b[1]).slice(0, 3);
   renderPlanHome();
-  const due = srsDue().length, nx = srsNext(), wk = new Set(ST.events.filter(e => e.at > dayStart(Date.now()) - 6 * DAY).map(e => new Date(e.at).toDateString())).size;
+  const due = srsDue().length, dc = srsDueCases(), nx = srsNext(), wk = new Set(ST.events.filter(e => e.at > dayStart(Date.now()) - 6 * DAY).map(e => new Date(e.at).toDateString())).size;
   const nxTxt = nx === Infinity ? "" : `Next review ${nx <= dayStart(Date.now()) + DAY ? "tomorrow" : new Date(nx).toLocaleDateString(undefined, {weekday: "long", day: "numeric", month: "short"})}.`;
-  const rev = due ? `<div class="srs"><p><b>${due} question${due === 1 ? "" : "s"} to review today</b><span class="meta">Questions you missed come back after 1, 3, 7, 16 and 35 days, until you know them.</span></p><button type="button" class="btn primary sm" id="srsGo">Review now</button></div>`
+  const caseBtns = dc.slice(0, 4).map(id => `<button type="button" class="btn sm" data-case="${esc(id)}" data-tab="viva">${esc(findCase(id).title)} viva</button>`).join("");
+  const rev = due || dc.length ? `<div class="srs"><p><b>${[due ? `${due} question${due === 1 ? "" : "s"}` : "", dc.length ? `${dc.length} case viva${dc.length === 1 ? "" : "s"}` : ""].filter(Boolean).join(" and ")} to review today</b><span class="meta">What you missed comes back after 1, 3, 7, 16 and 35 days, until you know it.</span></p>${due ? `<button type="button" class="btn primary sm" id="srsGo">Review now</button>` : ""}${caseBtns ? `<span class="srs-cases">${caseBtns}</span>` : ""}</div>`
     : nx !== Infinity ? `<div class="srs"><p><b>Nothing to review today</b><span class="meta">${nxTxt}</span></p></div>` : "";
   const week = ST.events.length ? `<p class="meta srs-week">This week: you studied on ${wk} of the last 7 days.</p>` : "";
   $("#progPane").hidden = !weak.length && !rev;
@@ -2139,7 +2143,7 @@ async function ligFix(store){
     .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
     .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); } b.pages = out; }
 }
-function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} remindSchedule().catch(() => {}); }
+function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} try { renderDashboard(); } catch {} remindSchedule().catch(() => {}); }
 function renderLibrary(){
   const pg = BOOKSTORE.reduce((a, b) => a + b.pages.length, 0);
   $("#libMeta").textContent = BOOKSTORE.length ? `${BOOKSTORE.length} books · ${pg.toLocaleString()} pages` : "";
@@ -2334,6 +2338,7 @@ function finishViva(V, vv, av){
   setMood(av, pct >= 70 ? "happy" : "concern", pct >= 70 ? "Well done." : "Keep studying.");
   $("#vf").hidden = true;
   const xp = 20 + Math.round(pct / 2);
+  if (/^b\d/.test(String(V.caseId || ""))) srsMark("c:" + V.caseId, pct >= 70 ? 1 : pct >= 40 ? 0.5 : 0);
   ST.events.push({type:"viva", score:pct, topic:V.topic, xp, at:Date.now(), caseId:V.caseId}); const b = levelInfo(ST.xp).i; ST.xp += xp; save(); planNote("case", null, String(V.caseId || "").replace(/^b/, ""));
   toast(levelInfo(ST.xp).i > b ? `Level up — ${LEVELS[levelInfo(ST.xp).i].n}! (+${xp} XP)` : `+${xp} XP`); renderDashboard();
 }
