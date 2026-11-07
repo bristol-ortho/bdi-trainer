@@ -182,6 +182,9 @@ mark{background:#f3e3b4;padding:0 2px;border-radius:2px;color:inherit}
 .tile .l{font-size:12px;color:var(--muted);font-weight:500}
 .srs{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
 .srs p{margin:0;min-width:0;flex:1 1 200px}.srs b{display:block;font-size:15px}.srs .meta{display:block;margin-top:3px;line-height:1.45}
+.focus{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.fc-clock{font:500 56px/1 var(--f-display,Georgia,serif);font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--ink)}
+.fc-clock.brk{color:var(--ok)}.fc-lbl{margin:0 0 6px;color:var(--muted)}.focus .actions{justify-content:center}
 .srs-cases{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}.srs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}.srs-week{margin:10px 0 4px}
 .trow{display:grid;grid-template-columns:minmax(0,150px) 1fr 64px;gap:12px;align-items:center;font-size:13.5px;margin:10px 0}
 .trow>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -765,6 +768,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
 </section>
 <section class="view" id="v-plan" hidden>
  <div class="phead"><div><div class="eyebrow">Your road to the exam</div><h1>Study plan</h1><p>A daily plan built around your exam date and your weakest topics. Miss a day and it moves forward by itself.</p></div></div>
+ <div class="pane" id="focusPane"><div class="pane-h"><h2>Focus timer</h2><span class="meta" id="fcMeta"></span></div><div class="pane-b focus"><div class="fc-clock" id="fcClock" role="timer" aria-live="off">25:00</div><p class="fc-lbl" id="fcLbl">25 minutes of study, then a 5-minute break.</p><div class="actions"><button type="button" class="btn primary" id="fcGo">Start</button><button type="button" class="btn" id="fcReset">Reset</button></div></div></div>
  <div class="pane" id="planSetup"><div class="pane-h"><h2>Build your plan</h2></div><div class="pane-b"><form id="planForm" class="pform">
    <div class="f"><label for="planExam">Exam date</label><input type="date" id="planExam" required></div>
    <div class="f"><label for="planMins">Time a day</label><select id="planMins"><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60" selected>1 hour</option><option value="90">1½ hours</option><option value="120">2 hours</option><option value="180">3 hours</option></select></div>
@@ -2736,6 +2740,52 @@ function planTaskRow(x, withAction){
   const done = (ST.plan.done || {})[x.id];
   return `<div class="ptask ${done ? "done" : ""}"><label class="pcheck"><input type="checkbox" data-ptick="${esc(x.id)}" ${done ? "checked" : ""} aria-label="Mark ${esc(x.label)} as done"><i></i></label><div class="ptxt"><b>${esc(x.label)}</b><span>${PLAN_KIND[x.k]}${PLAN_COST[x.k] ? ` · about ${PLAN_COST[x.k]} min` : ""}</span></div>${withAction && x.k !== "rest" ? `<button type="button" class="btn sm" data-pgo="${esc(x.id)}">${done ? "Again" : "Start"}</button>` : ""}</div>`;
 }
+/* Focus timer (Pomodoro): 25 minutes of study, then a 5-minute break (15 after every fourth).
+   Kept on the device as an end time, so it stays right when the phone sleeps or the app is closed.
+   A finished focus session counts as study (+5 XP, streak); in the app the phone also rings at the end. */
+const FC_KEY = "bdi.focus", FC_MIN = {focus: 25, short: 5, long: 15};
+const fcNew = () => ({mode: "focus", run: false, endAt: 0, left: FC_MIN.focus * 6e4, n: 0, day: ymd(new Date())});
+let FC = (() => { try { return Object.assign(fcNew(), JSON.parse(localStorage.getItem(FC_KEY) || "{}")); } catch { return fcNew(); } })();
+const fcSave = () => { try { localStorage.setItem(FC_KEY, JSON.stringify(FC)); } catch {} };
+const fcLeft = () => FC.run ? Math.max(0, FC.endAt - Date.now()) : FC.left;
+async function fcRing(){
+  const n = LN(); if (!n) return;
+  await n.cancel({notifications: [{id: 50}]}).catch(() => {});
+  if (!FC.run) return;
+  try { const p = await n.checkPermissions(); if (p.display !== "granted" && (await n.requestPermissions()).display !== "granted") return; } catch { return; }
+  n.schedule({notifications: [{id: 50, title: "Bristol Dental Institute", body: FC.mode === "focus" ? "Focus session done. Take a short break." : "Break over. Ready for the next focus session?", schedule: {at: new Date(FC.endAt), allowWhileIdle: true}}]}).catch(() => {});
+}
+function fcDraw(){
+  const c = $("#fcClock"); if (!c) return;
+  const s = Math.ceil(fcLeft() / 1000), brk = FC.mode !== "focus";
+  c.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); c.classList.toggle("brk", brk);
+  $("#fcLbl").textContent = brk ? `Break — ${FC_MIN[FC.mode]} minutes. Stand up, look away from the screen.` : "25 minutes of study, then a 5-minute break.";
+  $("#fcGo").textContent = FC.run ? "Pause" : fcLeft() < FC_MIN[FC.mode] * 6e4 ? "Resume" : brk ? "Start break" : "Start";
+  $("#fcMeta").textContent = FC.n ? `Today: ${FC.n} focus session${FC.n === 1 ? "" : "s"} · ${FC.n * FC_MIN.focus} min` : "";
+}
+function fcTick(){
+  if (FC.day !== ymd(new Date())){ FC.n = 0; FC.day = ymd(new Date()); fcSave(); }
+  if (FC.run && Date.now() >= FC.endAt){
+    if (FC.mode === "focus"){
+      FC.n++; const next = FC.n % 4 ? "short" : "long";
+      Object.assign(FC, {mode: next, run: true, endAt: Date.now() + FC_MIN[next] * 6e4, left: FC_MIN[next] * 6e4}); fcSave();
+      record("focus", null, "Focus", 5); toast(`Focus session ${FC.n} done (+5 XP). ${FC_MIN[next]}-minute break.`); fcRing();
+    } else { Object.assign(FC, {mode: "focus", run: false, endAt: 0, left: FC_MIN.focus * 6e4}); fcSave(); toast("Break over. Start the next focus session when you are ready."); }
+    try { if (navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) navigator.vibrate(200); } catch {}
+  }
+  fcDraw();
+  clearTimeout(fcTick.t); if (FC.run) fcTick.t = setTimeout(fcTick, 1000);
+}
+function fcInit(){
+  if (!$("#fcGo")) return;
+  $("#fcGo").addEventListener("click", () => {
+    if (FC.run){ FC.left = fcLeft(); FC.run = false; } else { FC.endAt = Date.now() + FC.left; FC.run = true; }
+    fcSave(); fcRing(); fcTick();
+  });
+  $("#fcReset").addEventListener("click", () => { Object.assign(FC, {mode: "focus", run: false, endAt: 0, left: FC_MIN.focus * 6e4}); fcSave(); fcRing(); fcTick(); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) fcTick(); });
+  fcTick();
+}
 function renderPlan(){
   const box = $("#planBox"); if (!box) return; const p = ST.plan, today = ymd(new Date());
   $("#planSetup").hidden = !!p && !box.dataset.edit;
@@ -3730,7 +3780,7 @@ function bind(){
   $("#pName").addEventListener("change", e => { ST.name = e.target.value.trim(); save(); renderDashboard(); toast("Saved"); });
 }
 async function boot(){
-  initQuizUi(); renderBank(); bind(); renderDashboard(); $("#pName").value = ST.name || ""; toolCeph(); toolSpace(); renderAccount();
+  initQuizUi(); renderBank(); bind(); fcInit(); renderDashboard(); $("#pName").value = ST.name || ""; toolCeph(); toolSpace(); renderAccount();
   setView("dashboard", false);
   try { history.replaceState({v: "dashboard", d: 0}, "", location.pathname + location.search); } catch {}
   try { const n = sessionStorage.getItem("bdi.note"); if (n){ GATE_NOTE = n; sessionStorage.removeItem("bdi.note"); } } catch {}
