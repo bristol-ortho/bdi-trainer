@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#0d0d0f"><link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="BDI Ortho">
 <link rel="icon" href="icon-32.png" sizes="32x32"><link rel="icon" href="icon-192.png" sizes="192x192">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://www.gstatic.com" crossorigin><link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://www.gstatic.com" crossorigin><link rel="preconnect" href="https://firestore.googleapis.com" crossorigin><link rel="preconnect" href="https://generativelanguage.googleapis.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
 <style>
 /* App shell: a black sidebar holds the institute mark and navigation; the warm paper canvas holds the work. Gold is used sparingly, for the active place and the primary action. */
@@ -573,6 +573,20 @@ html[data-look="collegiate"] main.gut{flex:1 0 auto}
  .exam-pill{display:none}
 }
 html[data-look="collegiate"]{--stick:136px}
+/* inside the phone app the page runs under the clock and camera: keep the top content below them */
+.gate-art.cine{padding-top:calc(40px + env(safe-area-inset-top,0px))}
+@media (max-width:860px){.gate-art.cine{padding-top:calc(26px + env(safe-area-inset-top,0px))}}
+html[data-look="collegiate"] .side{padding-top:calc(14px + env(safe-area-inset-top,0px))!important}
+@media (max-width:860px){html[data-look="collegiate"] .side{padding-top:calc(10px + env(safe-area-inset-top,0px))!important}}
+/* inside the phone app: no grey flash on tap, no long-press menus on buttons, no rubber-band page */
+html.in-app{-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+html.in-app button,html.in-app .btn,html.in-app .tab,html.in-app img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+/* the app stays hidden behind the sign-in screen in every design */
+html[data-look] body.locked .shell{display:none!important}
+/* inside the phone app: a solid strip behind the clock so scrolled text never runs under it */
+html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--night);z-index:9999;pointer-events:none}
+/* room for the copyright bar under the sign-in form, so its last line is never covered */
+.gate-main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -765,6 +779,8 @@ html[data-look="collegiate"]{--stick:136px}
   <div class="stack">
    <div class="pane"><div class="pane-h"><h2>Your account</h2></div><div class="pane-b" id="cloudBox"></div></div>
    <div class="pane" id="boardPane" hidden><div class="pane-h"><h2>Leaderboard</h2><span class="meta">top 25 by XP</span></div><div class="pane-b" id="boardBox"></div></div>
+   <div class="pane" id="remindPane" hidden><div class="pane-h"><h2>Study reminder</h2></div><div class="pane-b"><label class="chk"><input type="checkbox" id="remOn"> Remind me to study every day</label><div class="f" style="margin-top:10px;max-width:220px"><label for="remAt">Time</label><input type="time" id="remAt" value="20:00"></div><p class="status" id="remSt"></p></div></div>
+   <div class="pane"><div class="pane-h"><h2>About</h2></div><div class="pane-b"><p class="hint" style="margin:0 0 8px">BDI Trainer is for education and exam preparation only. It is not medical advice and does not replace clinical judgement.</p><p style="margin:0"><a href="https://bristol-ortho.github.io/bdi-trainer/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></div></div>
   </div>
  </div>
 </section>
@@ -2029,8 +2045,11 @@ async function fetchT(url, opts = {}, ms = 60000){
   catch (e) { throw e.name === "AbortError" ? new Error("The connection is too slow right now — please try again.") : e; }
   finally { clearTimeout(t); }
 }
+/* true inside the iPhone / Android app; there the libraries ship inside the app instead of coming from the internet */
+const IN_APP = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+if (IN_APP) document.documentElement.classList.add("in-app");
 function loadScript(src, ms = 20000){ return new Promise((res, rej) => { const s = document.createElement("script"), fail = () => { clearTimeout(t); s.remove(); rej(new Error("A component could not be loaded — check your internet connection.")); }, t = setTimeout(fail, ms); s.src = src; s.onload = () => { clearTimeout(t); res(); }; s.onerror = fail; document.head.appendChild(s); }); }
-const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+const PDFJS = IN_APP ? "vendor/pdfjs/" : "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
 async function ensurePdf(){ if (window.pdfjsLib) return; await loadScript(PDFJS + "pdf.min.js"); pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js"; }
 
 /* ---------- case bank & detail ---------- */
@@ -2138,7 +2157,7 @@ function showCaseTab(tab){
 async function aiMark(q, answer){
   if (aiProv() === "none" || !q.model) return null;
   const system = `You are a senior fellowship examiner in orthodontics marking one written viva answer. Mark what the resident means, not the words they use: accept synonyms, abbreviations and clinically equivalent wording, and give no credit for listing words without a correct point. Mark down wrong or clinically unsafe statements even if the rest is good. The model answer is from the course textbook and defines what is expected; give credit for other correct, established orthodontic points. You cannot see the patient's images. Never mention a figure, page or book. Answer with JSON only: {"score": 0-100, "covered": ["short point"], "missing": ["short point"], "feedback": "two spoken sentences to the resident in British English, saying what was right and the most important thing to add or correct"}. Keep each point under 12 words.`;
-  const t = await within(callAI([{role: "user", content: `QUESTION: ${q.q}\n\nMODEL ANSWER: ${q.model.slice(0, 2400)}\n\nRESIDENT'S ANSWER: ${answer.slice(0, 3000)}`}], system), 18000);
+  const t = await within(callAI([{role: "user", content: `QUESTION: ${q.q}\n\nMODEL ANSWER: ${q.model.slice(0, 2400)}\n\nRESIDENT'S ANSWER: ${answer.slice(0, 3000)}`}], system, {race: true}), 25000);
   const j = JSON.parse((String(t).match(/\{[\s\S]*\}/) || [""])[0]);
   const score = Math.max(0, Math.min(100, Math.round(+j.score)));
   if (!Number.isFinite(score) || !j.feedback) return null;
@@ -2801,28 +2820,117 @@ function tutorSystem(caseBlock, mode){
   return `${mode === "exam" ? exam : mode === "mentor" ? mentor : mode === "topic" ? topicExam : mode === "evidence" ? evidence : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said. Stay professional: address the resident as you or Doctor, with no slang or terms of endearment in any language, and no small talk before the answer.\n- Write every book citation exactly as labelled, with its page number in digits, in English even inside Arabic text; do not spell page numbers out in words.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
 }
 /* One key serves every resident, so Google will sometimes answer "busy": move to the next model (each has its own limit), then wait and go round once more, within a fixed time, before telling the resident. */
-const GEM_MODELS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest", "gemini-2.0-flash"];
-let gemGood = "";
+const GEM_MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.0-flash"];
+/* the model that answered last stays first for six hours, so a busy model does not cost every reply a long wait */
+let gemGood = ""; try { const g = JSON.parse(localStorage.getItem("bdi.gem") || "{}"); if (g.m && Date.now() - g.at < 216e5) gemGood = g.m; } catch {}
+const gemKeep = m => { gemGood = m; try { localStorage.setItem("bdi.gem", JSON.stringify({m, at: Date.now()})); } catch {} };
+const gemNoBudget = new Set();
+/* reads a streamed reply, passing the text so far to onText; a stalled stream ends with what has arrived */
+async function gemRead(r, onText){
+  const rd = r.body.getReader(), dec = new TextDecoder(); let buf = "", text = "";
+  for (;;){
+    let stop; const stall = new Promise(res => { stop = setTimeout(() => res({stalled: true}), 20000); });
+    const c = await Promise.race([rd.read(), stall]); clearTimeout(stop);
+    if (c.stalled){ rd.cancel().catch(() => {}); return {text, stalled: true}; }
+    if (c.done) return {text};
+    buf += dec.decode(c.value, {stream: true});
+    const lines = buf.split("\n"); buf = lines.pop();
+    let grew = false;
+    for (const l of lines){
+      if (!l.startsWith("data:")) continue;
+      let d; try { d = JSON.parse(l.slice(5)); } catch { continue; }
+      const piece = ((d.candidates || [])[0]?.content?.parts || []).filter(x => !x.thought).map(x => x.text || "").join("");
+      if (piece){ text += piece; grew = true; }
+    }
+    if (grew && onText) onText(text);
+  }
+}
 const gemGone = new Set();
+/* a student must not sit waiting on one busy model: if a model is silent for 2.5 seconds the next one is asked as well,
+   the first to start writing is shown, and the others are cancelled */
+const GEM_HEDGE = 2500;
+function gemRace(key, models, makeBody, onText){
+  return new Promise((done, fail) => {
+    const live = new Map(); let winner = null, next = 0, open = 0, wake = 0, ended = false, busy = false, last = "";
+    const stopOthers = m => { for (const [x, c] of live) if (x !== m) c.abort(); };
+    const lost = err => { if (ended) return; ended = true; clearTimeout(wake); stopOthers(null); err.busy = busy; fail(err); };
+    const launch = () => {
+      clearTimeout(wake); if (ended || winner) return;
+      if (next >= models.length){ if (!open) lost(new Error(last || "The examiner could not answer. Press Try again.")); return; }
+      const m = models[next++]; open++;
+      attempt(m).catch(e => { if (e.fatal) lost(e); else if (e.name !== "AbortError") last = e.message || last; }).finally(() => { open--; live.delete(m); if (!ended && (!winner || winner === m)){ if (winner === m) lost(new Error(last || "The connection is too slow right now — please try again.")); else launch(); } });
+      wake = setTimeout(launch, GEM_HEDGE);
+    };
+    const claim = (m, kill) => { if (winner) return winner === m; winner = m; clearTimeout(kill); clearTimeout(wake); stopOthers(m); return true; };
+    const win = (m, text) => { ended = true; gemKeep(m); done(text); };
+    async function attempt(m){
+      const ac = new AbortController(), kill = setTimeout(() => ac.abort(), 15000); live.set(m, ac);
+      try {
+        for (let pass = 0; pass < 2; pass++){
+          const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(key)}`, {method: "POST", headers: {"content-type": "application/json"}, body: makeBody(m), signal: ac.signal});
+          if (r.ok && /event-stream/i.test(r.headers.get("content-type") || "")){
+            const got = await gemRead(r, s => { if (claim(m, kill) && onText) onText(s); });
+            if (winner === m && got.text.trim() && (!got.stalled || (onText && got.text.length > 40))) return win(m, got.text.trim());
+            last = "The connection is too slow right now — please try again."; return;
+          }
+          const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
+          if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw Object.assign(new Error("The examiner key is not valid. Please tell your supervisor."), {fatal: true});
+          /* a model that does not accept the fast setting is asked again without it */
+          if (r.status === 400 && /thinking/i.test(msg) && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
+          if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; return; }
+          if (r.status === 429 || r.status >= 500){ busy = true; return; }
+          if (!r.ok) throw Object.assign(new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again."), {fatal: true});
+          const t = ((j.candidates || [])[0]?.content?.parts || []).filter(x => !x.thought).map(p => p.text || "").join("").trim();
+          if (t && claim(m, kill)){ if (onText) onText(t); return win(m, t); }
+          last = "The examiner gave an empty reply. Press Try again."; return;
+        }
+      } catch (e) {
+        if (e.fatal || e.name === "AbortError") throw e;
+        last = /fetch|network/i.test(e.message || "") ? "The connection dropped. Check your internet and press Try again." : e.message || last;
+      } finally { clearTimeout(kill); }
+    }
+    launch();
+  });
+}
 async function callGemini(key, model, messages, system, opts = {}){
-  const body = JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}]})), generationConfig: {temperature: .6, maxOutputTokens: opts.tokens || 4096, ...(opts.json ? {responseMimeType: "application/json"} : {})}});
-  const end = Date.now() + 75000; let last = "", busy = false;
+  const makeBody = m => JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}]})), generationConfig: {temperature: .6, maxOutputTokens: opts.tokens || 2048, ...(gemNoBudget.has(m) ? {} : {thinkingConfig: {thinkingBudget: 0}}), ...(opts.json ? {responseMimeType: "application/json"} : {})}});
+  if (opts.onText || opts.race){
+    const order = () => [...new Set([gemGood, model, ...GEM_MODELS].filter(Boolean))].filter(x => !gemGone.has(x));
+    let err;
+    for (let round = 0; round < 2; round++){
+      if (round) await sleep(1000 + Math.random() * 1000);
+      try { return await gemRace(key, order(), makeBody, opts.onText); }
+      catch (e) { err = e; if (e.fatal) throw e; }
+    }
+    throw new Error(err.busy ? "The examiner is very busy right now. Wait a minute and press Try again." : err.message);
+  }
+  const stream = false, end = Date.now() + 75000; let last = "", busy = false;
   for (let round = 0; round < 2; round++){
-    if (round) await sleep(2500 + Math.random() * 2500);
+    if (round) await sleep(2000 + Math.random() * 2000);
     /* start from the model that answered last time; retired model names are skipped for the rest of the visit */
     for (const m of [...new Set([gemGood, model, ...GEM_MODELS].filter(Boolean))].filter(x => !gemGone.has(x))){
-      const left = end - Date.now(); if (left < 3000) break;
-      let r;
-      try { r = await fetchT(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent?key=${encodeURIComponent(key)}`, {method: "POST", headers: {"content-type": "application/json"}, body}, Math.min(35000, left)); }
-      catch (e) { last = e.message || ""; continue; }
-      const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
-      if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw new Error("The examiner key is not valid. Please tell your supervisor.");
-      if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; continue; }
-      if (r.status === 429 || r.status >= 500){ busy = true; continue; }
-      if (!r.ok) throw new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again.");
-      const t = ((j.candidates || [])[0]?.content?.parts || []).map(p => p.text || "").join("").trim();
-      if (t){ gemGood = m; return t; }
-      last = "The examiner gave an empty reply. Press Try again.";
+      for (let pass = 0; pass < 2; pass++){
+        const left = end - Date.now(); if (left < 3000) break;
+        let r;
+        /* a model that has not started answering in time is busy: move on to the next one */
+        try { r = await fetchT(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:${stream ? "streamGenerateContent?alt=sse&" : "generateContent?"}key=${encodeURIComponent(key)}`, {method: "POST", headers: {"content-type": "application/json"}, body: makeBody(m)}, Math.min(stream ? 15000 : 30000, left)); }
+        catch (e) { last = /fetch|network/i.test(e.message || "") ? "The connection dropped. Check your internet and press Try again." : e.message || ""; break; }
+        if (r.ok && stream && /event-stream/i.test(r.headers.get("content-type") || "")){
+          const got = await gemRead(r, opts.onText).catch(() => ({text: "", stalled: true}));
+          if (got.text.trim() && (!got.stalled || got.text.length > 40)){ gemKeep(m); return got.text.trim(); }
+          last = "The connection is too slow right now — please try again."; break;
+        }
+        const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
+        if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw new Error("The examiner key is not valid. Please tell your supervisor.");
+        /* a model that does not accept the fast setting is asked again without it */
+        if (r.status === 400 && /thinking/i.test(msg) && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
+        if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; break; }
+        if (r.status === 429 || r.status >= 500){ busy = true; break; }
+        if (!r.ok) throw new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again.");
+        const t = ((j.candidates || [])[0]?.content?.parts || []).filter(x => !x.thought).map(p => p.text || "").join("").trim();
+        if (t){ gemKeep(m); if (opts.onText) opts.onText(t); return t; }
+        last = "The examiner gave an empty reply. Press Try again."; break;
+      }
     }
   }
   throw new Error(busy ? "The examiner is very busy right now. Wait a minute and press Try again." : last || "The examiner could not answer. Press Try again.");
@@ -2862,7 +2970,11 @@ function mountChat(host, o){
     const slow = setTimeout(() => { wait.innerHTML = '<span class="dots"><i></i><i></i><i></i></span> The service is busy, still working on it…'; }, 12000);
     try {
       /* a long discussion keeps its opening and its most recent turns, so it never outgrows the AI's limits */
-      const t = await callAI(o.keep && msgs.length > o.keep + 1 ? [msgs[0], ...msgs.slice(-o.keep)] : msgs, o.system).finally(() => clearTimeout(slow));
+      /* the reply appears as it arrives, a few times a second, without the verdict and score tags */
+      let partial = "", timer = 0, over = false;
+      const live = () => partial.replace(/VERDICT:\s*(CORRECT|PARTIAL|WRONG)\s*/gi, "").replace(/^\s*V[A-Z]*:?\s*[A-Z]*\s*$/, "").replace(/SCORE:\s*\d*\s*\/?\s*\d*/i, "").trim();
+      const onText = s => { clearTimeout(slow); partial = s; if (timer) return; timer = setTimeout(() => { timer = 0; if (over || !wait.isConnected) return; const b = live(); if (b){ wait.innerHTML = chatMd(b); if (inGrid && getComputedStyle(cm).overflowY === "auto") cm.scrollTop = cm.scrollHeight; } }, 80); };
+      const t = await callAI(o.keep && msgs.length > o.keep + 1 ? [msgs[0], ...msgs.slice(-o.keep)] : msgs, o.system, {onText}).finally(() => { clearTimeout(slow); over = true; });
       if (!cm.isConnected){ busy = false; return; }  /* a newer exam replaced this one */
       /* the textbook excerpts were for this turn only: long exams stay fast and inside the key's limits */
       msgs[msgs.length - 1].content = userText + hint;
@@ -3017,7 +3129,7 @@ async function gateStart(){
   if (!FB.cfg){ gShow('<p class="bad">This site is not configured yet.</p>'); return; }
   gShow('<p class="muted">Connecting…</p>');
   try {
-    const fbJs = f => loadScript(`https://www.gstatic.com/firebasejs/10.12.2/firebase-${f}-compat.js`);
+    const fbJs = f => loadScript(IN_APP ? `vendor/firebase-${f}-compat.js` : `https://www.gstatic.com/firebasejs/10.12.2/firebase-${f}-compat.js`);
     await fbJs("app"); await Promise.all([fbJs("auth"), fbJs("firestore")]);
     if (!firebase.apps.length) firebase.initializeApp(FB.cfg);
     FB.auth = firebase.auth(); FB.db = firebase.firestore();
@@ -3166,10 +3278,56 @@ function renderAccount0(){
     const run = async up => { const e = $("#fbEmail").value.trim(), p = $("#fbPass").value; try { await (up ? FB.auth.createUserWithEmailAndPassword(e, p) : FB.auth.signInWithEmailAndPassword(e, p)); } catch (er) { $("#fbStatus").textContent = er.message || "Could not sign in."; } };
     $("#fbForm").addEventListener("submit", ev => { ev.preventDefault(); run(false); }); $("#fbUp").addEventListener("click", () => { if ($("#fbForm").reportValidity()) run(true); });
   } else {
-    box.innerHTML = `<p>Signed in as <b>${esc(FB.user.email)}</b></p><div class="actions"><button class="btn" id="fbNow">Sync now</button><button class="btn" id="fbOut">Sign out</button></div><p class="status" id="fbStatus"></p>`;
+    box.innerHTML = `<p>Signed in as <b>${esc(FB.user.email)}</b></p><div class="actions"><button class="btn" id="fbNow">Sync now</button><button class="btn" id="fbOut">Sign out</button></div><p class="status" id="fbStatus"></p>${FB.admin ? "" : `<details class="del-acc" style="margin-top:18px"><summary class="muted" style="cursor:pointer">Delete my account</summary><p class="hint" style="margin:10px 0">This permanently deletes your account, your progress and your place on the leaderboard. It cannot be undone.</p><div class="f"><label for="delPw">Type your password to confirm</label><input type="password" id="delPw" autocomplete="current-password"></div><div class="actions"><button class="btn" id="delGo" style="color:#b3261e;border-color:#b3261e">Delete my account permanently</button></div><p class="status" id="delSt"></p></details>`}`;
     $("#fbNow").addEventListener("click", fbPush); $("#fbOut").addEventListener("click", () => FB.auth.signOut());
+    const dg = $("#delGo"); if (dg) dg.addEventListener("click", deleteAccount);
   }
   $("#boardPane").hidden = !(FB.ready && FB.user); if (FB.ready && FB.user) loadBoard();
+  remindShow();
+}
+
+/* a daily study reminder on the phone (app only) */
+const LN = () => IN_APP && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
+function remindShow(){
+  const pane = $("#remindPane"); if (!pane) return;
+  if (!LN()){ pane.hidden = true; return; }
+  pane.hidden = false;
+  let r = {}; try { r = JSON.parse(localStorage.getItem("bdi.remind") || "{}"); } catch {}
+  $("#remOn").checked = !!r.on; if (r.at) $("#remAt").value = r.at;
+  if (pane.dataset.bound) return; pane.dataset.bound = "1";
+  const apply = async () => {
+    const on = $("#remOn").checked, at = $("#remAt").value || "20:00", n = LN(), st = $("#remSt");
+    try {
+      await n.cancel({notifications: [{id: 1}]}).catch(() => {});
+      if (on){
+        const p = await n.requestPermissions();
+        if (p.display !== "granted"){ $("#remOn").checked = false; st.textContent = "Notifications are off for BDI Trainer. Turn them on in your phone's Settings."; return; }
+        const [h, m] = at.split(":").map(Number);
+        await n.schedule({notifications: [{id: 1, title: "Bristol Dental Institute", body: "Time for today's fellowship practice.", schedule: {on: {hour: h, minute: m}, allowWhileIdle: true}}]});
+        st.textContent = "You will be reminded every day at " + at + ".";
+      } else st.textContent = "";
+      localStorage.setItem("bdi.remind", JSON.stringify({on: $("#remOn").checked, at}));
+    } catch (e) { st.textContent = "The reminder could not be set."; }
+  };
+  $("#remOn").addEventListener("change", apply); $("#remAt").addEventListener("change", () => { if ($("#remOn").checked) apply(); });
+}
+
+/* the student removes the account and all its data from inside the app (required by the app stores) */
+async function deleteAccount(){
+  const u = FB.user, pw = $("#delPw").value, st = $("#delSt"), b = $("#delGo");
+  if (!u) return; if (!pw){ st.textContent = "Type your password first."; return; }
+  b.disabled = true; st.textContent = "Deleting…";
+  try {
+    await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, pw));
+  } catch (e) { b.disabled = false; st.textContent = /password|credential/i.test(e.code + e.message) ? "The password is not correct." : "Could not confirm your password. Check your internet and try again."; return; }
+  stopWatch();
+  const db = FB.db, id = u.uid;
+  await Promise.all([db.collection("leaderboard").doc(id).delete(), db.collection("users").doc(id).delete(), db.collection("sessions").doc(id).delete(), db.collection("requests").doc(id).delete(), db.collection("approved").doc(u.email.toLowerCase()).delete()].map(p => p.catch(() => {})));
+  try { await u.delete(); }
+  catch (e) { b.disabled = false; st.textContent = "Your account could not be deleted. Check your internet and try again."; return; }
+  try { ["bdi.uid", "bdi.sid", "bdi.gem", KEY].forEach(k => localStorage.removeItem(k)); } catch {}
+  ST = {name: "", xp: 0, events: [], wrong: []};
+  toast("Your account has been deleted.");
 }
 
 /* ---------- ui ---------- */
@@ -3224,7 +3382,7 @@ async function boot(){
   setView("dashboard");
   try { const n = sessionStorage.getItem("bdi.note"); if (n){ GATE_NOTE = n; sessionStorage.removeItem("bdi.note"); } } catch {}
   gateStart();
-  try { if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(() => {}); } catch {}
+  try { if (!IN_APP && "serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(() => {}); } catch {}
 }
 boot();
 
