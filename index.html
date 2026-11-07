@@ -687,7 +687,7 @@ html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:e
 </section>
 
 <section class="view" id="v-mycase" hidden>
- <div class="phead"><div><div class="eyebrow">Case analysis</div><h1>My case</h1><p>Write your case and discuss it with your own consultant. Ask anything, say when you don't know, and ask for the evidence: answers come with references from the textbooks. Photographs, radiographs and PDF pages stay private on your device. Do not write the patient's name.</p></div></div>
+ <div class="phead"><div><div class="eyebrow">Case analysis</div><h1>My case</h1><p>Write your case and discuss it with your own mentor. Ask anything, say when you don't know, and ask for the evidence: answers come with references from the textbooks. Photographs, radiographs and PDF pages stay private on your device. Do not write the patient's name.</p></div></div>
  <div class="ws">
   <div class="pane"><div class="pane-h"><h2>Your case presentation</h2></div><div class="pane-b">
    <textarea id="myText" class="big" placeholder="e.g. 13-year-old girl, Class II division 1, overjet 8 mm, overbite 5 mm, SNA 82, SNB 76, ANB 6, MMPA 28, LI-MnP 98 ..."></textarea>
@@ -697,7 +697,7 @@ html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:e
    <div class="actions" id="myActions" style="margin-top:12px" hidden><button class="btn gold" id="myViva">Practise a viva on this case</button></div></div></div>
   <div class="pane"><div class="pane-h"><h2>Analysis</h2></div><div class="pane-b answer" id="myOut"><p class="muted">The quick analysis appears here.</p></div></div>
  </div>
- <div class="pane" id="myMentorPane" hidden style="margin-top:14px"><div class="pane-h"><h2>Your consultant</h2></div><div class="pane-b"><div class="recs" id="myRecs" hidden></div><div id="myChat"></div></div></div>
+ <div class="pane" id="myMentorPane" hidden style="margin-top:14px"><div class="pane-h"><h2>Your mentor</h2></div><div class="pane-b"><div class="recs" id="myRecs" hidden></div><div id="myChat"></div></div></div>
 </section>
 
 <section class="view" id="v-evidence" hidden>
@@ -750,7 +750,7 @@ html.in-app body::before{content:"";position:fixed;left:0;right:0;top:0;height:e
  <div class="cols"><div class="pane"><div class="pane-h"><h2>Search the books</h2></div><div class="pane-b"><form class="ask" id="searchForm" style="margin-top:0"><input type="text" id="searchInput" placeholder="e.g. twin block timing pubertal growth spurt"><button class="btn primary">Search</button></form><p class="status" id="searchStatus"></p><div id="hits"></div></div></div>
   <div class="pane"><div class="pane-h"><h2>Books</h2></div><div class="pane-b">
    <p class="status" id="libStatus"></p><div class="list" id="bookList"></div>
-   <div id="libEmpty" hidden><h3>Library not available</h3><p class="hint">The reference books could not be loaded right now. Check your internet connection and refresh the page. If it still does not load, contact the programme administrator.</p></div>
+   <div id="libEmpty" hidden><h3>Library not available</h3><p class="hint">The reference books could not be loaded right now. Check your internet connection and try again. If it still does not load, contact the programme administrator.</p></div>
    <p class="hint">The reference library is managed by the Institute.</p></div></div>
  </div>
 </section>
@@ -2178,6 +2178,7 @@ function examPill(grid){
   b.onclick = () => (toRight ? right : left).scrollIntoView({block: "start", behavior: "smooth"});
   addEventListener("scroll", draw, {passive: true}); draw();
 }
+const hiNow = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
 function startViva(qs, caseText, topic, caseId, box, title){
   const V = {qs, i:0, results:[], caseId, topic};
   box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Viva examination</h2><label class="chk"><input type="checkbox" id="voiceChk" ${voiceOn?"checked":""}> Examiner voice</label></div><div class="pane-b">${curCase && curCase.book ? `<div class="exam-grid"><div class="exam-left">${sheetHtml(curCase.book)}${curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}</div><div class="exam-right">` : ""}${avatarHtml()}${curCase && curCase.book ? "" : caseText ? `<details class="casebox" open><summary>Case presentation</summary><pre class="casetext">${esc(caseText)}</pre></details>${curCase && curCase.stage && curCase.stage.length ? `<div class="recs" id="vvRecs">${figHtml(curCase.stage)}</div>` : ""}` : ""}<div class="viva-panel" id="vv"></div><form class="ask" id="vf"><textarea id="va" rows="4" placeholder="Type your answer… (or press the mic and speak)"></textarea><div class="stackb"><button type="button" class="btn" id="mic" hidden>🎤</button><button class="btn primary">Answer</button></div></form>${curCase && curCase.book ? "</div></div>" : ""}</div></div>`;
@@ -2189,7 +2190,7 @@ function startViva(qs, caseText, topic, caseId, box, title){
   fillVoices(); avMount(av);
   const vr = $("#vvRecs"); if (vr) vr.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(curCase.stage, +f.dataset.i); };
   const ask = () => { const q = V.qs[V.i]; setMood(av, "think", "Thinking…"); setTimeout(() => { if (!vv.isConnected) return; const m = bubble("exam", `<div class="qn">Question ${V.i + 1} of ${V.qs.length}</div>${q.figs ? `<div class="recs">${figHtml(q.figs)}</div>` : ""}${esc(q.q)}`); if (q.figs) m.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(q.figs, +f.dataset.i); }; speak(q.q); setMood(av, "neutral", "Waiting for your answer…"); vf.hidden = false; if (V.i || !inGrid) va.focus(); }, 500); };
-  bubble("exam", V.caseIntro = curCase && curCase.book ? `Good afternoon. Take a moment to read the patient's details and look at the records in front of you. I will ask you ${qs.length} questions, and I will show you more records as we go.` : `Good afternoon. I have your case in front of me${title ? ` — <i>${esc(title)}</i>` : ""}. I will ask you ${qs.length} questions. Answer as you would in the exam: structured and specific.`);
+  bubble("exam", V.caseIntro = curCase && curCase.book ? `${hiNow()}. Take a moment to read the patient's details and look at the records in front of you. I will ask you ${qs.length} questions, and I will show you more records as we go.` : `${hiNow()}. I have your case in front of me${title ? ` — <i>${esc(title)}</i>` : ""}. I will ask you ${qs.length} questions. Answer as you would in the exam: structured and specific.`);
   vf.hidden = true; setTimeout(ask, 400);
   vf.addEventListener("submit", e => {
     e.preventDefault(); const a = va.value.trim(); if (!a) return;
@@ -2902,7 +2903,7 @@ async function callGemini(key, model, messages, system, opts = {}){
       try { return await gemRace(key, order(), makeBody, opts.onText); }
       catch (e) { err = e; if (e.fatal) throw e; }
     }
-    throw new Error(err.busy ? "The examiner is very busy right now. Wait a minute and press Try again." : err.message);
+    throw new Error(err.busy ? "The examiner could not reply just now. Press Try again." : err.message);
   }
   const stream = false, end = Date.now() + 75000; let last = "", busy = false;
   for (let round = 0; round < 2; round++){
@@ -2933,7 +2934,7 @@ async function callGemini(key, model, messages, system, opts = {}){
       }
     }
   }
-  throw new Error(busy ? "The examiner is very busy right now. Wait a minute and press Try again." : last || "The examiner could not answer. Press Try again.");
+  throw new Error(busy ? "The examiner could not reply just now. Press Try again." : last || "The examiner could not answer. Press Try again.");
 }
 async function callAI(messages, system, opts = {}){
   const prov = aiProv(), a = ST.ai || {};
@@ -2967,7 +2968,7 @@ function mountChat(host, o){
     const hint = o.nQ && shown !== null && !finished ? `\n\n[System: this reply answers question ${Math.min(o.nQ, ++sent)} of ${o.nQ}.]` : "";
     msgs.push({role: "user", content: userText + hint + ctx});
     const wait = bubble("exam", '<span class="dots"><i></i><i></i><i></i></span> thinking…', shown === null); if (av) setMood(av, "think", "Thinking…");
-    const slow = setTimeout(() => { wait.innerHTML = '<span class="dots"><i></i><i></i><i></i></span> The service is busy, still working on it…'; }, 12000);
+    const slow = setTimeout(() => { wait.innerHTML = '<span class="dots"><i></i><i></i><i></i></span> Still preparing the reply…'; }, 12000);
     try {
       /* a long discussion keeps its opening and its most recent turns, so it never outgrows the AI's limits */
       /* the reply appears as it arrives, a few times a second, without the verdict and score tags */
@@ -3133,7 +3134,7 @@ async function gateStart(){
     await fbJs("app"); await Promise.all([fbJs("auth"), fbJs("firestore")]);
     if (!firebase.apps.length) firebase.initializeApp(FB.cfg);
     FB.auth = firebase.auth(); FB.db = firebase.firestore();
-  } catch (e) { gShow('<p class="bad">Could not reach the sign-in service. Check your internet connection and reload the page.</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Reload</button></div>'); return; }
+  } catch (e) { gShow('<p class="bad">Could not reach the sign-in service. Check your internet connection and try again.</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button></div>'); return; }
   FB.auth.onAuthStateChanged(gateAuth);
 }
 async function gateAuth(u){
@@ -3258,7 +3259,7 @@ async function loadBoard(){
   if (!FB.ready || !FB.user) return;
   try {
     const s = await FB.db.collection("leaderboard").orderBy("xp", "desc").limit(25).get();
-    $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Avg score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${r.xp}</td><td>${r.avg == null ? "–" : r.avg + "%"}</td></tr>`; }).join("") + "</table></div>";
+    $("#boardBox").innerHTML = '<div class="tw"><table><tr><th>#</th><th>Name</th><th>Level</th><th>XP</th><th>Average score</th></tr>' + s.docs.map((d, i) => { const r = d.data(), me = FB.user && d.id === FB.user.uid; return `<tr${me ? ' class="me"' : ""}><td>${i + 1}</td><td>${esc(r.name)}${me ? " (you)" : ""}</td><td>${esc(r.level)}</td><td>${r.xp}</td><td>${r.avg == null ? "–" : r.avg + "%"}</td></tr>`; }).join("") + "</table></div>";
   } catch (e) { $("#boardBox").innerHTML = `<p class="bad">Could not load the leaderboard: ${esc(e.message || e)}</p>`; }
 }
 /* Design choice: kept on this device; applied before first paint by the head script */
