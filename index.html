@@ -829,7 +829,7 @@ html.sheet-on body{overflow:hidden}
  <div class="cols2">
   <div class="stack">
    <div class="pane"><div class="pane-h"><h2>Profile</h2></div><div class="pane-b stack">
-    <div class="f"><label for="pName">Your name</label><input type="text" id="pName" placeholder="Dr …"><span class="hint" style="margin:0">Shown on your dashboard and the leaderboard.</span></div>
+    <div class="f"><label for="pName">Your name</label><input type="text" id="pName" maxlength="80" placeholder="Dr …"><span class="hint" style="margin:0">Shown on your dashboard and the leaderboard.</span></div>
     </div></div>
    <div class="pane"><div class="pane-h"><h2>Design</h2></div><div class="pane-b"><div class="look-opts" id="lookOpts">
     <button type="button" class="look-opt" data-look-pick="collegiate" aria-pressed="false"><span class="look-sw c"><i></i></span><b>Collegiate</b><small>Burgundy and ivory</small></button>
@@ -3351,7 +3351,7 @@ async function gateAuth(u){
 }
 function gateLogin(){
   const note = GATE_NOTE; GATE_NOTE = "";
-  gShow(`${note ? `<p class="note">${esc(note)}</p>` : ""}<form id="gForm"><div class="f"><label for="gName">Full name (new accounts)</label><input id="gName" autocomplete="name" placeholder="Dr …"></div><div class="f"><label for="gEmail">Email</label><input id="gEmail" type="email" required autocomplete="email"></div><div class="f"><label for="gPass">Password</label><input id="gPass" type="password" required minlength="6" autocomplete="current-password"></div><p class="bad" id="gMsg" style="margin:0"></p><div class="btnrow"><button class="btn primary">Sign in</button><button type="button" class="btn" id="gUp">Create account</button><button type="button" class="btn" id="gForgot">Forgot password</button></div></form><p class="muted small">Access is by invitation. After you create an account and confirm your email, your supervisor approves you.</p>`);
+  gShow(`${note ? `<p class="note">${esc(note)}</p>` : ""}<form id="gForm"><div class="f"><label for="gName">Full name (new accounts)</label><input id="gName" autocomplete="name" maxlength="80" placeholder="Dr …"></div><div class="f"><label for="gEmail">Email</label><input id="gEmail" type="email" required autocomplete="email"></div><div class="f"><label for="gPass">Password</label><input id="gPass" type="password" required minlength="6" autocomplete="current-password"></div><p class="bad" id="gMsg" style="margin:0"></p><div class="btnrow"><button class="btn primary">Sign in</button><button type="button" class="btn" id="gUp">Create account</button><button type="button" class="btn" id="gForgot">Forgot password</button></div></form><p class="muted small">Access is by invitation. After you create an account and confirm your email, your supervisor approves you.</p>`);
   const msg = t => { $("#gMsg").textContent = t; };
   $("#gForm").addEventListener("submit", async ev => { ev.preventDefault(); msg(""); try { await FB.auth.signInWithEmailAndPassword($("#gEmail").value.trim(), $("#gPass").value); } catch (e) { msg(gErr(e)); } });
   $("#gUp").addEventListener("click", async () => {
