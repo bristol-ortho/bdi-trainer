@@ -180,6 +180,9 @@ mark{background:#f3e3b4;padding:0 2px;border-radius:2px;color:inherit}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh-1);min-width:0}
 .tile .n{font-family:var(--f-display);font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum" 1;font-size:36px;font-weight:700;line-height:1;color:var(--ink);margin-bottom:8px}
 .tile .l{font-size:12px;color:var(--muted);font-weight:500}
+.srs{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.srs p{margin:0;min-width:0;flex:1 1 200px}.srs b{display:block;font-size:15px}.srs .meta{display:block;margin-top:3px;line-height:1.45}
+.srs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}.srs-week{margin:10px 0 4px}
 .trow{display:grid;grid-template-columns:minmax(0,150px) 1fr 64px;gap:12px;align-items:center;font-size:13.5px;margin:10px 0}
 .trow>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .trow .meta{text-align:right}
@@ -691,7 +694,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
  <div class="coll-row look-classic" id="planHomeC" style="margin-bottom:18px"></div>
  <div class="coll-hero look-coll"><div class="coll-eyebrow">YOUR FELLOWSHIP PREPARATION</div><h1 id="hello">Good morning, Doctor.</h1><p class="coll-line">A new era of dental education.</p><div class="coll-row" id="planHome"></div></div>
  <div class="statbar" id="statBar"></div>
- <div class="pane" id="progPane" hidden><div class="pane-h"><h2>Work on next</h2><span class="meta">your weakest topics</span></div><div class="pane-b" id="progBox"></div></div>
+ <div class="pane" id="progPane" hidden><div class="pane-h"><h2>Work on next</h2><span class="meta">review and weakest topics</span></div><div class="pane-b" id="progBox"></div></div>
 </section>
 
 <section class="view" id="v-cases" hidden>
@@ -1870,6 +1873,25 @@ function record(type, score, topic, xp){
   toast(a > b ? `Level up — you are now ${LEVELS[a].n}! (+${xp} XP)` : `+${xp} XP`);
   renderDashboard();
 }
+/* Spaced review: a missed question comes back 1 day later, then after 3, 7, 16 and 35 days while it is answered right.
+   Keys: "m:<bank index>" for the multiple-choice bank, "b:<case>#<question>" for book questions. b = step; b === SRS_DAYS.length means learnt (kept so a sync cannot bring it back). */
+const SRS_DAYS = [1, 3, 7, 16, 35], DAY = 864e5;
+const dayStart = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+function srsMark(key, g){
+  const s = ST.srs || (ST.srs = {}), cur = s[key], now = Date.now();
+  if (g >= 1){ if (!cur || cur.b >= SRS_DAYS.length) return; const b = cur.b + 1; s[key] = {b, due: b < SRS_DAYS.length ? dayStart(now) + SRS_DAYS[b] * DAY : 0, at: now}; }
+  else { const b = g > 0 && cur && cur.b < SRS_DAYS.length ? Math.max(0, cur.b - 1) : 0; s[key] = {b, due: dayStart(now) + SRS_DAYS[b] * DAY, at: now}; }
+}
+const srsDue = () => { const now = Date.now(); return Object.keys(ST.srs || {}).filter(k => { const r = ST.srs[k]; return r.b < SRS_DAYS.length && r.due <= now; }); };
+const srsNext = () => Object.values(ST.srs || {}).filter(r => r.b < SRS_DAYS.length).reduce((m, r) => Math.min(m, r.due), Infinity);
+/* earlier mistakes (before spaced review existed) start as due today */
+if (!ST.srs){ ST.srs = {}; (ST.wrong || []).forEach(i => { ST.srs["m:" + i] = {b: 0, due: dayStart(Date.now()), at: 1}; }); }
+function startReview(){
+  setView("quiz"); const both = document.querySelector('input[name=qsrc][value=both]'); if (both) both.checked = true;
+  refreshQuizUi(); $("#qTopics").querySelectorAll("input").forEach(i => { i.checked = i.value === "due"; });
+  $("#qTime").value = "0"; $("#qMinWrap").hidden = true; $("#qCount").value = Math.max(1, quizPool().length); updateAvail();
+  if (quizPool().length) startQuiz({preventDefault(){}});
+}
 function streak(){
   const days = new Set(ST.events.map(e => new Date(e.at).toDateString()));
   let n = 0, d = new Date(); if (!days.has(d.toDateString())) d.setDate(d.getDate() - 1);
@@ -1889,8 +1911,14 @@ function renderDashboard(){
   const tm = {}; g.forEach(e => { const t = tm[e.topic] || (tm[e.topic] = {s: 0, n: 0}); t.s += e.score; t.n++; });
   const weak = Object.entries(tm).map(([k, v]) => [k, Math.round(v.s / v.n)]).sort((a, b) => a[1] - b[1]).slice(0, 3);
   renderPlanHome();
-  $("#progPane").hidden = !weak.length;
-  $("#progBox").innerHTML = weak.map(([k, p]) => `<div class="trow ${p < 50 ? "weak" : p < 70 ? "mid" : ""}"><span>${esc(k)}</span><div class="bar"><i style="width:${p}%"></i></div><span class="meta">${p}%</span></div>`).join("");
+  const due = srsDue().length, nx = srsNext(), wk = new Set(ST.events.filter(e => e.at > dayStart(Date.now()) - 6 * DAY).map(e => new Date(e.at).toDateString())).size;
+  const nxTxt = nx === Infinity ? "" : `Next review ${nx <= dayStart(Date.now()) + DAY ? "tomorrow" : new Date(nx).toLocaleDateString(undefined, {weekday: "long", day: "numeric", month: "short"})}.`;
+  const rev = due ? `<div class="srs"><p><b>${due} question${due === 1 ? "" : "s"} to review today</b><span class="meta">Questions you missed come back after 1, 3, 7, 16 and 35 days, until you know them.</span></p><button type="button" class="btn primary sm" id="srsGo">Review now</button></div>`
+    : nx !== Infinity ? `<div class="srs"><p><b>Nothing to review today</b><span class="meta">${nxTxt}</span></p></div>` : "";
+  const week = ST.events.length ? `<p class="meta srs-week">This week: you studied on ${wk} of the last 7 days.</p>` : "";
+  $("#progPane").hidden = !weak.length && !rev;
+  $("#progBox").innerHTML = rev + week + weak.map(([k, p]) => `<div class="trow ${p < 50 ? "weak" : p < 70 ? "mid" : ""}"><span>${esc(k)}</span><div class="bar"><i style="width:${p}%"></i></div><span class="meta">${p}%</span></div>`).join("");
+  const sg = $("#srsGo"); if (sg) sg.onclick = startReview;
 }
 
 /* ---------- answer normalisation & marking ---------- */
@@ -2374,22 +2402,24 @@ function stopQuizTimer(){ clearInterval(Q.tick); Q.tick = null; }
 const quizTopics = () => [...new Set([...TOPICS, ...BOOKCASES.map(c => c.topic)])].filter(Boolean);
 /* the quiz shows no patient, so it can only use questions that make sense without one */
 const NEEDS_CASE = /\b(this|these|that|those|the) (case|patient|patient’s|patient's|malocclusion|finding|findings|observations?|tooth|teeth|problems?|appliances?|occlusion|child|boy|girl|result|approach|procedure|technique|condition|anomaly|options?|plan|stage|period)\b|\b(this|these|it|they|them|her|his|she|he|him)\b|in this|what would you|what do you|how would you|would you|do you|the case|\b[UL][LR][A-E1-8]\b|\b(was|were|been|now|anything|other|the centre line|intra-oral features|extra-oral features|combined treatment|associated with treatment|during treatment|the design)\b/i;
-const bookQs = () => BOOKCASES.flatMap(c => c.qs.filter(q => !/\bFig(?:ure)?s?\.?\s*\d/i.test(q.q) && !NEEDS_CASE.test(q.q) && q.q.length >= 30 && q.a.length >= 60).map((q, k) => ({kind:"book", topic:c.topic, caseId:c.id, q:q.q, a:noFig(q.a), page:q.page, key:c.id + "#" + k})));
+const bookQs = () => BOOKCASES.flatMap(c => c.qs.map((q, k) => [q, k]).filter(([q]) => !/\bFig(?:ure)?s?\.?\s*\d/i.test(q.q) && !NEEDS_CASE.test(q.q) && q.q.length >= 30 && q.a.length >= 60).map(([q, k]) => ({kind:"book", topic:c.topic, caseId:c.id, q:q.q, a:noFig(q.a), page:q.page, key:c.id + "#" + k})));
+const srsKey = x => x.kind === "book" ? "b:" + x.key : "m:" + (x.i != null ? x.i : x.id);
 function quizPool(){
   const src = (document.querySelector('input[name=qsrc]:checked') || {}).value || "mcq";
   const all = $("#qTopics").querySelector('input[value=all]').checked, picked = [...$("#qTopics").querySelectorAll('input:checked')].map(x => x.value);
-  const wrongOnly = picked.includes("wrong"), topics = picked.filter(v => v !== "all" && v !== "wrong");
+  const wrongOnly = picked.includes("wrong"), dueOnly = picked.includes("due"), topics = picked.filter(v => v !== "all" && v !== "wrong" && v !== "due");
   let pool = [];
   if (src !== "book") pool = pool.concat(QUIZ.map((q, i) => ({kind:"mcq", i, q, topic:q[0]})));
   if (src !== "mcq") pool = pool.concat(bookQs());
-  if (wrongOnly) pool = pool.filter(x => x.kind === "mcq" && ST.wrong.includes(x.i));
+  if (dueOnly){ const due = new Set(srsDue()); pool = pool.filter(x => due.has(srsKey(x))); }
+  else if (wrongOnly) pool = pool.filter(x => x.kind === "mcq" && ST.wrong.includes(x.i));
   else if (!all && topics.length) pool = pool.filter(x => topics.includes(x.topic));
   return pool;
 }
 function refreshQuizUi(){
   const box = $("#qTopics"); if (!box) return;
   const prev = new Set([...box.querySelectorAll('input:checked')].map(x => x.value)); const first = !box.children.length;
-  box.innerHTML = `<label class="chk"><input type="checkbox" value="all" ${first || prev.has("all") ? "checked" : ""}> All topics</label>` + quizTopics().map(t => `<label class="chk"><input type="checkbox" value="${esc(t)}" ${prev.has(t) ? "checked" : ""}> ${esc(t)}</label>`).join("") + `<label class="chk"><input type="checkbox" value="wrong" ${prev.has("wrong") ? "checked" : ""}> My mistakes (review)</label>`;
+  box.innerHTML = `<label class="chk"><input type="checkbox" value="all" ${first || prev.has("all") ? "checked" : ""}> All topics</label>` + quizTopics().map(t => `<label class="chk"><input type="checkbox" value="${esc(t)}" ${prev.has(t) ? "checked" : ""}> ${esc(t)}</label>`).join("") + `<label class="chk"><input type="checkbox" value="wrong" ${prev.has("wrong") ? "checked" : ""}> My mistakes (review)</label>` + `<label class="chk"><input type="checkbox" value="due" ${prev.has("due") ? "checked" : ""}> Due for review today (${srsDue().length})</label>`;
   updateAvail();
 }
 function updateAvail(){ const n = quizPool().length; $("#qAvail").textContent = `${n} question${n === 1 ? "" : "s"} available`; $("#qCount").max = n || 1; }
@@ -2433,7 +2463,7 @@ function showBookQ(){
   const pg = it.page ? `, p. ${Math.max(1, it.page - (BOOKOFF.cases || 0))}` : "";
   $("#qFb").innerHTML = `<div class="qa-box"><p><b>Book answer</b> <span class="meta">(Clinical Cases in Orthodontics, Case ${esc(it.caseId)}${pg})</span></p><p>${esc(it.a)}</p>${mine ? `<p class="small"><b>Key terms you covered:</b> ${cv.hit.length ? cv.hit.map(esc).join(", ") : "none"}${cv.miss.length ? `<br><b>Missing:</b> ${cv.miss.slice(0, 8).map(esc).join(", ")}` : ""}</p>` : ""}<p class="muted small">Matching is keyword-based. Judge yourself honestly:</p><div class="grade"><button class="btn" data-g="1">I had it</button><button class="btn" data-g="0.5">Partly</button><button class="btn" data-g="0">I missed it</button></div></div>`;
   $("#qFb").querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", () => {
-    Q.right += +b.dataset.g; qMeta();
+    Q.right += +b.dataset.g; qMeta(); srsMark(srsKey(it), +b.dataset.g); save();
     $("#qFb").querySelector(".grade").innerHTML = `<button class="btn primary" id="qNext">${last ? "Finish" : "Next question"}</button>`;
     $("#qNext").addEventListener("click", () => { if (last) finishQuiz(); else { Q.i++; renderQ(); } });
   }));
@@ -2441,7 +2471,8 @@ function showBookQ(){
 function answerQ(k){
   if (Q.answered) return; Q.answered = true; Q.answeredN++;
   const it = Q.items[Q.i], ok = k === it.ans; if (ok) Q.right++;
-  if (ok) ST.wrong = ST.wrong.filter(x => x !== it.id); else if (!ST.wrong.includes(it.id)) ST.wrong.push(it.id); save();
+  if (ok) ST.wrong = ST.wrong.filter(x => x !== it.id); else if (!ST.wrong.includes(it.id)) ST.wrong.push(it.id);
+  srsMark(srsKey(it), ok ? 1 : 0); save();
   $$(".qopt").forEach((b, j) => { b.disabled = true; if (j === it.ans) b.classList.add("right"); else if (j === k) b.classList.add("bad"); });
   const last = Q.i === Q.items.length - 1;
   $("#qFb").innerHTML = `<div class="qexp"><b>${ok ? "Correct." : "Not quite."}</b> ${esc(it.ex)}</div><div class="actions" style="margin-top:12px"><button class="btn primary" id="qNext">${last ? "Finish" : "Next question"}</button></div>`;
@@ -2454,7 +2485,7 @@ function finishQuiz(timeUp){
   const mins = Math.max(1, Math.round((Date.now() - Q.startedAt) / 60000));
   $("#quizSetup").hidden = true;
   $("#quizArea").innerHTML = `<div class="viva-score"><h3>${timeUp ? "Time is up" : "Quiz complete"}</h3><div class="score-bar"><i style="width:${pct}%;background:${pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--hi)'}"></i></div><p><b>${pct}%</b> — ${Math.round(Q.right * 10) / 10} correct out of ${N} questions (${esc(Q.topic)}). +${xp} XP</p><p class="muted small">You answered ${Q.answeredN} of ${N}${un ? `; the ${un} unanswered question${un === 1 ? "" : "s"} counted as wrong` : ""}. Time used: ${Date.now() - Q.startedAt < 60000 ? "under 1 minute" : mins + (mins === 1 ? " minute" : " minutes")}${Q.limit ? ` of ${Q.limit}` : ""}.</p><div class="actions"><button class="btn primary" id="qAgain">New quiz</button></div></div>`;
-  $("#qAgain").addEventListener("click", () => { $("#quizArea").innerHTML = ""; $("#quizMeta").textContent = ""; $("#quizSetup").hidden = false; updateAvail(); });
+  $("#qAgain").addEventListener("click", () => { $("#quizArea").innerHTML = ""; $("#quizMeta").textContent = ""; $("#quizSetup").hidden = false; refreshQuizUi(); });
   const topic = Q.items.every(i => i.topic === Q.items[0].topic) ? Q.items[0].topic : "Mixed";
   record("quiz", pct, topic, xp); planNote("quiz", Q && Q.items && Q.items.every(i => i.topic === topic) ? topic : null);
 }
@@ -2676,7 +2707,8 @@ function buildPlan(p){
   queue.forEach(x => { while (di < learn - 1 && used && used + PLAN_COST[x.k] > p.mins){ di++; used = 0; } if (di < learn){ out[di].tasks.push(x); used += PLAN_COST[x.k]; } });
   out.filter(x => x.phase === "practice").forEach((x, i) => {
     let m = 0, k = 0; while (m + PLAN_COST.exam <= Math.max(p.mins, PLAN_COST.exam)){ const t = weak[(i + k) % Math.max(1, weak.length)]; if (!t) break; x.tasks.push({k: "exam", id: `exam:${x.d}:${k}`, topic: t.t, label: `Exam room: ${t.t}`}); m += PLAN_COST.exam; k++; }
-    if (m + PLAN_COST.quiz <= p.mins && (ST.wrong || []).length) x.tasks.push({k: "quiz", id: `mist:${x.d}`, topic: "wrong", label: "Quiz: my mistakes"});
+    if (m + PLAN_COST.quiz <= p.mins && srsDue().length) x.tasks.push({k: "quiz", id: `mist:${x.d}`, topic: "due", label: "Review: questions due today"});
+    else if (m + PLAN_COST.quiz <= p.mins && (ST.wrong || []).length) x.tasks.push({k: "quiz", id: `mist:${x.d}`, topic: "wrong", label: "Quiz: my mistakes"});
   });
   out.filter(x => x.phase === "quiet").forEach(x => { x.tasks.push({k: "rest", id: `rest:${x.d}`, label: "Light review only, then rest well"}); });
   return {days: out, covered, total: BOOKCASES.length};
@@ -2730,6 +2762,7 @@ function renderPlanHome(){
 function planGo(id){
   const p = ST.plan, x = [(p.today || {}).tasks || []].flat().find(y => y.id === id); if (!x) return;
   if (x.k === "case") openCase("b" + x.ref, "viva");
+  else if (x.k === "quiz" && x.topic === "due") startReview();
   else if (x.k === "quiz"){ setView("quiz"); const box = $("#qTopics"); box.querySelectorAll("input").forEach(i => { i.checked = i.value === x.topic; }); box.dispatchEvent(new Event("change", {bubbles: true})); }
   else if (x.k === "ev"){ setView("evidence"); $("#evTopic").value = x.topic; startEvidence(x.topic, true); planMark(x.id); renderPlanHome(); }
   else if (x.k === "exam"){ setView("tutor"); const s = $("#tTopic"); if (s){ s.value = x.topic; s.dispatchEvent(new Event("change", {bubbles: true})); } }
@@ -3437,7 +3470,7 @@ function fbSchedule(){ if (!FB.ready || !FB.user) return; clearTimeout(FB.timer)
 async function fbPush(){
   if (!FB.ready || !FB.user || FB.deleting) return;
   try {
-    await FB.db.collection("users").doc(FB.user.uid).set({name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, updatedAt: Date.now()});
+    await FB.db.collection("users").doc(FB.user.uid).set({name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, srs: ST.srs || {}, updatedAt: Date.now()});
     if (ST.plan) FB.db.collection("users").doc(FB.user.uid).set({plan: ST.plan}, {merge: true}).catch(() => {});
     await FB.db.collection("leaderboard").doc(FB.user.uid).set(myStats());
     setText("#fbStatus", "Synced " + new Date().toLocaleTimeString());
@@ -3452,6 +3485,8 @@ async function fbPull(){
       ST.events.sort((a, b) => a.at - b.at); ST.events = ST.events.slice(-400);
       ST.xp = Math.max(ST.xp, r.xp || 0); if (!ST.name && r.name) ST.name = r.name;
       ST.wrong = [...new Set([...(ST.wrong || []), ...(r.wrong || [])])];
+      /* spaced review: for each question keep whichever device answered it last */
+      const rs = r.srs || {}; ST.srs = ST.srs || {}; Object.keys(rs).forEach(k => { if (!ST.srs[k] || (rs[k].at || 0) > (ST.srs[k].at || 0)) ST.srs[k] = rs[k]; });
       if (r.plan && (!ST.plan || (r.plan.savedAt || 0) > (ST.plan.savedAt || 0))) ST.plan = r.plan;
       try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch {}
       renderDashboard();
