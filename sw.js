@@ -24,6 +24,7 @@ self.addEventListener("fetch", e => {
     const saved = await c.match(req, {ignoreSearch: true});
     const net = fetch(req).then(r => { if (r.ok) c.put(req, r.clone()); return r; });
     if (!saved) return net;
-    return Promise.race([net.catch(() => saved), new Promise(res => setTimeout(() => res(saved), 4000))]);
+    /* a server error page never replaces the good saved copy */
+    return Promise.race([net.then(r => r.ok ? r : saved, () => saved), new Promise(res => setTimeout(() => res(saved), 4000))]);
   }));
 });

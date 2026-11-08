@@ -185,6 +185,21 @@ mark{background:#f3e3b4;padding:0 2px;border-radius:2px;color:inherit}
 .focus{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
 .fc-clock{font:500 56px/1 var(--f-display,Georgia,serif);font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--ink)}
 .fc-clock.brk{color:var(--ok)}.fc-lbl{margin:0 0 6px;color:var(--muted)}.focus .actions{justify-content:center}
+/* Easy IOTN (owner's tool, Tools page): finding groups in MOCDO order, the grade pinned at the bottom of the card */
+.iotn-g{border-top:1px solid var(--line);padding:14px 0 4px;margin-top:12px}
+.iotn-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.iotn-h h3{margin:0;font-size:17px}
+.iotn-l{font:600 12px/1.6 var(--f-body);color:var(--gold-ink);background:var(--gold-soft);border-radius:6px;padding:0 7px;min-width:30px;text-align:center}
+.iotn-o{display:flex;align-items:center;gap:10px;min-height:44px;padding:9px 12px;margin-top:6px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:15px;line-height:1.4}
+.iotn-o input{accent-color:var(--gold);width:18px;height:18px;flex:none;margin:0}
+.iotn-o:has(input:checked){border-color:var(--gold);background:var(--gold-soft)}
+.iotn-c{font:600 12.5px/1 var(--f-body);min-width:32px;text-align:center;padding:5px 0;border-radius:6px;color:#fff;flex:none}
+.iotn-c.none{background:transparent;color:var(--muted);border:1px dashed var(--line-2)}
+.iotn-c.g1{background:#5f7a6a}.iotn-c.g2{background:var(--ok)}.iotn-c.g3{background:var(--warn)}.iotn-c.g4{background:#c0562f}.iotn-c.g5{background:var(--hi)}
+.iotn-bar{position:sticky;bottom:0;z-index:3;display:flex;align-items:center;gap:14px;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 18px -12px rgba(0,0,0,.25)}
+.iotn-grade{width:60px;height:60px;border-radius:12px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;background:#5f7a6a;transition:background .2s}
+.iotn-grade small{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.9}.iotn-grade b{font-size:24px;line-height:1}
+.iotn-res{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.iotn-res b{font-size:20px;font-family:var(--f-display)}
+@media (prefers-reduced-motion:reduce){.iotn-grade{transition:none}}
 .srs-cases{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}.srs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}.srs-week{margin:10px 0 4px}
 .trow{display:grid;grid-template-columns:minmax(0,150px) 1fr 64px;gap:12px;align-items:center;font-size:13.5px;margin:10px 0}
 .trow>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -789,7 +804,12 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
  <div class="pane" id="paRun" hidden style="margin-top:14px"><div class="pane-h"><h2 id="paTitle"></h2></div><div class="pane-b" id="paArea"></div></div>
 </section>
 <section class="view" id="v-tools" hidden>
- <div class="phead"><div><div class="eyebrow">Chairside</div><h1>Tools</h1><p>Quick cephalometric interpretation and space analysis. Results update as you type.</p></div></div>
+ <div class="phead"><div><div class="eyebrow">Chairside</div><h1>Tools</h1><p>Easy IOTN, quick cephalometric interpretation and space analysis. Results update as you go.</p></div></div>
+ <div class="pane" id="iotnPane"><div class="pane-h"><h2>Easy IOTN</h2><button type="button" class="btn sm" id="iotnReset">New patient</button></div>
+  <div class="pane-b"><p class="hint" style="margin:0">Index of Orthodontic Treatment Need — Dental Health Component</p><div id="iotnGroups"></div>
+   <p class="muted small" style="margin:14px 0 0">Score the worst single feature present. Work through the groups in MOCDO order (Missing, Overjet, Crossbite, Displacement, Overbite); the highest grade found is the DHC. Measure with an IOTN ruler. Third molars are excluded. This is a teaching and referral aid, not a substitute for IOTN calibration.</p></div>
+  <div class="iotn-bar" aria-live="polite"><div class="iotn-grade" id="iotnGrade"><small>Score</small><b id="iotnCode">1</b></div><div class="iotn-res"><span class="meta">Final IOTN score</span><b id="iotnNeed">1 · No need</b></div><button type="button" class="btn sm" id="iotnCopy">Copy</button></div>
+ </div>
  <div class="cols2">
   <div class="pane"><div class="pane-h"><h2>Cephalometric quick analysis</h2></div><form class="pane-b" id="cephForm" onsubmit="return false"><div class="grid">
    <div class="f"><label for="t_sna">SNA</label><input type="number" step="any" id="t_sna" value="82"></div><div class="f"><label for="t_snb">SNB</label><input type="number" step="any" id="t_snb" value="76"></div>
@@ -1858,7 +1878,12 @@ const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--){ co
 /* ---------- storage ---------- */
 const KEY = "bdi.trainer.v1";
 let ST = (() => { try { return Object.assign({name:"", xp:0, events:[], wrong:[]}, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch { return {name:"", xp:0, events:[], wrong:[]}; } })();
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch {} try { fbSchedule(); } catch {} };
+const save = () => { if (ST.events.length > 400) ST.events = ST.events.slice(-400); try { localStorage.setItem(KEY, JSON.stringify(ST)); } catch {} try { fbSchedule(); } catch {} };
+/* the app open in two tabs: when the other tab saves progress, this tab takes it, so neither overwrites the other's work */
+window.addEventListener("storage", e => {
+  if (e.key !== KEY || !e.newValue) return;
+  try { ST = Object.assign({name:"", xp:0, events:[], wrong:[]}, JSON.parse(e.newValue)); renderDashboard(); } catch {}
+});
 
 /* ---------- levels & progress ---------- */
 const LEVELS = [{n:"Junior Resident", xp:0},{n:"Resident", xp:200},{n:"Senior Resident", xp:600},{n:"Registrar", xp:1200},{n:"Fellow", xp:2500}];
@@ -1888,7 +1913,14 @@ function srsMark(key, g){
 }
 /* "c:b<case>" = a book case whose viva went badly: the whole case comes back with its records (never a case question on its own) */
 const srsDueAll = () => { const now = Date.now(); return Object.keys(ST.srs || {}).filter(k => { const r = ST.srs[k]; return r.b < SRS_DAYS.length && r.due <= now; }); };
-const srsDue = () => srsDueAll().filter(k => !k.startsWith("c:"));
+/* only questions that exist now are counted: an entry left over from an older bank or book version is never shown as due */
+let srsLive = null, srsLiveN = -1;
+const srsExists = k => {
+  if (k.startsWith("m:")) return !!QUIZ[+k.slice(2)];
+  if (srsLiveN !== BOOKCASES.length){ srsLive = new Set(bookQs().map(x => "b:" + x.key)); srsLiveN = BOOKCASES.length; }
+  return srsLive.has(k);
+};
+const srsDue = () => srsDueAll().filter(k => !k.startsWith("c:") && srsExists(k));
 const srsDueCases = () => srsDueAll().filter(k => k.startsWith("c:")).map(k => k.slice(2)).filter(id => findCase(id));
 const srsNext = () => Object.values(ST.srs || {}).filter(r => r.b < SRS_DAYS.length).reduce((m, r) => Math.min(m, r.due), Infinity);
 /* earlier mistakes (before spaced review existed) start as due today */
@@ -2440,7 +2472,7 @@ function startQuiz(ev){
   $("#qStatus").textContent = "";
   Q.items = shuffle(pool).slice(0, n).map(x => { if (x.kind === "book") return x; const idx = shuffle(x.q[2].map((o, k) => k)); return {kind:"mcq", id:x.i, topic:x.q[0], q:x.q[1], opts:idx.map(k => x.q[2][k]), ans:idx.indexOf(x.q[3]), ex:x.q[4]}; });
   const tops = [...new Set(Q.items.map(i => i.topic))]; Q.topic = tops.length === 1 ? tops[0] : "Mixed";
-  Q.i = 0; Q.right = 0; Q.answeredN = 0; stopQuizTimer(); Q.startedAt = Date.now();
+  Q.i = 0; Q.right = 0; Q.answeredN = 0; stopQuizTimer(); Q.startedAt = Date.now(); Q.review = !!$('#qTopics input[value="due"]:checked');
   const tm = $("#qTime").value; Q.limit = tm === "auto" ? autoMinutes(Q.items) : tm === "custom" ? Math.max(1, +$("#qMin").value || 15) : 0;
   $("#quizSetup").hidden = true; window.scrollTo(0, 0);
   if (Q.limit) Q.endAt = Date.now() + Q.limit * 60000;
@@ -2449,7 +2481,7 @@ function startQuiz(ev){
 function startQuizTimer(){ stopQuizTimer(); if (Q.limit) Q.tick = setInterval(() => { const left = Q.endAt - Date.now(), el = $("#qClock"); if (el){ el.textContent = fmtT(left); el.classList.toggle("low", left < 60000); } if (left <= 0) finishQuiz(true); }, 500); }
 function resumeQuiz(d){
   if (!d || !d.items || !d.items.length){ clearRun("quiz"); return; }
-  Object.assign(Q, {items: d.items, i: d.i, right: d.right, answeredN: d.answeredN, limit: d.limit, endAt: d.endAt, startedAt: d.startedAt, topic: d.topic});
+  Object.assign(Q, {review: !!d.review, items: d.items, i: d.i, right: d.right, answeredN: d.answeredN, limit: d.limit, endAt: d.endAt, startedAt: d.startedAt, topic: d.topic});
   $("#quizSetup").hidden = true; window.scrollTo(0, 0);
   if (Q.limit && Q.endAt <= Date.now()){ finishQuiz(true); return; }
   startQuizTimer(); renderQ();
@@ -2458,7 +2490,7 @@ function qMeta(){ $("#quizMeta").textContent = `Question ${Q.i + 1} of ${Q.items
 const clockHtml = () => Q.limit ? `<div class="timerbar"><span class="meta">Time limit ${Q.limit} min · unanswered questions count as wrong</span><span class="clock" id="qClock">${fmtT(Q.endAt - Date.now())}</span></div>` : "";
 function renderQ(){
   const it = Q.items[Q.i]; Q.answered = false; qMeta();
-  saveRun("quiz", {items: Q.items, i: Q.i, right: Q.right, answeredN: Q.answeredN, limit: Q.limit, endAt: Q.endAt, startedAt: Q.startedAt, topic: Q.topic});
+  saveRun("quiz", {review: Q.review, items: Q.items, i: Q.i, right: Q.right, answeredN: Q.answeredN, limit: Q.limit, endAt: Q.endAt, startedAt: Q.startedAt, topic: Q.topic});
   if (it.kind === "book"){
     $("#quizArea").innerHTML = clockHtml() + `<p class="meta">Clinical Cases in Orthodontics · Case ${esc(it.caseId)} · ${esc(it.topic)}</p><h3 class="qq">${esc(it.q)}</h3><textarea id="qbAns" rows="5" placeholder="Write your answer as you would say it in the viva…"></textarea><div class="actions" style="margin-top:10px"><button class="btn primary" id="qbShow">Check my answer</button></div><div id="qFb"></div>`;
     $("#qbShow").addEventListener("click", showBookQ); return;
@@ -2496,7 +2528,7 @@ function finishQuiz(timeUp){
   $("#quizArea").innerHTML = `<div class="viva-score"><h3>${timeUp ? "Time is up" : "Quiz complete"}</h3><div class="score-bar"><i style="width:${pct}%;background:${pct>=70?'var(--ok)':pct>=50?'var(--warn)':'var(--hi)'}"></i></div><p><b>${pct}%</b> — ${Math.round(Q.right * 10) / 10} correct out of ${N} questions (${esc(Q.topic)}). +${xp} XP</p><p class="muted small">You answered ${Q.answeredN} of ${N}${un ? `; the ${un} unanswered question${un === 1 ? "" : "s"} counted as wrong` : ""}. Time used: ${Date.now() - Q.startedAt < 60000 ? "under 1 minute" : mins + (mins === 1 ? " minute" : " minutes")}${Q.limit ? ` of ${Q.limit}` : ""}.</p><div class="actions"><button class="btn primary" id="qAgain">New quiz</button></div></div>`;
   $("#qAgain").addEventListener("click", () => { $("#quizArea").innerHTML = ""; $("#quizMeta").textContent = ""; $("#quizSetup").hidden = false; refreshQuizUi(); });
   const topic = Q.items.every(i => i.topic === Q.items[0].topic) ? Q.items[0].topic : "Mixed";
-  record("quiz", pct, topic, xp); planNote("quiz", Q && Q.items && Q.items.every(i => i.topic === topic) ? topic : null);
+  record("quiz", pct, topic, xp); planNote("quiz", Q.review ? "due" : topic);
 }
 
 /* ---------- my case analysis ---------- */
@@ -2732,7 +2764,8 @@ function planMark(id, on = true){ const p = ST.plan; if (!p) return; p.done = p.
 /* finishing the work ticks the task */
 function planNote(kind, topic, ref){
   const p = ST.plan; if (!p || !p.today) return;
-  const hit = p.today.tasks.find(x => x.k === kind && !(p.done || {})[x.id] && (ref ? x.ref === ref : !topic || x.topic === topic || x.topic === "wrong"));
+  const open = x => x.k === kind && !(p.done || {})[x.id];
+  const hit = p.today.tasks.find(x => open(x) && (ref ? x.ref === ref : x.topic === topic)) || (kind === "quiz" && topic !== "due" ? p.today.tasks.find(x => open(x) && x.topic === "wrong") : null);
   if (hit){ planMark(hit.id); renderPlan(); renderDashboard(); }
 }
 const PLAN_KIND = {case: "Viva", quiz: "Quiz", ev: "Evidence", exam: "Exam room", rest: "Rest"};
@@ -2764,6 +2797,7 @@ function fcDraw(){
   $("#fcMeta").textContent = FC.n ? `Today: ${FC.n} focus session${FC.n === 1 ? "" : "s"} · ${FC.n * FC_MIN.focus} min` : "";
 }
 function fcTick(){
+  try { const s = JSON.parse(localStorage.getItem(FC_KEY) || "null"); if (s) FC = Object.assign(fcNew(), s); } catch {}
   if (FC.day !== ymd(new Date())){ FC.n = 0; FC.day = ymd(new Date()); fcSave(); }
   if (FC.run && Date.now() >= FC.endAt){
     if (FC.mode === "focus"){
@@ -2910,6 +2944,56 @@ const GENERIC_VIVA = [
 ];
 
 /* ---------- tools ---------- */
+/* ---------- Easy IOTN (the owner's chairside tool): Dental Health Component, the worst feature found is the grade ---------- */
+const IOTN = [
+ {id: "spec", letter: "5/4", title: "Eruption, cleft & supernumeraries", hint: "Tick any present.", multi: true, opts: [
+  ["5i", "Impeded eruption of teeth (except third molars) due to crowding, displacement, supernumeraries, retained deciduous teeth or pathology"],
+  ["5p", "Defects of cleft lip and/or palate"],
+  ["5s", "Submerged deciduous teeth"],
+  ["4t", "Partially erupted teeth, tipped and impacted against adjacent teeth"],
+  ["4x", "Supernumerary teeth present"]]},
+ {id: "m", letter: "M", title: "Missing teeth (hypodontia)", opts: [
+  ["", "None / not relevant"],
+  ["4h", "Less extensive hypodontia needing pre-restorative orthodontics or space closure to avoid a prosthesis"],
+  ["5h", "Extensive hypodontia with restorative implications (more than 1 tooth missing in any quadrant) needing pre-restorative orthodontics"]]},
+ {id: "o", letter: "O", title: "Overjet (increased)", opts: [
+  ["", "≤ 3.5 mm"], ["2a", "> 3.5 mm and ≤ 6 mm, lips competent"], ["3a", "> 3.5 mm and ≤ 6 mm, lips incompetent"], ["4a", "> 6 mm and ≤ 9 mm"], ["5a", "> 9 mm"]]},
+ {id: "r", letter: "O", title: "Reverse overjet", opts: [
+  ["", "None"], ["2b", "> 0 mm and ≤ 1 mm"], ["3b", "> 1 mm and ≤ 3.5 mm"], ["4m", "> 1 mm and < 3.5 mm, with recorded masticatory or speech difficulties"],
+  ["4b", "> 3.5 mm, no masticatory or speech difficulties"], ["5m", "> 3.5 mm, with masticatory and speech difficulties"]]},
+ {id: "c", letter: "C", title: "Crossbite (RCP–ICP discrepancy)", hint: "Anterior or posterior crossbite: discrepancy between retruded contact position and intercuspal position.", opts: [
+  ["", "None"], ["2c", "≤ 1 mm discrepancy"], ["3c", "> 1 mm and ≤ 2 mm discrepancy"], ["4c", "> 2 mm discrepancy"]]},
+ {id: "l", letter: "C", title: "Scissor bite", multi: true, opts: [
+  ["4l", "Posterior lingual crossbite with no functional occlusal contact in one or both buccal segments"]]},
+ {id: "d", letter: "D", title: "Contact point displacement", opts: [
+  ["", "< 1 mm (or none)"], ["2d", "> 1 mm and ≤ 2 mm"], ["3d", "> 2 mm and ≤ 4 mm"], ["4d", "> 4 mm (severe)"]]},
+ {id: "e", letter: "O", title: "Open bite (anterior or lateral)", opts: [
+  ["", "None or ≤ 1 mm"], ["2e", "> 1 mm and ≤ 2 mm"], ["3e", "> 2 mm and ≤ 4 mm"], ["4e", "> 4 mm (extreme)"]]},
+ {id: "f", letter: "O", title: "Overbite (increased)", opts: [
+  ["", "Normal"], ["2f", "≥ 3.5 mm without gingival contact"], ["3f", "Increased and complete, without gingival or palatal trauma"], ["4f", "Increased and complete, with gingival or palatal trauma"]]},
+ {id: "g", letter: "–", title: "Buccal segment relationship", multi: true, opts: [
+  ["2g", "Pre-normal or post-normal occlusion (up to ½ unit) with no other anomalies"]]}
+];
+const IOTN_NEED = {1: "No need", 2: "Little need", 3: "Moderate / borderline need", 4: "Great need", 5: "Very great need"};
+function iotnScore(){
+  const codes = [...document.querySelectorAll("#iotnGroups input:checked")].map(i => i.value).filter(Boolean);
+  const grade = codes.length ? Math.max(...codes.map(c => +c[0])) : 1;
+  return {grade, code: codes.find(c => +c[0] === grade) || "1"};
+}
+function iotnDraw(){
+  const r = iotnScore();
+  $("#iotnCode").textContent = r.code; $("#iotnGrade").style.background = ["", "#5f7a6a", "var(--ok)", "var(--warn)", "#c0562f", "var(--hi)"][r.grade];
+  $("#iotnNeed").textContent = `${r.code} · ${IOTN_NEED[r.grade]}`;
+}
+function iotnInit(){
+  const box = $("#iotnGroups"); if (!box) return;
+  box.innerHTML = IOTN.map(G => `<div class="iotn-g" role="group" aria-labelledby="iotn-${G.id}"><div class="iotn-h"><span class="iotn-l">${esc(G.letter)}</span><h3 id="iotn-${G.id}">${esc(G.title)}</h3></div>${G.hint ? `<p class="hint" style="margin:4px 0 0">${esc(G.hint)}</p>` : ""}` +
+    G.opts.map(([code, txt], i) => `<label class="iotn-o"><input type="${G.multi ? "checkbox" : "radio"}" name="iotn-${G.id}" value="${code}"${!G.multi && i === 0 ? " checked" : ""}>${code ? `<span class="iotn-c g${code[0]}">${code}</span>` : '<span class="iotn-c none">—</span>'}<span>${esc(txt)}</span></label>`).join("") + "</div>").join("");
+  box.addEventListener("change", iotnDraw);
+  $("#iotnReset").addEventListener("click", () => { box.querySelectorAll("input").forEach(i => { i.checked = false; }); IOTN.filter(G => !G.multi).forEach(G => { const f = box.querySelector(`input[name="iotn-${G.id}"]`); if (f) f.checked = true; }); iotnDraw(); $("#iotnPane").scrollIntoView({block: "start", behavior: "smooth"}); });
+  $("#iotnCopy").addEventListener("click", async () => { const s = iotnScore(); const t = `IOTN DHC ${s.code} (${IOTN_NEED[s.grade]})`; try { await navigator.clipboard.writeText(t); toast("Copied: " + t); } catch { toast(t); } });
+  iotnDraw();
+}
 function toolCeph(){
   const g = id => num($(id).value), sna = g("#t_sna"), snb = g("#t_snb"), snmx = g("#t_snmx"), mmpa = g("#t_mmpa"), li = g("#t_li");
   let anb = g("#t_anb"); if (anb == null && sna != null && snb != null) anb = sna - snb;
@@ -3027,7 +3111,7 @@ function renderSession(){
       if (!aiReady()){ $("#sesChat").innerHTML = `<p class="notice2">${NO_AI} Meanwhile use “More passages” and the related questions below.</p>`; return; }
       const sys = tutorSystem(`CASE ${bc.id} (from Clinical Cases in Orthodontics)\n${bc.full.slice(0, 3500)}\n\nQUESTION UNDER DISCUSSION: ${q.q}\nBOOK'S ANSWER: ${q.a.slice(0, 1800)}`, "discussion");
       $("#sesDeep").disabled = true;
-      mountChat($("#sesChat"), {system: sys, topic: bc.topic, opening: `Resident's answer to "${q.q}": ${ans || "(skipped — wants to understand the answer)"}\nPlease start the discussion: assess my answer, then probe deeper.`, retrieve: t => excerpts(diverse(t + " " + q.q, 4)), avatar: false});
+      mountChat($("#sesChat"), {system: sys, topic: bc.topic, keep: 30, opening: `Resident's answer to "${q.q}": ${ans || "(skipped — wants to understand the answer)"}\nPlease start the discussion: assess my answer, then probe deeper.`, retrieve: t => excerpts(diverse(t + " " + q.q, 4)), avatar: false});
     });
     $("#sesNext").addEventListener("click", () => { S_.i++; renderSession(); window.scrollTo(0, 0); });
     $("#sesFb").scrollIntoView({block: "nearest", behavior: "smooth"});
@@ -3058,7 +3142,10 @@ function tutorSystem(caseBlock, mode){
   return `${mode === "exam" ? exam : mode === "mentor" ? mentor : mode === "topic" ? topicExam : mode === "evidence" ? evidence : disc}\n\nHOW YOU SPEAK\n- Talk the way a warm, experienced consultant talks face to face: natural contractions (you're, that's, let's), short sentences, plain words, occasional human touches such as 'Right', 'Okay', 'Good', 'Hmm, not quite'. Address the resident as 'you'.\n- Your reply is read aloud, so write flowing spoken prose: no bullet points, no headings, no tables, no markdown, no emojis, and say numbers and measurements the way a person would. Keep citations in square brackets only; they are shown on screen but not read out.\n- Never sound like a template or a machine; react to what this particular resident actually said. Stay professional: address the resident as you or Doctor, with no slang or terms of endearment in any language, and no small talk before the answer.\n- Write every book citation exactly as labelled, with its page number in digits, in English even inside Arabic text; do not spell page numbers out in words.\n\nEVIDENCE RULES\n- Each turn you receive LIBRARY EXCERPTS from the programme's textbooks. Use them first and cite inline exactly as labelled, e.g. [Proffit, Contemporary Orthodontics 6e, PDF p. 212].\n- If the excerpts do not support a point, you may use mainstream orthodontic knowledge but tag it [general knowledge]. Never invent a citation, page, figure or quotation. Where textbooks disagree, say so.\n- British conventions: BSI classification, IOTN, Eastman norms, MMPA.\n- This is a teaching aid; the supervising consultant decides clinically.\nLANGUAGE: ${lang}\n\n${caseBlock}`;
 }
 /* One key serves every resident, so Google will sometimes answer "busy": move to the next model (each has its own limit), then wait and go round once more, within a fixed time, before telling the resident. */
-const GEM_MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.0-flash"];
+/* Free tier, tested with the Institute key on 2026-11-08: each model has its own limit (Flash 5 a minute / 20 a day; Flash-Lite 15 a minute / 500 a day).
+   The fastest that answered come first; gemini-flash-latest hung for 20 s in that test, so it is last; 2.0 / 2.5 models are closed to new keys.
+   Once one is busy the next takes over, and the one that answered stays first for six hours. */
+const GEM_MODELS = ["gemini-3.6-flash", "gemini-3-flash-preview", "gemini-3.1-flash-lite", "gemini-flash-lite-latest", "gemini-flash-latest"];
 /* the model that answered last stays first for six hours, so a busy model does not cost every reply a long wait */
 let gemGood = ""; try { const g = JSON.parse(localStorage.getItem("bdi.gem") || "{}"); if (g.m && Date.now() - g.at < 216e5) gemGood = g.m; } catch {}
 const gemKeep = m => { gemGood = m; try { localStorage.setItem("bdi.gem", JSON.stringify({m, at: Date.now()})); } catch {} };
@@ -3087,6 +3174,7 @@ const gemGone = new Set();
 /* a student must not sit waiting on one busy model: if a model is silent for 2.5 seconds the next one is asked as well,
    the first to start writing is shown, and the others are cancelled */
 const GEM_HEDGE = 2500;
+let gemCool = 0;
 function gemRace(key, models, makeBody, onText){
   return new Promise((done, fail) => {
     const live = new Map(); let winner = null, next = 0, open = 0, wake = 0, ended = false, busy = false, last = "";
@@ -3097,7 +3185,7 @@ function gemRace(key, models, makeBody, onText){
       if (next >= models.length){ if (!open) lost(new Error(last || "The examiner could not answer. Press Try again.")); return; }
       const m = models[next++]; open++;
       attempt(m).catch(e => { if (e.fatal) lost(e); else if (e.name !== "AbortError") last = e.message || last; }).finally(() => { open--; live.delete(m); if (!ended && (!winner || winner === m)){ if (winner === m) lost(new Error(last || "The connection is too slow right now — please try again.")); else launch(); } });
-      wake = setTimeout(launch, GEM_HEDGE);
+      wake = setTimeout(launch, Date.now() < gemCool ? 9000 : GEM_HEDGE);
     };
     const claim = (m, kill) => { if (winner) return winner === m; winner = m; clearTimeout(kill); clearTimeout(wake); stopOthers(m); return true; };
     const win = (m, text) => { ended = true; gemKeep(m); done(text); };
@@ -3116,7 +3204,7 @@ function gemRace(key, models, makeBody, onText){
           /* a model that does not accept the fast setting is asked again without it */
           if (r.status === 400 && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
           if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; return; }
-          if (r.status === 429 || r.status >= 500){ busy = true; return; }
+          if (r.status === 429 || r.status >= 500){ busy = true; if (r.status === 429) gemCool = Date.now() + 6e4; return; }
           if (!r.ok) throw Object.assign(new Error(msg || "The examiner could not answer (" + r.status + "). Press Try again."), {fatal: true});
           const t = ((j.candidates || [])[0]?.content?.parts || []).filter(x => !x.thought).map(p => p.text || "").join("").trim();
           if (t && claim(m, kill)){ if (onText) onText(t); return win(m, t); }
@@ -3363,7 +3451,7 @@ function startTutor(ev, resume){
     $("#tRun").scrollIntoView({block: "start"});
     const endAt = limit ? (resume && resume.end ? resume.end : Date.now() + limit * 60000) : 0;
     const form = {mode, tp, nq: $("#tNq").value, tm, min: $("#tMin").value, lang: $("#tLang").value, level: $("#tLevel").value};
-    const chat = mountChat($("#tChat"), {resume: resume && resume.chat, onSave: scored && (s => s ? saveRun("exam", {form, caseId: bc.id, end: endAt, chat: s}) : clearRun("exam")), system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
+    const chat = mountChat($("#tChat"), {keep: 40, resume: resume && resume.chat, onSave: scored && (s => s ? saveRun("exam", {form, caseId: bc.id, end: endAt, chat: s}) : clearRun("exam")), system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
       opening: mode === "disc" ? "The patient's details and records are on my screen. Ask me to study them and give you my summary, then we'll discuss the case." : "Begin the examination. This is question 1 of " + nQ + ".",
       greet: unseen && $("#tLang").value !== "ar" ? `${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}. Please study the patient's details and all the records on your screen, then write your summary of the case.` : "",
       retrieve: t => excerpts(diverse(t + " " + bc.topic, 4)),
@@ -3522,12 +3610,17 @@ async function renderAdmin(){
 
 const myStats = () => { const g = ST.events.filter(e => e.score != null); return {name: ST.name || (FB.user && FB.user.email.split("@")[0]) || "Resident", xp: ST.xp, level: levelInfo(ST.xp).cur.n, avg: g.length ? Math.round(g.reduce((s, e) => s + e.score, 0) / g.length) : null, activities: ST.events.length, updatedAt: Date.now()}; };
 function fbSchedule(){ if (!FB.ready || !FB.user) return; clearTimeout(FB.timer); FB.timer = setTimeout(fbPush, 2500); }
-async function fbPush(){
+/* one write for the progress and one for the leaderboard row, each only when it has changed since the last sync:
+   the free database quota is shared by every resident, so an unchanged save costs nothing. "Sync now" always writes. */
+const FBLAST = {u: "", l: ""};
+async function fbPush(force){
   if (!FB.ready || !FB.user || FB.deleting) return;
+  force = force === true || (force && force.type === "click");
   try {
-    await FB.db.collection("users").doc(FB.user.uid).set({name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, srs: ST.srs || {}, updatedAt: Date.now()});
-    if (ST.plan) FB.db.collection("users").doc(FB.user.uid).set({plan: ST.plan}, {merge: true}).catch(() => {});
-    await FB.db.collection("leaderboard").doc(FB.user.uid).set(myStats());
+    const u = {name: ST.name || "", xp: ST.xp, events: ST.events.slice(-150), wrong: ST.wrong, srs: ST.srs || {}, ...(ST.plan ? {plan: ST.plan} : {})}, uj = JSON.stringify(u);
+    if (force || uj !== FBLAST.u){ await FB.db.collection("users").doc(FB.user.uid).set({...u, updatedAt: Date.now()}); FBLAST.u = uj; }
+    const s = myStats(), lj = JSON.stringify({...s, updatedAt: 0});
+    if (force || lj !== FBLAST.l){ await FB.db.collection("leaderboard").doc(FB.user.uid).set(s); FBLAST.l = lj; }
     setText("#fbStatus", "Synced " + new Date().toLocaleTimeString());
   } catch (e) { setText("#fbStatus", navigator.onLine === false ? "Offline — your progress is saved on this device and will sync later." : "Sync failed: " + (e.message || e)); }
 }
@@ -3698,7 +3791,8 @@ document.addEventListener("click", e => {
   openSheet(t.b, t.page, quote ? quote.textContent : "");
 }, true);
 document.addEventListener("keydown", e => { if (e.key === "Escape" && document.querySelector(".sheet")) closeSheet(); if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches(".cite[tabindex]")){ e.preventDefault(); e.target.click(); } });
-new MutationObserver(() => { if (!BOOKSTORE.length) return; document.querySelectorAll(".cite:not(.gk):not([tabindex])").forEach(c => { if (citeTarget(c.textContent)){ c.tabIndex = 0; c.setAttribute("role", "button"); c.title = "Open this page"; c.classList.add("go"); } else c.tabIndex = -1; }); }).observe(document.body, {childList: true, subtree: true});
+let citeQ = 0;
+new MutationObserver(() => { if (!BOOKSTORE.length || citeQ) return; citeQ = requestAnimationFrame(() => { citeQ = 0; document.querySelectorAll(".cite:not(.gk):not([tabindex])").forEach(c => { if (citeTarget(c.textContent)){ c.tabIndex = 0; c.setAttribute("role", "button"); c.title = "Open this page"; c.classList.add("go"); } else c.tabIndex = -1; }); }); }).observe(document.body, {childList: true, subtree: true});
 
 /* the phone's back button (and the browser's) goes to the previous screen; an open picture or book page closes first */
 const NAV = {d: 0, cur: "dashboard"};
@@ -3774,13 +3868,13 @@ function bind(){
   $("#evQuiz").addEventListener("click", () => startEvidence($("#evTopic").value, false));
   $("#evChips").addEventListener("click", e => { const b = e.target.closest("button"); if (b){ $("#evTopic").value = b.textContent; $("#evTopic").focus(); } });
   $("#evAsk").addEventListener("click", () => { if (evChat) evChat.turn("Where is the evidence?"); });
-  $("#myRun").addEventListener("click", () => { const t = $("#myText").value.trim(); if (t.length < 30){ toast("Paste or upload a case first."); return; } runMyCase(t); ST.events.push({type:"plan", score:null, topic:topicOf(t), xp:10, at:Date.now()}); ST.xp += 10; save(); renderDashboard(); });
+  $("#myRun").addEventListener("click", () => { const t = $("#myText").value.trim(); if (t.length < 30){ toast("Paste or upload a case first."); return; } runMyCase(t); const sig = t.length + ":" + t.slice(0, 120); let last = ""; try { last = localStorage.getItem("bdi.myrun") || ""; } catch {} if (sig === last) return; try { localStorage.setItem("bdi.myrun", sig); } catch {} ST.events.push({type:"plan", score:null, topic:topicOf(t), xp:10, at:Date.now()}); ST.xp += 10; save(); renderDashboard(); });
   $("#myViva").addEventListener("click", () => { const t = $("#myText").value.trim(); curCase = {id:"my", title:"Your case", topic:$("#myViva").dataset.topic || "General", viva:GENERIC_VIVA, text:t, stage: MY.files.filter(f => f.src).map(f => ({l: "", src: f.src}))}; $("#caseTitle").textContent = "Your case — viva"; $("#caseTopic").textContent = curCase.topic; setView("case"); curTab = "viva"; $$("#caseTabs .stab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === "viva"))); startViva(GENERIC_VIVA, t, curCase.topic, "my", $("#caseBody"), "your case"); });
   $("#cephForm").addEventListener("input", toolCeph); $("#spaceForm").addEventListener("input", toolSpace);
   $("#pName").addEventListener("change", e => { ST.name = e.target.value.trim(); save(); renderDashboard(); toast("Saved"); });
 }
 async function boot(){
-  initQuizUi(); renderBank(); bind(); fcInit(); renderDashboard(); $("#pName").value = ST.name || ""; toolCeph(); toolSpace(); renderAccount();
+  initQuizUi(); renderBank(); bind(); fcInit(); iotnInit(); renderDashboard(); $("#pName").value = ST.name || ""; toolCeph(); toolSpace(); renderAccount();
   setView("dashboard", false);
   try { history.replaceState({v: "dashboard", d: 0}, "", location.pathname + location.search); } catch {}
   try { const n = sessionStorage.getItem("bdi.note"); if (n){ GATE_NOTE = n; sessionStorage.removeItem("bdi.note"); } } catch {}
