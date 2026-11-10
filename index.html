@@ -630,7 +630,11 @@ nav.tabs.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000
  #v-mycase #myMentor{order:-1;flex-basis:100%}
  #cephForm .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:end}
 }
-/* "continue where you stopped" banner */
+/* "continue where you stopped" and "set up your key" banners */
+.keynudge{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:0 0 14px}
+.keynudge .actions{display:flex;gap:8px}
+.steps{margin:0;padding-inline-start:22px;display:grid;gap:4px;font-size:15px;line-height:1.55}
+#aiPane{scroll-margin-top:150px}
 .resume{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:0 0 14px}
 .resume .actions{display:flex;gap:8px}
 /* book page reader that opens over the current screen */
@@ -850,10 +854,16 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
     <button type="button" class="look-opt" data-look-pick="collegiate" aria-pressed="false"><span class="look-sw c"><i></i></span><b>Collegiate</b><small>Burgundy and ivory</small></button>
     <button type="button" class="look-opt" data-look-pick="classic" aria-pressed="false"><span class="look-sw n"><i></i></span><b>Night &amp; Gold</b><small>Black and gold</small></button>
    </div></div></div>
-   <div class="pane" hidden><div class="pane-h"><h2>AI tutor (optional)</h2></div><div class="pane-b stack">
-    <p class="hint" style="margin:0">The AI examiner works for free with no key (a public free service; about one reply every 15 seconds). Never type patient names or identifiers. For faster replies you can use a free Google Gemini key; any key stays only in this browser.</p>
-    <div class="grid"><div class="f"><label for="aiProv">Provider</label><select id="aiProv"><option value="free">Institute examiner (default)</option><option value="gemini">Google Gemini (free key)</option><option value="anthropic">Anthropic (own key)</option></select></div><div class="f"><label for="aiModel">Model (optional)</label><input type="text" id="aiModel" placeholder="claude-sonnet-5-5 / gemini-2.0-flash"></div><div class="f wide" id="aiKeyRow"><label for="aiKey">API key</label><input type="password" id="aiKey" autocomplete="off"></div></div>
-    <div class="actions"><button class="btn primary" id="aiSave">Save</button><button class="btn" id="aiTest">Test</button><button class="btn danger" id="aiClear">Remove key</button></div><p class="status" id="aiStatus"></p></div></div>
+   <div class="pane" id="aiPane"><div class="pane-h"><h2>AI examiner</h2></div><div class="pane-b stack">
+    <p class="hint" style="margin:0">The Institute examiner is shared by every resident, so it can be slow or busy at peak hours. For fast replies, use your own free Google key. It takes about a minute, once.</p>
+    <ol class="steps">
+     <li>Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> and sign in with your Google account.</li>
+     <li>Press <b>Create API key</b> and copy the key.</li>
+     <li>Paste it below and press <b>Save and test</b>.</li>
+    </ol>
+    <p class="hint" style="margin:0">Your key stays on this device only and is never sent to the Institute. With a free Google key, Google may use your questions and answers to improve its products, and people may read them. Never type patient names or identifiers.</p>
+    <div class="grid"><div class="f"><label for="aiProv">Examiner</label><select id="aiProv"><option value="gemini">Google Gemini (my own free key)</option><option value="free">Institute examiner (shared)</option><option value="anthropic">Anthropic (own key)</option></select></div><div class="f"><label for="aiModel">Model (optional)</label><input type="text" id="aiModel" placeholder="leave empty"></div><div class="f wide" id="aiKeyRow"><label for="aiKey">API key</label><input type="password" id="aiKey" autocomplete="off"></div></div>
+    <div class="actions"><button class="btn primary" id="aiTest">Save and test</button><button class="btn danger" id="aiClear">Remove key</button></div><p class="status" id="aiStatus" role="status"></p></div></div>
   </div>
   <div class="stack">
    <div class="pane"><div class="pane-h"><h2>Your account</h2></div><div class="pane-b" id="cloudBox"></div></div>
@@ -1897,7 +1907,7 @@ window.addEventListener("error", e => { if (/ResizeObserver/.test(e.message || "
 window.addEventListener("unhandledrejection", e => { e.preventDefault(); oops(e.reason); });
 function record(type, score, topic, xp){
   const b = levelInfo(ST.xp).i;
-  ST.xp += xp; ST.events.push({type, score, topic, xp, at: Date.now()}); ST.events = ST.events.slice(-400); save();
+  ST.xp += xp; ST.events.push({type, score, topic, xp, at: Date.now()}); ST.events = ST.events.slice(-400); save(); try { fbSchedule(3000); } catch {}
   const a = levelInfo(ST.xp).i;
   toast(a > b ? `Level up — you are now ${LEVELS[a].n}! (+${xp} XP)` : `+${xp} XP`);
   renderDashboard();
@@ -2179,7 +2189,7 @@ async function ligFix(store){
     .replace(/(^|[^A-Za-z])(ffi|ffl|fi|ff|fl) ([a-z]+)/g, (m, s, g, r) => has(g + r) ? s + g + r : m)
     .replace(/\b([b-hj-zB-HJ-Z])[ \n]([a-z]{3,})\b/g, (m, l, r) => has(l + r) ? l + r : m)); } b.pages = out; }
 }
-function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} try { renderDashboard(); } catch {} remindSchedule().catch(() => {}); }
+function afterLibrary(){ try { prepareBookCases(); initTutorUi(); } catch (e) { console.error(e); } try { offerResume(); } catch {} try { renderDashboard(); } catch {} try { keyNudge(); } catch {} remindSchedule().catch(() => {}); }
 function renderLibrary(){
   const pg = BOOKSTORE.reduce((a, b) => a + b.pages.length, 0);
   $("#libMeta").textContent = BOOKSTORE.length ? `${BOOKSTORE.length} books · ${pg.toLocaleString()} pages` : "";
@@ -3131,6 +3141,20 @@ const NO_AI_SETUP = "The AI examiner has not been set up yet — please tell you
 let NO_AI = NO_AI_SETUP;
 const aiProv = () => (ST.ai && ST.ai.key && ST.ai.provider && ST.ai.provider !== "free") ? ST.ai.provider : AIKEY ? "inst" : "none";
 const aiReady = () => aiProv() !== "none";
+const hasOwnKey = () => !!(ST.ai && ST.ai.key && ST.ai.provider && ST.ai.provider !== "free");
+/* once, at the first visit: ask the resident to set up a personal examiner key (asked again after a week if skipped) */
+function keyNudge(){
+  document.querySelectorAll(".keynudge").forEach(x => x.remove());
+  if (hasOwnKey() || !(FB.user || ENTERED)) return;
+  let at = 0; try { at = +localStorage.getItem("bdi.keyask") || 0; } catch {}
+  if (at && Date.now() - at < 7 * 864e5) return;
+  const host = $("#v-dashboard"); if (!host) return;
+  const b = document.createElement("div"); b.className = "keynudge notice2";
+  b.innerHTML = '<span>Get fast replies from the examiner: set up your own free Google key. It takes about a minute, once.</span><span class="actions"><button type="button" class="btn sm primary" data-key-go>Set it up</button><button type="button" class="btn sm" data-key-later>Not now</button></span>';
+  b.querySelector("[data-key-go]").onclick = () => { b.remove(); setView("account"); const p = $("#aiPane"); if (p) p.scrollIntoView({block: "start"}); };
+  b.querySelector("[data-key-later]").onclick = () => { try { localStorage.setItem("bdi.keyask", String(Date.now())); } catch {} b.remove(); };
+  host.prepend(b);
+}
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 function tutorSystem(caseBlock, mode){
   const lang = ($("#tLang") && $("#tLang").value) === "ar" ? "Write explanations in clear Modern Standard Arabic suitable for Egyptian residents; keep all orthodontic terms, measurements, headings and citations in English." : "British English.";
@@ -3200,7 +3224,7 @@ function gemRace(key, models, makeBody, onText){
             last = "The connection is too slow right now — please try again."; return;
           }
           const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
-          if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw Object.assign(new Error("The examiner key is not valid. Please tell your supervisor."), {fatal: true});
+          if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw Object.assign(new Error("The key was not accepted. If it is your own key, copy it again from aistudio.google.com/apikey. If you use the Institute examiner, tell your supervisor."), {fatal: true});
           /* a model that does not accept the fast setting is asked again without it */
           if (r.status === 400 && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
           if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; return; }
@@ -3247,7 +3271,7 @@ async function callGemini(key, model, messages, system, opts = {}){
           last = "The connection is too slow right now — please try again."; break;
         }
         const j = await r.json().catch(() => ({})), msg = (j.error && j.error.message) || "";
-        if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw new Error("The examiner key is not valid. Please tell your supervisor.");
+        if (r.status === 400 && /api key/i.test(msg) || r.status === 401 || r.status === 403) throw new Error("The key was not accepted. If it is your own key, copy it again from aistudio.google.com/apikey. If you use the Institute examiner, tell your supervisor.");
         /* a model that does not accept the fast setting is asked again without it */
         if (r.status === 400 && !gemNoBudget.has(m)){ gemNoBudget.add(m); continue; }
         if (r.status === 404 || (r.status === 400 && /model/i.test(msg))){ gemGone.add(m); last = msg; break; }
@@ -3399,8 +3423,8 @@ function initTutorUi(){
   const topics = TOPICS.filter(t => nT[t]);
   $("#tTopic").innerHTML = `<option value="">All topics (random)</option>` + topics.map(t => `<option value="${esc(t)}">${esc(t)} (${nT[t]} cases)</option>`).join("");
   fillTutorCases();
-  $("#tNote").hidden = aiReady() && BOOKCASES.length > 0;
-  $("#tNote").innerHTML = !BOOKCASES.length ? "The case book is still loading, or could not be loaded — check the Library tab." : !aiReady() ? NO_AI : "";
+  const own = hasOwnKey(), note = !BOOKCASES.length ? "The case book is still loading, or could not be loaded — check the Library tab." : !aiReady() ? NO_AI : !own ? 'You are using the shared Institute examiner, which can be slow at peak hours. <button type="button" class="btn sm" data-go="account">Set up your own free key</button>' : "";
+  $("#tNote").hidden = !note; $("#tNote").innerHTML = note;
 }
 function fillTutorCases(){
   const tp = $("#tTopic").value, list = BOOKCASES.filter(c => !tp || c.topic === tp);
@@ -3585,7 +3609,7 @@ async function renderAdmin(){
     const when = t => t ? new Date(t).toLocaleDateString() : "";
     box.innerHTML = `<div class="adm"><h3 style="margin-top:0">Waiting for your approval (${pend.length})</h3>${pend.length ? `<table>${pend.map(d => { const r = d.data(); return `<tr><td><b>${esc(r.name || "")}</b><br><span class="meta">${esc(r.email)} · ${when(r.at)}</span></td><td style="text-align:right"><button class="btn sm primary" data-apr="${esc(r.email)}" data-nm="${esc(r.name || "")}" data-rq="${esc(d.id)}">Approve</button> <button class="btn sm" data-rej="${esc(d.id)}">Reject</button></td></tr>`; }).join("")}</table>` : '<p class="muted">No one is waiting.</p>'}
       <h3>Approved (${ap.size})</h3>${ap.size ? `<table>${ap.docs.map(d => { const r = d.data(); return `<tr><td><b>${esc(r.name || "")}</b><br><span class="meta">${esc(d.id)} · since ${when(r.at)}</span></td><td style="text-align:right"><button class="btn sm danger" data-rev="${esc(d.id)}">Remove access</button></td></tr>`; }).join("")}</table>` : '<p class="muted">Nobody yet.</p>'}
-      <h3>Approve an email in advance</h3><form id="admAdd" class="actions"><input type="email" id="admEm" placeholder="resident@example.com" required style="flex:1 1 240px"><button class="btn primary">Approve</button></form>
+      <h3>Approve emails in advance</h3><p class="muted small">Paste one email or a whole list, separated by new lines, commas or spaces.</p><form id="admAdd" class="stack"><textarea id="admEm" rows="5" placeholder="resident1@example.com&#10;resident2@example.com" required></textarea><div class="actions"><button class="btn primary">Approve</button></div><p class="status" id="admAddSt" role="status"></p></form>
       <h3>Library key</h3><p class="muted small">${ky.exists ? "A key is set. Paste a new one only after re-encrypting the books." : "No key is set yet. Paste the key you were given."}</p><form id="admKey" class="actions"><input id="admK" placeholder="Library key" style="flex:1 1 260px" autocomplete="off"><button class="btn">Save key</button></form>
       <h3>AI examiner key (Google Gemini)</h3><p class="muted small">${aik.exists && aik.data().k ? "A key is set — the Exam room works for every approved resident." : "No key yet: the Exam room and the tutor discussions will not work until you add one. Create a free key at aistudio.google.com → Get API key, then paste it here."}</p><form id="admAi" class="actions"><input id="admAiK" type="password" placeholder="Gemini API key" style="flex:1 1 260px" autocomplete="off"><button class="btn primary">Save &amp; test</button></form><p class="status" id="admAiSt"></p></div>`;
     box.onclick = async e => {
@@ -3596,7 +3620,17 @@ async function renderAdmin(){
         else if (b.dataset.rev){ if (b.dataset.armed !== "1"){ b.dataset.armed = "1"; b.textContent = "Click again to confirm"; return; } await db.collection("approved").doc(b.dataset.rev).delete(); toast("Access removed"); renderAdmin(); }
       } catch (er) { toast(gErr(er)); }
     };
-    $("#admAdd").addEventListener("submit", async e => { e.preventDefault(); const em = $("#admEm").value.trim().toLowerCase(); try { await FB.db.collection("approved").doc(em).set({email: em, name: "", at: Date.now()}); toast("Approved"); renderAdmin(); } catch (er) { toast(gErr(er)); } });
+    $("#admAdd").addEventListener("submit", async e => {
+      e.preventDefault(); const st = $("#admAddSt"), isMail = x => /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+$/.test(x);
+      const toks = $("#admEm").value.toLowerCase().split(/[\s,;]+/).filter(Boolean), good = [...new Set(toks.filter(isMail))], bad = toks.filter(x => !isMail(x));
+      const fresh = good.filter(x => !have.has(x)), already = good.length - fresh.length;
+      if (!good.length){ st.textContent = "No valid email found."; return; }
+      st.textContent = "Approving…";
+      try {
+        for (let i = 0; i < fresh.length; i += 400){ const b = FB.db.batch(); fresh.slice(i, i + 400).forEach(em => b.set(FB.db.collection("approved").doc(em), {email: em, name: "", at: Date.now()})); await b.commit(); }
+        toast(`Approved ${fresh.length}`); renderAdmin().then(() => { const s2 = $("#admAddSt"); if (s2) s2.textContent = `Approved ${fresh.length}` + (already ? ` · already approved ${already}` : "") + (bad.length ? ` · not an email: ${bad.slice(0, 5).join(", ")}${bad.length > 5 ? "…" : ""}` : ""); });
+      } catch (er) { st.textContent = "⚠ " + gErr(er); }
+    });
     $("#admKey").addEventListener("submit", async e => { e.preventDefault(); const k = $("#admK").value.trim(); if (k.length < 40){ toast("That does not look like the key."); return; } try { await FB.db.collection("secrets").doc("lib").set({k, at: Date.now()}); toast("Key saved — reloading…"); setTimeout(() => location.reload(), 1200); } catch (er) { toast(gErr(er)); } });
     $("#admAi").addEventListener("submit", async e => {
       e.preventDefault(); const k = $("#admAiK").value.trim(); if (k.length < 20){ toast("That does not look like a Gemini key."); return; }
@@ -3609,7 +3643,16 @@ async function renderAdmin(){
 }
 
 const myStats = () => { const g = ST.events.filter(e => e.score != null); return {name: ST.name || (FB.user && FB.user.email.split("@")[0]) || "Resident", xp: ST.xp, level: levelInfo(ST.xp).cur.n, avg: g.length ? Math.round(g.reduce((s, e) => s + e.score, 0) / g.length) : null, activities: ST.events.length, updatedAt: Date.now()}; };
-function fbSchedule(){ if (!FB.ready || !FB.user) return; clearTimeout(FB.timer); FB.timer = setTimeout(fbPush, 2500); }
+/* the free database quota is shared by every resident: changes are collected and sent together after a minute,
+   sooner when an activity finishes, and straight away when the app is put in the background */
+function fbSchedule(ms = 60000){
+  if (!FB.ready || !FB.user || FB.deleting) return;
+  const at = Date.now() + ms; if (FB.timer && FB.dueAt <= at) return;
+  clearTimeout(FB.timer); FB.dueAt = at; FB.timer = setTimeout(() => { FB.timer = 0; FB.dueAt = 0; fbPush(); }, ms);
+}
+function fbFlush(){ if (FB.timer){ clearTimeout(FB.timer); FB.timer = 0; FB.dueAt = 0; fbPush(); } }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") try { fbFlush(); } catch {} });
+addEventListener("pagehide", () => { try { fbFlush(); } catch {} });
 /* one write for the progress and one for the leaderboard row, each only when it has changed since the last sync:
    the free database quota is shared by every resident, so an unchanged save costs nothing. "Sync now" always writes. */
 const FBLAST = {u: "", l: ""};
@@ -3658,7 +3701,7 @@ function bindLook(){ lookTheme(); const box = $("#lookOpts"); if (!box) return; 
 function renderAccount(){ try { renderAccount0(); } finally { const st = $("#fbStatus"); if (st && FB.err && !st.textContent) st.textContent = FB.err; } }
 function renderAccount0(){
   const a = ST.ai || {};
-  $("#aiProv").value = a.provider || "free"; $("#aiKey").value = a.key || ""; $("#aiModel").value = a.model || ""; $("#aiKeyRow").hidden = (a.provider || "free") === "free";
+  $("#aiProv").value = a.provider || "gemini"; $("#aiKey").value = a.key || ""; $("#aiModel").value = a.model || ""; $("#aiKeyRow").hidden = $("#aiProv").value === "free";
   const box = $("#cloudBox");
   if (!FB.cfg){
     box.innerHTML = `<p class="hint">Online accounts are not available right now. Your progress is still saved on this device.</p>`;
@@ -3841,9 +3884,8 @@ function bindExt(){
   $("#bkRandom").addEventListener("click", () => { if (!bankItems.length){ toast("No case matches the current search."); return; } openCase(rnd(bankItems).c.id, "read"); });
   $("#tutorForm").addEventListener("submit", startTutor); $("#tTopic").addEventListener("change", fillTutorCases); $("#tMode").addEventListener("change", tutorFormUi); $("#tTime").addEventListener("change", tutorFormUi); tutorFormUi();
   $("#aiProv").addEventListener("change", () => { $("#aiKeyRow").hidden = $("#aiProv").value === "free"; });
-  $("#aiSave").addEventListener("click", () => { ST.ai = {provider: $("#aiProv").value, key: $("#aiKey").value.trim(), model: $("#aiModel").value.trim()}; save(); initTutorUi(); toast("AI settings saved on this device"); });
-  $("#aiTest").addEventListener("click", async () => { ST.ai = {provider: $("#aiProv").value, key: $("#aiKey").value.trim(), model: $("#aiModel").value.trim()}; save(); $("#aiStatus").textContent = "Testing…"; try { const t = await callAI([{role: "user", content: "Reply with the single word: ready"}], "You are a test."); $("#aiStatus").textContent = "✓ Works: " + t.slice(0, 40); initTutorUi(); } catch (er) { $("#aiStatus").textContent = "⚠ " + (er.message || er); } });
-  $("#aiClear").addEventListener("click", () => { ST.ai = {provider: "free"}; save(); renderAccount(); initTutorUi(); toast("API key removed"); });
+  $("#aiTest").addEventListener("click", async () => { ST.ai = {provider: $("#aiProv").value, key: $("#aiKey").value.trim(), model: $("#aiModel").value.trim()}; save(); $("#aiStatus").textContent = ST.ai.provider !== "free" && !ST.ai.key ? "Paste your key first." : "Testing…"; if (ST.ai.provider !== "free" && !ST.ai.key) return; try { const t = await callAI([{role: "user", content: "Reply with the single word: ready"}], "You are a test."); $("#aiStatus").textContent = "✓ Saved. Your key works: " + t.slice(0, 40); initTutorUi(); keyNudge(); } catch (er) { $("#aiStatus").textContent = "⚠ " + (er.message || er); } });
+  $("#aiClear").addEventListener("click", () => { ST.ai = {provider: "free"}; save(); renderAccount(); initTutorUi(); keyNudge(); toast("API key removed"); });
 }
 function bind(){
   document.addEventListener("click", e => {
