@@ -367,6 +367,7 @@ details.mini{margin-bottom:12px}details.mini summary,details summary.muted{curso
 .recs:empty{display:none}
 .recs figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d0f;cursor:zoom-in;transition:box-shadow .2s}@media (hover:hover) and (pointer:fine){.recs figure:hover{box-shadow:var(--sh-2)}}
 .recs img{display:block;width:100%;height:auto;max-height:460px;object-fit:contain}
+.recs.own{display:block}.rgroup{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px}.rgroup figure{flex:var(--ar,1) 1 0;min-width:0;background:var(--card,#fff);cursor:zoom-in}.rgroup img{max-height:none;height:auto}.rgroup figcaption{font-size:12.5px;padding:3px 8px;color:var(--muted,#6b5b52)}.rgroup.pa figure{flex:1 1 100%}.rgroup.ce figure{flex:0 1 62%;margin-inline:auto}.cephtab{border-collapse:collapse;margin:6px 0 4px;background:#fff;border-radius:10px;overflow:hidden;width:100%;max-width:420px}.cephtab th{text-align:left;background:#efe6cf;padding:6px 10px;font-size:13.5px;width:55%}.cephtab td{padding:6px 10px;font-size:13.5px}.cephtab tr+tr>*{border-top:1px solid #e6dcc3}
 .recs figcaption{font-size:11.5px;padding:6px 10px;background:var(--surface);color:var(--muted)}
 .lbx{position:fixed;inset:0;background:rgba(8,8,10,.94);z-index:90;display:flex;align-items:center;justify-content:center;overflow:auto;animation:fadeIn .2s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -664,6 +665,50 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
 /* press feedback on everything tappable, the same small press the buttons already have */
 .bcase:active,.coll-cell:active,.chk:active,.src:active,.recs figure:active{transform:translateY(1px)}
 .tab:active,.stab:active,.cite.go:active,summary:active{opacity:.75}
+/* Guide: full-screen dark panels that reveal as you scroll */
+#v-guide{padding:0;margin-top:-20px}
+.gx{overflow-x:clip}
+.gx{background:radial-gradient(circle 420px at 90% 3%,rgba(201,162,78,.30),transparent),radial-gradient(circle 380px at 6% 45%,rgba(201,162,78,.14),transparent),radial-gradient(circle 420px at 94% 88%,rgba(201,162,78,.18),transparent),linear-gradient(165deg,#5b0f1c 0%,#2a0810 40%,#0d0204 75%,#000 100%);color:#f5f5f7;margin:0 -16px;padding:0 0 12vh;border-radius:0;font-family:inherit}
+@media (min-width:900px){.gx{margin:0;border-radius:24px}}
+.gx-bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;justify-content:center;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:linear-gradient(rgba(42,8,16,.92) 55%,transparent)}
+.gx-l{appearance:none;border:1px solid rgba(245,245,247,.3);background:transparent;color:rgba(245,245,247,.75);font:inherit;font-size:14px;padding:8px 18px;min-height:44px;border-radius:999px;cursor:pointer}
+.gx-l.on{background:#f5f5f7;color:#000;border-color:#f5f5f7}
+.gx-hero,.gx-p{min-height:78vh;display:flex;flex-direction:column;justify-content:center;padding:10vh 24px;max-width:760px;margin:0 auto}
+.gx-p{min-height:52vh;padding:7vh 24px;max-width:none;margin:0}.gx-p>*{max-width:712px;margin-left:auto;margin-right:auto;width:100%}
+.gx-p{background:linear-gradient(90deg,transparent,rgba(201,162,78,.55),transparent) top center/min(70%,520px) 1px no-repeat,radial-gradient(circle 300px at 100% 55%,rgba(201,162,78,.2),transparent)}
+.gx-p:nth-of-type(even){background:linear-gradient(90deg,transparent,rgba(201,162,78,.55),transparent) top center/min(70%,520px) 1px no-repeat,radial-gradient(circle 300px at 0% 55%,rgba(201,162,78,.2),transparent)}
+.gx-hero{min-height:88vh;align-items:center;text-align:center}
+.gx-logo{width:min(300px,72vw);height:auto;color:#f5f5f7;margin:0 auto 6vh;display:block}
+.gx-k{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:14px}
+.gx-h{margin:0 0 18px;font-size:clamp(34px,8vw,64px);line-height:1.05;font-weight:600;letter-spacing:-.02em;background:linear-gradient(90deg,#f5f5f7,#c9a24e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gx-big{font-size:clamp(42px,11vw,88px)}
+.gx-t{margin:0;font-size:clamp(20px,4.6vw,30px);line-height:1.35;font-weight:600;letter-spacing:-.01em}
+.gx-w{color:rgba(245,245,247,.34);transition:color .35s}
+.gx-w.on{color:#f5f5f7}
+.gx-p .gx-k,.gx-p .gx-h,.gx-hero>*{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.gx-p.in .gx-k,.gx-p.in .gx-h,.gx-hero.in>*{opacity:1;transform:none}
+.gx-p.in .gx-h{transition-delay:.08s}
+.gx-t b{font-weight:700}
+@media (prefers-reduced-motion:reduce){.gx-p .gx-k,.gx-p .gx-h,.gx-hero>*{opacity:1;transform:none;transition:none}.gx-w{color:#f5f5f7;transition:none}}
+/* each Guide panel carries a faint line drawing of its section */
+.gx-p{position:relative}
+.gx-p::before{content:"";position:absolute;right:-4%;top:50%;width:min(78vw,360px);aspect-ratio:1;transform:translateY(-50%) scale(.9);background:var(--mo) center/contain no-repeat;opacity:0;transition:opacity 1s,transform 1.2s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.gx-p.in::before{opacity:.8;transform:translateY(-50%) scale(1)}
+.gx-p>*{position:relative;z-index:1}
+#gdAr .gx-p::before{right:auto;left:-4%}
+@media (prefers-reduced-motion:reduce){.gx-p::before{opacity:.5;transform:translateY(-50%);transition:none}}
+.gx-p[data-m=start]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='80' cy='80' r='54'/%3E%3Cpath d='M62 80l14 14 26-30'/%3E%3C/svg%3E")}
+.gx-p[data-m=dash]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M26 130V30M26 130h110'/%3E%3Cpath d='M44 112l24-30 22 14 28-44 18 18'/%3E%3Ccircle cx='68' cy='82' r='4'/%3E%3Ccircle cx='90' cy='96' r='4'/%3E%3Ccircle cx='118' cy='52' r='4'/%3E%3C/svg%3E")}
+.gx-p[data-m=cases]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='38' y='24' width='84' height='112' rx='8'/%3E%3Cpath d='M60 24v-8h40v8M56 64h48M56 84h48M56 104h30'/%3E%3C/svg%3E")}
+.gx-p[data-m=tutor]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M26 40h84a8 8 0 0 1 8 8v44a8 8 0 0 1-8 8H66l-24 20v-20H26a8 8 0 0 1-8-8V48a8 8 0 0 1 8-8z'/%3E%3Cpath d='M46 62h48M46 78h30'/%3E%3Cpath d='M122 70h14a8 8 0 0 1 8 8v36a8 8 0 0 1-8 8h-8v14l-18-14h-26'/%3E%3C/svg%3E")}
+.gx-p[data-m=quiz]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='80' cy='80' r='52'/%3E%3Cpath d='M62 66a18 18 0 1 1 26 16c-6 3-8 7-8 14M80 112h.01'/%3E%3C/svg%3E")}
+.gx-p[data-m=parta]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M44 40h72M44 72h72M44 104h72'/%3E%3Cpath d='M26 40l5 5 8-9M26 72l5 5 8-9M26 104l5 5 8-9'/%3E%3Crect x='18' y='22' width='124' height='116' rx='10'/%3E%3C/svg%3E")}
+.gx-p[data-m=mycase]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M40 24h56l24 24v88H40z'/%3E%3Cpath d='M96 24v24h24M58 76h44M58 96h44M58 116h28'/%3E%3C/svg%3E")}
+.gx-p[data-m=evidence]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='68' cy='68' r='38'/%3E%3Cpath d='M96 96l40 40M52 68l12 12 22-24'/%3E%3C/svg%3E")}
+.gx-p[data-m=plan]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='26' y='34' width='108' height='100' rx='10'/%3E%3Cpath d='M26 62h108M54 22v20M106 22v20M48 84h12M74 84h12M100 84h12M48 108h12M74 108h12'/%3E%3C/svg%3E")}
+.gx-p[data-m=tools]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M30 128l100-100M30 128h60M30 128V68'/%3E%3Cpath d='M52 128a22 22 0 0 0-10-24M64 50l14 14M80 34l10 10M96 18l8 8'/%3E%3C/svg%3E")}
+.gx-p[data-m=library]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='26' y='40' width='22' height='96' rx='3'/%3E%3Crect x='54' y='28' width='22' height='108' rx='3'/%3E%3Crect x='82' y='48' width='22' height='88' rx='3'/%3E%3Cpath d='M112 54l22-6 22 78-22 6z'/%3E%3Cpath d='M20 140h140'/%3E%3C/svg%3E")}
+.gx-p[data-m=account]{--mo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160' stroke='%23c9a24e' stroke-opacity='.5' fill='none' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='80' cy='56' r='26'/%3E%3Cpath d='M28 136c0-30 24-48 52-48s52 18 52 48'/%3E%3C/svg%3E")}
 </style></head><body class="locked">
 <!-- Institute logo: Bristol skyline with the suspension bridge on two brackets (redrawn as vector from the Institute's logo) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="bdi-hang" width="9" height="60" patternUnits="userSpaceOnUse"><rect x="3" width="3" height="60" fill="currentColor"/></pattern>
@@ -702,6 +747,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
   <button class="tab" data-view="plan" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M8.5 15l2.3 2.3 4.7-4.8"/></svg>Study plan</button>
   <button class="tab" data-view="tools" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3v3"/><circle cx="12" cy="8" r="2"/><path d="M10.8 9.7L6 21M13.2 9.7L18 21M7.6 17h8.8"/></svg>Tools</button>
   <button class="tab" data-view="library" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v15H6a2 2 0 0 0-2 2z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H18"/><path d="M9 7h6"/></svg>Library</button>
+  <button class="tab" data-view="guide" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><path d="M12 17h.01"/></svg>Guide</button>
   <button class="tab" data-view="account" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
   <button class="tab" data-view="admin" aria-selected="false" id="tabAdmin" hidden><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Admin</button>
  </nav>
@@ -748,7 +794,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
 
 <section class="view" id="v-case" hidden>
  <div class="casetop"><button class="btn sm" data-go="cases">← Cases</button><h1 id="caseTitle"></h1><span class="pill" id="caseTopic"></span></div>
- <div class="stabs" id="caseTabs"><button class="stab" data-tab="read" aria-selected="true">Case &amp; references</button><button class="stab" data-tab="viva" aria-selected="false">Viva</button><button class="stab" data-tab="model" aria-selected="false">Model answer</button></div>
+ <div class="stabs" id="caseTabs"><button class="stab" data-tab="read" aria-selected="true">Case</button><button class="stab" data-tab="viva" aria-selected="false">Viva</button><button class="stab" data-tab="model" aria-selected="false">Model answer</button></div>
  <div id="caseBody"></div>
 </section>
 
@@ -843,6 +889,13 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
  <div class="pane"><div class="pane-b" id="adminBox"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading…</div></div>
 </section>
 
+<section class="view" id="v-guide" hidden>
+ <div class="gx" id="gx">
+  <div class="gx-bar"><button type="button" class="gx-l on" data-gl="en">English</button><button type="button" class="gx-l" data-gl="ar">عربي</button></div>
+  <div id="gdEn"><div class="gx-hero"><svg class="gx-logo" viewBox="220 140 1220 715" role="img" aria-label="Bristol Dental Institute"><use href="#bdi-sky" x="232" y="148" width="1190" height="366"/><g fill="currentColor" font-family="'Cormorant Garamond',Garamond,Georgia,serif" font-weight="500" text-anchor="middle"><text x="829" y="637" font-size="132" textLength="1186" lengthAdjust="spacingAndGlyphs">BRISTOL DENTAL</text><text x="830" y="789" font-size="132" textLength="746" lengthAdjust="spacingAndGlyphs">INSTITUTE</text></g><rect x="515" y="832" width="627" height="4" fill="currentColor"/></svg><div class="gx-k">How it works</div><h2 class="gx-h gx-big">Your training, explained.</h2></div><article class="gx-p" data-m="start"><div class="gx-k">01</div><h2 class="gx-h">Start here</h2><p class="gx-t">Pick any section below and start. The <b>Dashboard</b> shows what to do next. Your account works on one device at a time, and you stay signed in on it.</p></article><article class="gx-p" data-m="dash"><div class="gx-k">02</div><h2 class="gx-h">Dashboard</h2><p class="gx-t">Your points, recent activity and what to work on next.</p></article><article class="gx-p" data-m="cases"><div class="gx-k">03</div><h2 class="gx-h">Cases</h2><p class="gx-t">Real cases from the textbooks. Read the case presentation, then practise the viva: the examiner asks you questions one step at a time.</p></article><article class="gx-p" data-m="tutor"><div class="gx-k">04</div><h2 class="gx-h">Exam room</h2><p class="gx-t">Like the real exam: you get the patient's details and records, write your summary, and the examiner questions you. You can answer by typing or by pressing the microphone and speaking.</p></article><article class="gx-p" data-m="quiz"><div class="gx-k">05</div><h2 class="gx-h">Quiz</h2><p class="gx-t">Multiple-choice questions and the books' case questions, by topic, with an optional timer.</p></article><article class="gx-p" data-m="parta"><div class="gx-k">06</div><h2 class="gx-h">Part A preparation</h2><p class="gx-t">Single best answer questions and case scenarios. Every question shows its evidence with the book and the page.</p></article><article class="gx-p" data-m="mycase"><div class="gx-k">07</div><h2 class="gx-h">My case</h2><p class="gx-t">Write your own case and discuss it with a mentor. Ask anything, say when you do not know, and ask for the evidence. Photos and PDF pages stay on your phone. Never write the patient's name.</p></article><article class="gx-p" data-m="evidence"><div class="gx-k">08</div><h2 class="gx-h">Where is the evidence</h2><p class="gx-t">Type any topic, then press <b>Show me the evidence</b> to see what the textbooks say with the book and page, or <b>Ask me on this topic</b> to be questioned on it.</p></article><article class="gx-p" data-m="plan"><div class="gx-k">09</div><h2 class="gx-h">Study plan</h2><p class="gx-t">A daily plan built around your exam date and your weakest topics. If you miss a day it moves forward by itself.</p></article><article class="gx-p" data-m="tools"><div class="gx-k">10</div><h2 class="gx-h">Tools</h2><p class="gx-t">Easy IOTN, quick cephalometric interpretation and space analysis.</p></article><article class="gx-p" data-m="library"><div class="gx-k">11</div><h2 class="gx-h">Library</h2><p class="gx-t">The Institute's textbooks, searchable in full. Every citation gives the page number.</p></article><article class="gx-p" data-m="account"><div class="gx-k">12</div><h2 class="gx-h">Account</h2><p class="gx-t">Your profile, the daily reminder (in the phone app) and deleting your account.</p></article></div>
+  <div id="gdAr" dir="rtl" lang="ar" hidden><div class="gx-hero"><svg class="gx-logo" viewBox="220 140 1220 715" role="img" aria-label="Bristol Dental Institute"><use href="#bdi-sky" x="232" y="148" width="1190" height="366"/><g fill="currentColor" font-family="'Cormorant Garamond',Garamond,Georgia,serif" font-weight="500" text-anchor="middle"><text x="829" y="637" font-size="132" textLength="1186" lengthAdjust="spacingAndGlyphs">BRISTOL DENTAL</text><text x="830" y="789" font-size="132" textLength="746" lengthAdjust="spacingAndGlyphs">INSTITUTE</text></g><rect x="515" y="832" width="627" height="4" fill="currentColor"/></svg><div class="gx-k">كيف يعمل</div><h2 class="gx-h gx-big">تدريبك، مشروحا.</h2></div><article class="gx-p" data-m="start"><div class="gx-k">01</div><h2 class="gx-h">ابدأ من هنا</h2><p class="gx-t">اختر أي قسم من الأقسام التالية وابدأ. صفحة <b>Dashboard</b> تعرض ما تفعله بعد ذلك. حسابك يعمل على جهاز واحد في الوقت نفسه، وتبقى مسجلا للدخول عليه.</p></article><article class="gx-p" data-m="dash"><div class="gx-k">02</div><h2 class="gx-h">Dashboard</h2><p class="gx-t">نقاطك ونشاطك الأخير وما يجب أن تذاكره بعد ذلك.</p></article><article class="gx-p" data-m="cases"><div class="gx-k">03</div><h2 class="gx-h">Cases</h2><p class="gx-t">حالات حقيقية من الكتب. اقرأ عرض الحالة ثم تدرّب على الـ viva: الممتحن يسألك خطوة بخطوة.</p></article><article class="gx-p" data-m="tutor"><div class="gx-k">04</div><h2 class="gx-h">Exam room</h2><p class="gx-t">مثل الامتحان الحقيقي: تحصل على بيانات المريض والسجلات، وتكتب ملخصك، ثم يسألك الممتحن. تستطيع الإجابة بالكتابة أو بالضغط على الميكروفون والكلام.</p></article><article class="gx-p" data-m="quiz"><div class="gx-k">05</div><h2 class="gx-h">Quiz</h2><p class="gx-t">أسئلة اختيار من متعدد وأسئلة الحالات من الكتب، حسب الموضوع، مع مؤقت اختياري.</p></article><article class="gx-p" data-m="parta"><div class="gx-k">06</div><h2 class="gx-h">Part A preparation</h2><p class="gx-t">أسئلة أفضل إجابة وحالات سريرية. كل سؤال يعرض دليله مع اسم الكتاب ورقم الصفحة.</p></article><article class="gx-p" data-m="mycase"><div class="gx-k">07</div><h2 class="gx-h">My case</h2><p class="gx-t">اكتب حالتك أنت وناقشها مع مرشد. اسأل أي شيء، وقل إنك لا تعرف، واطلب الدليل. الصور وصفحات PDF تبقى على هاتفك. لا تكتب اسم المريض أبدا.</p></article><article class="gx-p" data-m="evidence"><div class="gx-k">08</div><h2 class="gx-h">Where is the evidence</h2><p class="gx-t">اكتب أي موضوع، ثم اضغط <b>Show me the evidence</b> لترى ما تقوله الكتب مع الكتاب والصفحة، أو <b>Ask me on this topic</b> ليسألك الممتحن فيه.</p></article><article class="gx-p" data-m="plan"><div class="gx-k">09</div><h2 class="gx-h">Study plan</h2><p class="gx-t">خطة يومية مبنية على موعد امتحانك وأضعف مواضيعك. إذا فاتك يوم تتحرك الخطة تلقائيا.</p></article><article class="gx-p" data-m="tools"><div class="gx-k">10</div><h2 class="gx-h">Tools</h2><p class="gx-t">Easy IOTN وتفسير سريع للسيفالومتري وتحليل المسافات.</p></article><article class="gx-p" data-m="library"><div class="gx-k">11</div><h2 class="gx-h">Library</h2><p class="gx-t">كتب المعهد قابلة للبحث بالكامل. كل اقتباس يذكر رقم الصفحة.</p></article><article class="gx-p" data-m="account"><div class="gx-k">12</div><h2 class="gx-h">Account</h2><p class="gx-t">ملفك الشخصي والتذكير اليومي (في تطبيق الهاتف) وحذف حسابك.</p></article></div>
+ </div>
+</section>
 <section class="view" id="v-account" hidden>
  <div class="phead"><div><div class="eyebrow">Settings</div><h1>Account</h1></div></div>
  <div class="cols2">
@@ -869,7 +922,7 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
    <div class="pane"><div class="pane-h"><h2>Your account</h2></div><div class="pane-b" id="cloudBox"></div></div>
    <div class="pane" id="boardPane" hidden><div class="pane-h"><h2>Leaderboard</h2><span class="meta">top 25 by XP</span></div><div class="pane-b" id="boardBox"></div></div>
    <div class="pane" id="remindPane" hidden><div class="pane-h"><h2>Study reminder</h2></div><div class="pane-b"><label class="chk"><input type="checkbox" id="remOn"> Remind me to study every day</label><label class="chk" style="margin-top:8px"><input type="checkbox" id="remFact" checked> With one fact from the books each day, and its reference</label><div class="f" style="margin-top:10px;max-width:220px"><label for="remAt">Time</label><input type="time" id="remAt" value="20:00"></div><p class="status" id="remSt"></p></div></div>
-   <div class="pane"><div class="pane-h"><h2>About</h2></div><div class="pane-b"><p class="hint" style="margin:0 0 8px">BDI Trainer is for education and exam preparation only. It is not medical advice and does not replace clinical judgement.</p><p style="margin:0"><a href="https://bristol-ortho.github.io/bdi-trainer/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></div></div>
+   <div class="pane"><div class="pane-h"><h2>About</h2></div><div class="pane-b"><p class="hint" style="margin:0 0 8px" id="voiceState" aria-live="polite"></p><p class="hint" style="margin:0 0 8px">BDI Trainer is for education and exam preparation only. It is not medical advice and does not replace clinical judgement.</p><p style="margin:0"><a href="https://bristol-ortho.github.io/bdi-trainer/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></div></div>
   </div>
  </div>
 </section>
@@ -877,8 +930,9 @@ button,.btn,.tab{-webkit-user-select:none;user-select:none}
 </div><footer class="copybar">© 2026 Bristol Dental Institute. All rights reserved.</footer></main>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>window.BDI_VER={"examiner-idle.mp4": "7c7fe52a58", "examiner-talk.mp4": "a97b96ddab", "examiner.jpg": "a523633d26", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "947324b57c", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "ccf3e8a9cc"};</script>
+<script>window.BDI_VER={"c1.dat": "da09838d59", "c2.dat": "c9708ddf36", "examiner-idle.mp4": "7c7fe52a58", "examiner-talk.mp4": "a97b96ddab", "examiner.jpg": "a523633d26", "k1.dat": "20f7a4eeea", "k2.dat": "fcb50b68d7", "k3.dat": "52b0db77ff", "k4.dat": "00ad662a28", "k5.dat": "79afac1dee", "k6.dat": "55fcd1192a", "m1.dat": "4b6437f716", "m10.dat": "ed736aad8c", "m2.dat": "76212c7d61", "m3.dat": "fb85b7a381", "m4.dat": "2bc4e695b3", "m5.dat": "30b308165c", "m6.dat": "f519cf6a7a", "m7.dat": "ae57d4a596", "m9.dat": "c568d1e59b", "q1.dat": "7175ed9bfb"};</script>
 <script src="config.js"></script>
+<script defer src="tts/bdi-tts.js"></script>
 <script>/* Bristol Dental Institute — Orthodontic Fellowship Trainer: content (cases, viva rubrics, quiz bank) */
 const BOOKS = [
   {id:"mitchell", file:"k1.dat", title:"Littlewood & Mitchell, Intro to Orthodontics 5e"},
@@ -956,7 +1010,7 @@ Ceph: SNA 80, SNB 76, ANB 4, interincisal angle 150°. IOTN DHC 4f.`,
 Family history: father has a Class III jaw pattern and had jaw surgery.
 Extra-oral: moderate Class III skeletal base with maxillary retrusion, concave profile, average vertical proportions. No anterior shift on closing into centric relation.
 Intra-oral: mixed dentition. Anterior crossbite UR1, UL1, UL2, overjet −2 mm, overbite 2 mm. Upper arch 4 mm crowding and narrow with a bilateral posterior crossbite tendency. Molars half unit Class III.
-Ceph: SNA 77, SNB 80, ANB −3, Wits −6, MMPA 28. IOTN DHC 4b.`,
+Ceph: SNA 77, SNB 80, ANB −3, Wits −6, MMPA 28. IOTN DHC 3b.`,
  problems:["Skeletal: moderate Class III with maxillary retrusion, positive family history (poor prognosis for growth)","Dental: anterior crossbite, upper crowding, narrow upper arch","Soft tissue: concave profile","Timing: pre-pubertal, growth modification window"],
  aims:["Correct crossbite and reverse overjet","Improve maxillary position and arch width","Maintain until growth complete, then decide on camouflage or surgery","Psychosocial: improve appearance"],
  options:[["Observe / delay","Avoids treatment burden","Crossbite damage to incisors; psychosocial; reduced options later"],["Rapid maxillary expansion + facemask / reverse headgear","Maxillary advancement in pre-pubertal child; improves profile","Compliance; relapse; mandibular growth may overcome result"],["Upper removable appliance (anterior crossbite correction)","Simple, for dentoalveolar crossbite only","Not for skeletal Class III"],["Camouflage fixed appliances later / orthognathic surgery after growth","Definitive","Not until growth complete; need to plan lower incisor decompensation"]],
@@ -1007,7 +1061,7 @@ Intra-oral: Class I, mild upper crowding 4 mm, retained UL-C, overjet 4 mm. Good
 Medical history nil. Patient and parents want to avoid prolonged treatment but accept appliances.`,
  problems:["UL3 palatally impacted, resorption on UL2","Retained UL-C","Upper crowding 4 mm, space lacking for UL3","Treatment duration concerns"],
  aims:["Bring UL3 into alignment safely","Protect UL1/UL2 roots","Provide adequate space","Healthy periodontium, aesthetic gingival level"],
- options:[["Interceptive: extract UL-C and observe","Eruption improves in ~ 60–80% if done early and if canine is not severely displaced","Not enough alone here: position is unfavourable"],["Surgical exposure and orthodontic traction (closed or open) with fixed appliances","Natural tooth preserved; standard treatment","Long treatment; risk to adjacent roots; ankylosis possible"],["Extraction of UL3 and space closure/replacement","Shorter","Loss of canine guidance, prosthetic implications"],["No treatment with periodic radiographs","None","Resorption risk; not advised"]],
+ options:[["Interceptive: extract UL-C and observe","Eruption chances improve when done early (about 10–12 years) and the canine is not severely displaced","Not enough alone here: position is unfavourable"],["Surgical exposure and orthodontic traction (closed or open) with fixed appliances","Natural tooth preserved; standard treatment","Long treatment; risk to adjacent roots; ankylosis possible"],["Extraction of UL3 and space closure/replacement","Shorter","Loss of canine guidance, prosthetic implications"],["No treatment with periodic radiographs","None","Resorption risk; not advised"]],
  plan:["Extract UL-C; create space with fixed appliances (± upper premolar extraction)","Surgical exposure UL3 with bonded attachment, traction guided away from the UL2 root first","Align, finish, retain; monitor root resorption with radiographs"],
  planPts:[["Extract primary canine","primary|deciduous|c\\b|retained"],["Space creation / fixed appliance","space|fixed|brace|appliance"],["Surgical exposure and traction","exposure|traction|bond|attachment|closed|open"],["Radiographic review for resorption","radiograph|resorption|cbct|review"],["Retention","retain|retention"]],
  viva:[
@@ -1015,8 +1069,8 @@ Medical history nil. Patient and parents want to avoid prolonged treatment but a
   model:"Clinically, assess palpability and displacement of lateral incisors. Radiographically use parallax with two views (OPG plus upper anterior occlusal, or two periapicals); the tube shift rule (SLOB: same lingual, opposite buccal) localises the tooth. CBCT is indicated when root resorption of adjacent teeth is suspected or position is unclear.",
   pts:[["Palpation / clinical examination","palpat|clinic"],["Parallax (SLOB) / two views","parallax|slob|tube shift|two views|occlusal|periapical"],["OPG","opg|dpt|panoramic"],["CBCT for resorption / precise localisation","cbct|cone beam|3d"]]},
  {q:"What factors predict a poor prognosis for the impacted canine?",
-  model:"Older age, severe angulation (more than 31° from the midline), the crown overlapping more than half of the lateral incisor root or reaching the central incisor (higher sectors), a high vertical position with a long distance from the occlusal plane; also lack of space and severe resorption of adjacent teeth.",
-  pts:[["Age","age|older"],["Angulation to midline","angul|angle|midline|31"],["Overlap with lateral incisor / sector","overlap|sector|crown"],["Vertical height","vertical|height|high"],["Space / resorption","space|resorption"]]},
+  model:"Older age, severe angulation (more than about 30° from the midline), the crown reaching the central incisor (sectors 4–5), a high vertical position with a long distance from the occlusal plane; also lack of space and severe resorption of adjacent teeth.",
+  pts:[["Age","age|older"],["Angulation to midline","angul|angle|midline|30|31"],["Overlap with lateral incisor / sector","overlap|sector|crown"],["Vertical height","vertical|height|high"],["Space / resorption","space|resorption"]]},
  {q:"What would be your management and what risks do you warn the patient about?",
   model:"Extract UL-C, create space, surgical exposure of UL3 with attachment and orthodontic traction, then align and retain. Risks: root resorption of adjacent teeth, ankylosis/failed traction, loss of the tooth, prolonged treatment, gingival recession and periodontal problems. Alternatives (extraction of UL3) are explained.",
   pts:[["Extract primary canine / create space","extract|primary|space"],["Surgical exposure + traction","expos|tract|bond|attach"],["Risks: resorption / ankylosis","resorption|ankyl|failed|fail"],["Alternatives (extraction/no treatment)","alternativ|extract|observe|no treatment"],["Consent and length of treatment","consent|length|duration|prolonged|time"]]}
@@ -1087,8 +1141,7 @@ Current: overjet 3 mm, overbite 3 mm, Class I buccal segments.`,
   pts:[["No compliance / effective","complian|effective|no need"],["Aesthetic","aesthetic|esthetic|invisible"],["Plaque / calculus / hygiene","plaque|calculus|hygiene|periodontal"],["Debond / breakage / unwanted movement","debond|break|fail|unwanted|twist|movement"]]}
  ]},
 
-/* ---- draft cases (added 2026-11-01): visible to the supervisor only until reviewed; remove draft:true to publish ---- */
-{id:"c9", draft:true, title:"Adult Class II division 1 — camouflage with extractions", topic:"Class II division 1", level:2,
+{id:"c9", title:"Adult Class II division 1 — camouflage with extractions", topic:"Class II division 1", level:2,
  text:`24-year-old woman.
 Complaint: "My front teeth stick out and I can't close my lips." Wants treatment without surgery.
 Medical history: fit and well. Dental history: regular attender, good oral hygiene.
@@ -1105,7 +1158,7 @@ Ceph: SNA 81, SNB 77, ANB 4, MMPA 26, UI–MxP 121, LI–MnP 96.`,
   model:"She is an adult with no growth, so growth modification is not possible. The skeletal discrepancy is mild (ANB 4°, average vertical) and the overjet is mainly dentoalveolar from proclined upper incisors (UI–MxP 121°). The profile is acceptable to her and she declines surgery, so tooth movement to mask the skeletal pattern is appropriate.",
   pts:[["No growth / adult","adult|no growth|growth (is )?complete|not growing"],["Mild skeletal discrepancy","mild|anb|skeletal"],["Proclined upper incisors / dentoalveolar","procli|dentoalveolar|incisor"],["Acceptable profile / patient declines surgery","profile|declin|surgery|accept"]]},
  {q:"Which teeth would you extract and why?",
-  model:"Upper first premolars only. They give space close to the incisors to retract them and reduce the overjet, and to relieve the 2 mm upper crowding. The lower arch is aligned with acceptable incisor inclination, so it is left unextracted; the molars finish in a full unit Class II with Class I canines.",
+  model:"Upper first premolars only. They give space close to the incisors to retract them and reduce the overjet, and to relieve the 2 mm upper crowding. The lower arch is aligned with acceptable incisor inclination, so it is left unextracted; the molars finish in Class II (they are not brought to Class I, because the space is used for incisor retraction) with Class I canines.",
   pts:[["Upper first premolars","upper (first )?premolar|upper 4|4s"],["Space to retract incisors / reduce overjet","retract|overjet|space"],["Lower arch non-extraction","lower (arch )?(non|not|no)|non ?extraction|lower.*aligned"],["Class II molar finish","class2 molar|class ?2 molar|full unit|molars? (in|to) class ?2"]]},
  {q:"How will you manage anchorage?",
   model:"Anchorage requirement in the upper arch is maximum: most of the extraction space is needed for incisor retraction. Options are TADs (direct or indirect anchorage), a transpalatal arch or Nance, or headgear; in an adult TADs avoid compliance. Light forces, retracting canines first or en masse with TAD support, and avoiding unnecessary tip and torque that tax anchorage.",
@@ -1115,7 +1168,7 @@ Ceph: SNA 81, SNB 77, ANB 4, MMPA 26, UI–MxP 121, LI–MnP 96.`,
   pts:[["Root resorption","resorption"],["Decalcification","decalcif|white spot|caries"],["Anchorage loss / residual overjet","anchorage loss|residual overjet|loss of anchorage"],["Relapse / retention","relapse|retention|retain"],["Informed consent with alternatives","consent|option|alternative|surgery"]]}
  ]},
 
-{id:"c10", draft:true, title:"Class II division 1 with increased vertical proportions", topic:"Class II division 1", level:3,
+{id:"c10", title:"Class II division 1 with increased vertical proportions", topic:"Class II division 1", level:3,
  text:`11-year-old boy, early pubertal (CVMS 2–3).
 Complaint: prominent upper teeth; mother concerned about "gummy" smile.
 Medical history: mild asthma, mouth breather. Dental history: no caries.
@@ -1135,14 +1188,14 @@ Ceph: SNA 80, SNB 73, ANB 7, MMPA 35, UI–MxP 115, LI–MnP 92.`,
   model:"Use a design that controls vertical development: Twin Block with full occlusal coverage and no trimming of the blocks (so posterior teeth are not allowed to erupt), or add high-pull headgear to the upper block. Avoid appliances that open the bite further. Construct the bite with limited vertical opening.",
   pts:[["Do not trim blocks / occlusal coverage","trim|occlusal coverage|bite block|block"],["High-pull headgear","high ?pull|headgear"],["Prevent posterior eruption","erupt|posterior|vertical"],["Twin Block or named appliance","twinblock|functional|herbst|van beek"]]},
  {q:"Which fixed appliance mechanics would you avoid and why?",
-  model:"Avoid extrusive mechanics: prolonged Class II elastics, extrusion of molars, cervical-pull headgear, and excessive levelling with reverse curves in the upper arch. These rotate the mandible backwards, increase face height and worsen the Class II. Consider TADs for molar intrusion if vertical control is needed.",
+  model:"Avoid extrusive mechanics: prolonged Class II elastics, extrusion of molars, cervical-pull headgear, and excessive levelling that extrudes molars. These rotate the mandible backwards, increase face height and worsen the Class II. Consider TADs for molar intrusion if vertical control is needed.",
   pts:[["Class II elastics","elastic"],["Cervical headgear","cervical"],["Molar extrusion / backward rotation","extrus|backward|rotat|face height"],["TADs for intrusion","tad|miniscrew|intrus"]]},
  {q:"How would you explain the prognosis to his mother?",
   model:"Explain honestly that his growth pattern is downward and backward, so early treatment will reduce the overjet and protect the teeth but may not fully correct the jaw relationship. Results depend on growth and his cooperation. If the face continues to lengthen, jaw surgery may be advised once growth is complete (late teens). Retention will be long term.",
   pts:[["Growth pattern unfavourable","growth|downward|backward|vertical"],["Benefit: overjet / trauma","overjet|trauma|protect"],["Compliance","complian|cooperat|wear"],["Possible surgery after growth","surg|after growth|growth (is )?complete"],["Retention","retain|retention|long term"]]}
  ]},
 
-{id:"c11", draft:true, title:"Adult Class II division 2 with deep bite", topic:"Class II division 2", level:2,
+{id:"c11", title:"Adult Class II division 2 with deep bite", topic:"Class II division 2", level:2,
  text:`32-year-old man.
 Complaint: "My front teeth bite into my gums and the lower teeth are crowded."
 Medical history: fit and well. Dental history: worn lower incisors, mild generalised gingivitis.
@@ -1169,7 +1222,7 @@ Ceph: SNA 82, SNB 79, ANB 3, MMPA 20, UI–MxP 92, interincisal angle 160°.`,
   pts:[["Upper bonded retainer","bonded|fixed retainer|palatal retainer"],["Bite plane retainer","bite plane"],["Lower retainer","lower"],["Long-term","long|life|indefinite|years"]]}
  ]},
 
-{id:"c12", draft:true, title:"Anterior crossbite with mandibular displacement", topic:"Class III", level:1,
+{id:"c12", title:"Anterior crossbite with mandibular displacement", topic:"Class III", level:1,
  text:`8-year-old boy, mixed dentition.
 Complaint: parents notice "his bottom teeth are in front of the top ones".
 Medical history: fit and well. Dental history: caries-free.
@@ -1196,7 +1249,7 @@ No ceph taken.`,
   pts:[["Review recession / hygiene","recession|hygiene|gingiv"],["Monitor growth for Class III","growth|class3|monitor"],["Reassess permanent dentition","permanent|crowd|reassess|review"]]}
  ]},
 
-{id:"c13", draft:true, title:"Borderline Class III — camouflage in a late teenager", topic:"Class III", level:3,
+{id:"c13", title:"Borderline Class III — camouflage in a late teenager", topic:"Class III", level:3,
  text:`17-year-old girl, growth nearly complete (serial cephalograms stable over 12 months).
 Complaint: "My lower teeth are in front"; happy with her face.
 Medical history: fit and well.
@@ -1223,7 +1276,7 @@ Ceph: SNA 80, SNB 81, ANB −1, MMPA 25, UI–MxP 116, LI–MnP 84.`,
   pts:[["Recession / thin bone","recession|bone|dehiscence|gingiv"],["Relapse / late growth","relapse|late growth|growth"],["Root resorption","resorption"],["Profile changes","profile"]]}
  ]},
 
-{id:"c14", draft:true, title:"Digit-sucking anterior open bite in a child", topic:"Open bite", level:1,
+{id:"c14", title:"Digit-sucking anterior open bite in a child", topic:"Open bite", level:1,
  text:`8-year-old girl, early mixed dentition.
 Complaint: parents worried about "a gap between the front teeth when she bites".
 Medical history: fit and well. Habit: sucks right thumb at night and while watching TV.
@@ -1249,7 +1302,7 @@ Intra-oral: anterior open bite 4 mm, asymmetric (greater on the right). Upper in
   pts:[["Quad-helix","quad"],["Removable expansion screw alternative","screw|removable|ura"],["Overexpand / retain 3 months","over ?expand|retain|3 month|three month"],["Eliminates displacement","displacement"]]}
  ]},
 
-{id:"c16", draft:true, title:"Class I deep traumatic overbite in an adolescent", topic:"Deep bite", level:1,
+{id:"c16", title:"Class I deep traumatic overbite in an adolescent", topic:"Deep bite", level:1,
  text:`13-year-old boy, late mixed to early permanent dentition, growing.
 Complaint: "My lower teeth hit the roof of my mouth"; gums sore behind upper front teeth.
 Medical history: fit and well.
@@ -1276,7 +1329,7 @@ Ceph: ANB 2, MMPA 21, UI–MxP 108, LI–MnP 96.`,
   pts:[["Upper retainer with bite plane","bite plane|hawley"],["Long term","long|indefinite|years"],["Interincisal angle / occlusal stop","interincisal|stop|angle"],["Bonded retainer","bonded"]]}
  ]},
 
-{id:"c17", draft:true, title:"Adult deep bite with worn incisors — restorative space", topic:"Deep bite", level:3,
+{id:"c17", title:"Adult deep bite with worn incisors — restorative space", topic:"Deep bite", level:3,
  text:`45-year-old woman referred by her dentist.
 Complaint: short, worn upper front teeth; dentist cannot restore them because there is no space.
 Medical history: gastro-oesophageal reflux, controlled. Bruxism reported by partner.
@@ -1299,7 +1352,7 @@ Intra-oral: localised palatal wear of upper incisors with dentine exposure; over
   pts:[["Erosion / reflux / diet","erosion|reflux|diet|acid"],["Attrition / bruxism","attrition|brux|grind"],["Restorations fail otherwise","fail|continue"],["Splint / referral","splint|guard|refer|gp"]]}
  ]},
 
-{id:"c18", draft:true, title:"Poor-prognosis first permanent molars in a child", topic:"Crowding & extractions", level:2,
+{id:"c18", title:"Poor-prognosis first permanent molars in a child", topic:"Crowding & extractions", level:2,
  text:`9-year-old boy, mixed dentition.
 Complaint: referred by general dentist — "the back teeth are breaking down".
 Medical history: fit and well. Dental history: molar–incisor hypomineralisation (MIH); hypersensitive molars.
@@ -1323,7 +1376,7 @@ Radiograph: all permanent teeth present including third molar crypts; lower seco
   pts:[["Radiograph: all teeth present","radiograph|opg|panoramic|present|third molar|hypodontia"],["Prognosis of other teeth","prognosis|incisor|other teeth"],["Crowding / skeletal pattern","crowd|skeletal"],["Cooperation / anaesthesia","anaesthe|anesthe|ga|cooperat|cope|sedation"]]}
  ]},
 
-{id:"c19", draft:true, title:"Adult borderline crowding — IPR and aligners", topic:"Crowding & extractions", level:2,
+{id:"c19", title:"Adult borderline crowding — IPR and aligners", topic:"Crowding & extractions", level:2,
  text:`29-year-old man.
 Complaint: crooked lower front teeth; wants "invisible" treatment.
 Medical history: fit and well. Dental history: good hygiene, no restorations in anterior teeth.
@@ -1347,7 +1400,7 @@ Ceph: ANB 3, MMPA 26, LI–MnP 94.`,
   pts:[["Lifelong","life|long|indefinite"],["Bonded lower retainer","bonded|fixed"],["Removable night retainer","vacuum|essix|removable|night"],["Maintenance / relapse","relapse|maintenance|repair|check"]]}
  ]},
 
-{id:"c20", draft:true, title:"Unerupted upper central incisor and a supernumerary", topic:"Impacted teeth", level:2,
+{id:"c20", title:"Unerupted upper central incisor and a supernumerary", topic:"Impacted teeth", level:2,
  text:`9-year-old boy.
 Complaint: "My front tooth has not come through"; UL1 missing while UR1 erupted 18 months ago.
 Medical history: fit and well.
@@ -1356,9 +1409,9 @@ Intra-oral: UL1 unerupted with space partially lost (6 mm available, 8.5 mm need
 Radiographs: upper standard occlusal and periapical show a tuberculate supernumerary palatal to UL1 crown; UL1 root about two-thirds formed, correctly angulated.`,
  problems:["Unerupted UL1 caused by a tuberculate supernumerary","Space loss for UL1","Aesthetic concern"],
  aims:["Remove the obstruction","Create adequate space","Allow or assist eruption of UL1","Align the upper labial segment"],
- options:[["Monitor","None","UL1 will not erupt while the supernumerary is present"],["Remove supernumerary and create space; wait for spontaneous eruption","Up to 75% erupt spontaneously within 18 months","May fail; needs space maintenance"],["Remove supernumerary and expose/bond UL1 at the same time","Fewer GAs if eruption unlikely","Surgery, may be unnecessary"]],
- plan:["Localise with parallax radiographs (periapical + occlusal) or CBCT if needed","Create/maintain space for UL1 (upper removable or sectional fixed) before or after surgery","Remove supernumerary under GA/LA","Monitor eruption up to 18 months; if no progress, expose and bond with gold chain, apply traction","Align with fixed appliances and retain"],
- planPts:[["Localise (parallax / CBCT)","parallax|cbct|localis|radiograph"],["Space creation / maintenance","space"],["Remove supernumerary","remove|extract|supernumerary"],["Monitor spontaneous eruption","spontaneous|monitor|wait|18 month|eruption"],["Expose and bond if needed","expos|bond|chain|traction"]],
+ options:[["Monitor","None","UL1 will not erupt while the supernumerary is present"],["Remove supernumerary and create space; wait for spontaneous eruption","Many erupt spontaneously once the obstruction is gone and there is enough space","May fail; needs space maintenance"],["Remove supernumerary and expose/bond UL1 at the same time","Fewer GAs if eruption unlikely","Surgery, may be unnecessary"]],
+ plan:["Localise with parallax radiographs (periapical + occlusal) or CBCT if needed","Create/maintain space for UL1 (upper removable or sectional fixed) before or after surgery","Remove supernumerary under GA/LA","Monitor eruption for about 12 months; if it has not erupted, expose and bond with a gold chain and apply traction","Align with fixed appliances and retain"],
+ planPts:[["Localise (parallax / CBCT)","parallax|cbct|localis|radiograph"],["Space creation / maintenance","space"],["Remove supernumerary","remove|extract|supernumerary"],["Monitor spontaneous eruption","spontaneous|monitor|wait|12 month|18 month|year|eruption"],["Expose and bond if needed","expos|bond|chain|traction"]],
  viva:[
  {q:"What causes failed eruption of an upper central incisor?",
   model:"Supernumerary teeth (most common, especially tuberculate type), dilaceration after trauma to the primary predecessor, retained primary incisor, crowding/space loss, cysts or odontomes, and rarely primary failure of eruption or syndromes (cleidocranial dysplasia).",
@@ -1367,11 +1420,11 @@ Radiographs: upper standard occlusal and periapical show a tuberculate supernume
   model:"Parallax: two radiographs taken from different horizontal or vertical angles (e.g. periapical and upper standard occlusal). The object further from the tube moves in the same direction as the tube (SLOB rule), so a palatal object moves with the tube. CBCT if relationships to roots are unclear.",
   pts:[["Parallax","parallax"],["Two radiographs (periapical + occlusal)","periapical|occlusal|two"],["SLOB rule","slob|same lingual|moves (with|in the same)"],["CBCT if unclear","cbct|cone beam"]]},
  {q:"After removing the supernumerary, what then?",
-  model:"Ensure adequate space for UL1 (at least the mesiodistal width); maintain it with an appliance. About half to three-quarters of incisors erupt spontaneously within 18 months if space is adequate and root development incomplete. If not, surgical exposure with a closed eruption technique (gold chain) and orthodontic traction.",
-  pts:[["Space for UL1","space"],["Spontaneous eruption likely (months)","spontaneous|18|month|erupt"],["Exposure and gold chain if fails","expos|chain|bond|traction"],["Appliance to maintain space","appliance|maintain"]]}
+  model:"Ensure adequate space for UL1 (at least the mesiodistal width); maintain it with an appliance. Many incisors erupt spontaneously if space is adequate and root development is incomplete. If the tooth has not erupted within about a year, surgical exposure with a closed eruption technique (gold chain) and orthodontic traction.",
+  pts:[["Space for UL1","space"],["Spontaneous eruption likely (months)","spontaneous|12|18|year|month|erupt"],["Exposure and gold chain if fails","expos|chain|bond|traction"],["Appliance to maintain space","appliance|maintain"]]}
  ]},
 
-{id:"c21", draft:true, title:"Retained lower E and impacted second premolar", topic:"Impacted teeth", level:1,
+{id:"c21", title:"Retained lower E and impacted second premolar", topic:"Impacted teeth", level:1,
  text:`13-year-old girl.
 Complaint: referred because "a baby tooth is still there".
 Medical history: fit and well.
@@ -1380,7 +1433,7 @@ Intra-oral: LRE retained, infraoccluded by 2 mm, mobile grade 0. Mild crowding. 
 Radiograph (DPT): LR5 present, developing, distally inclined below the LRE roots with incomplete root formation; LRE roots partially resorbed.`,
  problems:["Retained infraoccluded LRE","Impacted, distally inclined LR5","Mild crowding"],
  aims:["Allow LR5 to erupt into the arch","Prevent space loss and further infraocclusion","Maintain occlusion"],
- options:[["Monitor","None","LR5 may not erupt; infraocclusion worsens"],["Extract LRE and maintain space","Often allows spontaneous eruption of LR5 with improved angulation","Space loss without maintainer"],["Extract LRE, expose LR5 and apply traction","When spontaneous eruption unlikely","Surgery, fixed appliance"],["Extract LR5 and keep LRE / close space","Avoids surgery","LRE long-term prognosis uncertain"]],
+ options:[["Monitor","None","LR5 may not erupt; infraocclusion worsens"],["Extract LRE and maintain space","Often allows spontaneous eruption of LR5 with improved angulation","Space loss without maintainer"],["Extract LRE, expose LR5 and apply traction","When spontaneous eruption unlikely","Surgery, fixed appliance"],["Extract LR5 and keep LRE","Avoids surgery","LRE long-term prognosis uncertain (ankylosed, infraoccluded)"]],
  plan:["Extract LRE","Space maintainer (lingual arch or band and loop) if crowding; or monitor","Review LR5 eruption with radiographs every 6 months","If not erupting after 12 months, expose and align with fixed appliance"],
  planPts:[["Extract LRE (primary molar)","extract|lre|primary|e\\b|deciduous"],["Space maintenance","space maintain|maintain|lingual arch|band and loop|maintainer"],["Monitor eruption / radiograph","monitor|review|radiograph|month"],["Expose / align if fails","expos|traction|align|fixed"]],
  viva:[
@@ -1392,7 +1445,7 @@ Radiograph (DPT): LR5 present, developing, distally inclined below the LRE roots
   pts:[["Spontaneous eruption / uprighting","spontaneous|upright|erupt"],["Incomplete root formation helps","root"],["Adequate space","space"],["Timescale","month|year"]]}
  ]},
 
-{id:"c22", draft:true, title:"Adult Class II skeletal pattern — mandibular advancement", topic:"Surgical orthodontics", level:3,
+{id:"c22", title:"Adult Class II skeletal pattern — mandibular advancement", topic:"Surgical orthodontics", level:3,
  text:`19-year-old woman, growth complete.
 Complaint: "My chin is small and my top teeth stick out."
 Medical history: fit and well; wants a facial change.
@@ -1416,14 +1469,14 @@ Ceph: SNA 82, SNB 72, ANB 10, MMPA 26, UI–MxP 112, LI–MnP 104.`,
   pts:[["Severe skeletal discrepancy","sever|anb|skeletal"],["Compensation already present","compensat|procli"],["Facial concern / profile","face|facial|profile|chin"],["Limits of tooth movement","limit|envelope"]]}
  ]},
 
-{id:"c24", draft:true, title:"Interpreting a cephalogram — Eastman correction", topic:"Cephalometrics", level:2,
+{id:"c24", title:"Interpreting a cephalogram — Eastman correction", topic:"Cephalometrics", level:2,
  text:`14-year-old boy.
 Lateral cephalometric values: SNA 76, SNB 75, ANB 1, SN–MxP 8, MMPA 30, UI–MxP 112, LI–MnP 86, interincisal angle 132, LAFH 56%.
 Clinically: Class III incisor relationship, reverse overjet −1 mm, overbite 1 mm. Profile mildly concave.
 The trainee is asked to interpret the cephalogram.`,
  problems:["Apparent Class I ANB with a low SNA","Retroclined lower incisors (compensation)","Slightly increased vertical proportions"],
  aims:["Interpret skeletal pattern correctly","Identify dentoalveolar compensation","Relate ceph to clinical findings"],
- options:[["Use ANB alone","Simple","Misleading when SNA is abnormal"],["Eastman correction of ANB","Adjusts for SNA position","Valid only when SN–MxP is 5–11°"],["Alternative analyses (Wits, Ballard)","Not dependent on SN","Wits affected by occlusal plane"]],
+ options:[["Use ANB alone","Simple","Misleading when SNA is abnormal"],["Eastman correction of ANB","Adjusts for SNA position","Valid only when SN–MxP is 5–11°"],["Alternative measures (Wits appraisal) and clinical assessment","Not dependent on SN","Wits affected by occlusal plane"]],
  plan:["Apply Eastman correction: for every degree SNA is below 81, add 0.5° to ANB → corrected ANB = 1 + (81 − 76) × 0.5 = 3.5°","Note SN–MxP 8° is within 5–11°, so correction is valid","Assess vertical: MMPA 30 and LAFH 56% slightly increased","Lower incisor compensation: expected LI–MnP ≈ 120 − MMPA = 90°, measured 86° → within 5° of expected, mildly retroclined","Corroborate with clinical assessment and Wits"],
  planPts:[["Eastman correction","eastman|correct"],["SN-MxP check 5–11","sn ?mxp|5 ?to ?11|5 11|maxillary plane"],["Vertical assessment","mmpa|vertical|lafh"],["Lower incisor 120 − MMPA","120|lower incisor|li ?mnp"],["Clinical correlation / Wits","clinical|wits"]],
  viva:[
@@ -1438,7 +1491,7 @@ The trainee is asked to interpret the cephalogram.`,
   pts:[["Nasion / SN position","nasion|sn|cranial base"],["Rotation / vertical effects","rotat|vertical"],["Landmark error / 2D","landmark|error|two dimension|2d|radiograph"],["Corroborate (Wits/clinical)","wits|clinical|corroborat"]]}
  ]},
 
-{id:"c26", draft:true, title:"Timing of Class II treatment — wait or start?", topic:"Growth & timing", level:2,
+{id:"c26", title:"Timing of Class II treatment — wait or start?", topic:"Growth & timing", level:2,
  text:`9-year-old boy, early mixed dentition, prepubertal (CVMS 1).
 Complaint: parents keen to "fix it early"; overjet 8 mm.
 Medical history: fit and well. No history of incisor trauma; lips competent with effort; no teasing reported.
@@ -1447,18 +1500,18 @@ Intra-oral: Class II division 1, overjet 8 mm, overbite increased, molars ½ uni
  problems:["Moderate Class II division 1 with 8 mm overjet","Prepubertal — peak growth some years away","Parental pressure for early treatment"],
  aims:["Correct the Class II efficiently with least burden","Reduce trauma risk","Avoid unnecessarily long treatment"],
  options:[["Early (two-phase) functional treatment now","Reduces trauma risk early; psychosocial benefit","Longer overall burden; no better final skeletal result (RCT evidence)"],["Wait and treat in late mixed/early permanent dentition near pubertal peak","Single course; growth response best; shorter total time","Trauma risk meanwhile"],["Mouthguard for sport while waiting","Protects incisors","Compliance"]],
- plan:["Explain evidence: early treatment does not give better skeletal results; it may reduce incisal trauma and help self-esteem","Unless there is trauma risk or bullying, start in late mixed dentition near the pubertal growth spurt (around 11–13 for boys)","Mouthguard for contact sport","Review every 6–12 months; assess growth (height velocity, CVM)"],
+ plan:["Explain evidence: early treatment does not give better skeletal results; it may reduce incisal trauma and help self-esteem","Unless there is trauma risk or bullying, start in late mixed dentition near the pubertal growth spurt (around 12 in girls, about 14 in boys)","Mouthguard for contact sport","Review every 6–12 months; assess growth (height velocity, CVM)"],
  planPts:[["Evidence: early treatment no better skeletally","evidence|rct|trial|no (better|difference)|cochrane"],["Indications for early (trauma/bullying)","trauma|bully|self ?esteem|psycho"],["Start near pubertal growth spurt","pubert|growth spurt|peak|late mixed"],["Mouthguard","mouthguard|gum ?shield|guard"],["Monitor growth","monitor|review|cvm|height"]],
  viva:[
  {q:"What does the evidence say about early Class II treatment?",
-  model:"Randomised controlled trials (e.g. UK Twin Block trials, Cochrane review) show early functional treatment followed by later treatment gives no better — no clinically meaningful difference in — final skeletal or occlusal outcome compared with treatment in adolescence, but it takes longer overall. Early treatment does reduce the incidence of incisal trauma and may help self-esteem.",
+  model:"Randomised controlled trials (e.g. UK Twin Block trials, Cochrane review) show early functional treatment followed by later treatment gives no clinically meaningful difference in final skeletal or occlusal outcome compared with treatment in adolescence, but it takes longer overall. Early treatment does reduce the incidence of incisal trauma and may help self-esteem.",
   pts:[["RCTs / Cochrane","rct|randomi|trial|cochrane|evidence"],["No better final skeletal outcome","no (better|difference|significant)|same|similar"],["Longer overall treatment","longer|burden|two phase"],["Reduced trauma / self-esteem","trauma|self ?esteem|bully|psycho"]]},
  {q:"How can you assess growth stage?",
   model:"Chronological age is unreliable. Use height velocity (serial measurements), secondary sexual characteristics, cervical vertebral maturation on the lateral ceph (CVMS), hand–wrist radiograph (rarely now), and dental stage. Peak growth is about 12 in girls and 14 in boys.",
   pts:[["Height / growth charts","height|stature|chart"],["Cervical vertebral maturation","cervical|cvm|vertebra"],["Hand-wrist","hand|wrist"],["Peak ages","12|14|peak"]]}
  ]},
 
-{id:"c27", draft:true, title:"Class III in a growing boy — when to plan surgery", topic:"Growth & timing", level:3,
+{id:"c27", title:"Class III in a growing boy — when to plan surgery", topic:"Growth & timing", level:3,
  text:`15-year-old boy.
 Complaint: lower jaw "getting bigger"; reverse overjet worse over last year.
 Medical history: fit and well. Father has a prominent chin.
@@ -1479,7 +1532,7 @@ Ceph: SNA 80, SNB 85, ANB −5, MMPA 31. Serial cephalograms 12 months apart sho
   pts:[["Serial cephalograms","serial|ceph|superimpos"],["Stable height","height|stature"],["CVM / maturation","cvm|vertebra|matur"]]}
  ]},
 
-{id:"c28", draft:true, title:"Twin Block non-compliance — what next?", topic:"Functional appliances", level:2,
+{id:"c28", title:"Twin Block non-compliance — what next?", topic:"Functional appliances", level:2,
  text:`12-year-old girl, at pubertal growth peak.
 Six months ago a Twin Block was fitted for a Class II division 1 malocclusion (overjet 9 mm, moderate Class II skeletal, average vertical).
 Review: overjet still 8 mm; appliance looks unworn, clasps unworn, patient admits wearing it "only at night sometimes". Speech difficulty reported at school.`,
@@ -1497,7 +1550,7 @@ Review: overjet still 8 mm; appliance looks unworn, clasps unworn, patient admit
   pts:[["No compliance needed","complian|wear|full ?time"],["Combined with fixed appliances","fixed"],["Breakages / hygiene","break|hygiene"],["Lower incisor proclination","procli|lower incisor"]]}
  ]},
 
-{id:"c29", draft:true, title:"Class II division 2 — functional appliance after proclination", topic:"Functional appliances", level:2,
+{id:"c29", title:"Class II division 2 — functional appliance after proclination", topic:"Functional appliances", level:2,
  text:`11-year-old girl, pubertal growth spurt beginning.
 Complaint: "Teeth at the front point backwards."
 Extra-oral: moderate Class II skeletal base with mandibular retrusion, reduced vertical proportions, high lower lip line.
@@ -1517,7 +1570,7 @@ Ceph: ANB 6, MMPA 21, UI–MxP 95.`,
   pts:[["Trim upper block","trim"],["Allow lower molar eruption","erupt|molar"],["Suitable in low angle","low angle|reduced vertical"]]}
  ]},
 
-{id:"c30", draft:true, title:"Bimaxillary proclination — TAD-supported retraction", topic:"Anchorage & mechanics", level:3,
+{id:"c30", title:"Bimaxillary proclination — TAD-supported retraction", topic:"Anchorage & mechanics", level:3,
  text:`22-year-old woman of West African descent.
 Complaint: "My lips stick out and teeth are too forward."
 Extra-oral: Class I skeletal base, average vertical, protrusive lips, lip incompetence at rest, acute nasolabial angle.
@@ -1536,11 +1589,11 @@ Ceph: ANB 2, MMPA 27, UI–MxP 124, LI–MnP 105, interincisal angle 104.`,
   model:"Direct: force is applied from the TAD to the teeth to be moved (e.g. elastic chain from TAD to a power arm). Indirect: the TAD stabilises an anchor tooth (e.g. tied to the molar), and the anchor tooth is used for the movement. Direct gives more predictable anchorage.",
   pts:[["Direct: force from TAD to teeth","direct"],["Indirect: TAD holds anchor tooth","indirect"],["Examples","chain|power arm|molar|tie"]]},
  {q:"What are the risks of TADs?",
-  model:"Failure/loosening (around 10–15%), root contact, soft tissue irritation, infection, fracture on insertion or removal, and perforation of the sinus in upper posterior sites.",
+  model:"Failure/loosening (survival is reported at about 80–90%, so roughly 10–20% fail), root contact, soft tissue irritation, infection, fracture on insertion or removal, and perforation of the sinus in upper posterior sites.",
   pts:[["Failure / loosening","fail|loos|mobil"],["Root damage","root"],["Soft tissue / infection","soft tissue|infect|inflam|irritat"],["Fracture / sinus","fracture|sinus"]]}
  ]},
 
-{id:"c32", draft:true, title:"Space closure mechanics — sliding vs loop", topic:"Anchorage & mechanics", level:2,
+{id:"c32", title:"Space closure mechanics — sliding vs loop", topic:"Anchorage & mechanics", level:2,
  text:`16-year-old boy, mid-treatment with upper and lower fixed appliances (0.022" slot, pre-adjusted).
 Four first premolars extracted for crowding and mild bimaxillary proclination; alignment complete; 0.019×0.025" stainless steel archwires in place.
 Remaining extraction spaces: 4 mm each quadrant. Anchorage requirement: moderate. Molars Class I.`,
@@ -1558,25 +1611,25 @@ Remaining extraction spaces: 4 mm each quadrant. Anchorage requirement: moderate
   pts:[["100–150 g","100|150|gram"],["Light continuous force","light|continuous"],["Heavy force problems (hyalinisation, anchorage loss)","hyalin|anchorage|heavy|resorption"]]}
  ]},
 
-{id:"c33", draft:true, title:"Retention after midline diastema closure", topic:"Retention & relapse", level:1,
+{id:"c33", title:"Retention after midline diastema closure", topic:"Retention & relapse", level:1,
  text:`15-year-old girl, completed fixed appliance treatment.
 Before treatment: 4 mm upper midline diastema with a low labial frenum (blanching test positive, notch in interdental bone on radiograph). No supernumerary.
 The diastema has been closed. Debond planned next visit.`,
- problems:["High relapse risk of median diastema","Fraenal attachment"],
+ problems:["Relapse risk of a median diastema (larger initial diastema and a family history raise it)","Low labial frenum"],
  aims:["Keep the diastema closed long term","Address soft tissue factors"],
- options:[["Removable retainer only","Simple","High relapse risk"],["Bonded palatal retainer UR1–UL1 (or 2–2)","Reliable long-term","Bond failure; hygiene"],["Labial frenectomy","Removes fibrous attachment","Surgery; timing"]],
- plan:["Frenectomy after space closure (scar tissue helps stability)","Bonded palatal retainer between the central incisors","Plus upper vacuum-formed retainer at night","Long-term review"],
- planPts:[["Frenectomy (after closure)","frenectomy|frenum|fraenum|frenotomy"],["Bonded palatal retainer","bonded|fixed retainer|palatal"],["Removable retainer at night","vacuum|essix|removable|night"],["Long term","long|life|indefinite"]],
+ options:[["Removable retainer only","Simple","High relapse risk"],["Bonded palatal retainer UR1–UL1 (or 2–2)","Reliable long-term","Bond failure; hygiene"],["Labial frenectomy","Some clinicians advocate it; if done after closure, scar contracture may consolidate the result","Not normally indicated: the frenum usually remodels apically after closure and an abnormal frenum has not been shown to cause relapse; surgery"]],
+ plan:["Bonded palatal retainer between the central incisors (advised for every midline diastema closure)","Plus upper vacuum-formed retainer at night","Frenectomy is not routinely needed: the frenum usually remodels apically after closure; if it is chosen, after closure rather than before is suggested","Long-term review"],
+ planPts:[["Frenectomy not routine (if done, after closure)","frenectomy|frenum|fraenum|frenotomy"],["Bonded palatal retainer","bonded|fixed retainer|palatal"],["Removable retainer at night","vacuum|essix|removable|night"],["Long term","long|life|indefinite"]],
  viva:[
- {q:"When would you do a frenectomy and why then?",
-  model:"After the diastema has been closed orthodontically — the scar tissue that forms then helps stability, and the incisors can be moved together first without the tissue being trapped. Indications: positive blanching test, notch in interdental bone.",
-  pts:[["After closure","after|following"],["Scar tissue aids stability","scar|stab"],["Indications: blanch test / bony notch","blanch|notch|indication"]]},
- {q:"Why are diastemas prone to relapse?",
-  model:"Fraenal fibres, transseptal and gingival fibres, tongue and lip pressures, and any underlying tooth size discrepancy (e.g. small laterals) pull the teeth apart. Hence bonded retention.",
-  pts:[["Fibres (fraenal, transseptal)","fibre|fiber|transseptal|fraen|fren"],["Soft tissue pressures","tongue|lip|soft tissue"],["Tooth size discrepancy","tooth size|bolton|small"]]}
+ {q:"Is a frenectomy indicated after closing a median diastema?",
+  model:"Not normally. The labial frenum, often low and fleshy, tends to remodel apically after the space is closed. Some clinicians advocate frenectomy; if it is done, it can be before (for access) or after closure, and after closure scar contracture of the healing tissue may help to hold the space closed. A bonded palatal retainer is advised in every case.",
+  pts:[["Not normally indicated / frenum remodels","not normally|not indicated|not routine|remodel|apical"],["If done: after closure, scar contracture","after|following|scar|contract"],["Bonded retainer advised","bonded|retainer|fixed"]]},
+ {q:"What predicts relapse of a diastema, and how do you retain it?",
+  model:"The strongest predictors are the size of the diastema before treatment and a family history of diastema; an abnormal frenum or a bony cleft between the central incisors has not been shown to predict relapse. Tongue and lip pressures, transseptal fibres and a tooth-size discrepancy (e.g. small lateral incisors) also pull the teeth apart. Hence a bonded palatal retainer for every case.",
+  pts:[["Size of the original diastema / family history","size|family|history|heredit"],["Frenum not a predictor","frenum|fraen|not (a )?predict|no association"],["Soft tissue / fibres / tooth size","tongue|lip|fibre|fiber|transseptal|tooth size|bolton|small"],["Bonded retention for all","bonded|fixed|retainer"]]}
  ]},
 
-{id:"c34", draft:true, title:"Adult orthodontics with reduced periodontal support", topic:"Retention & relapse", level:3,
+{id:"c34", title:"Adult orthodontics with reduced periodontal support", topic:"Retention & relapse", level:3,
  text:`48-year-old man.
 Complaint: upper front teeth have "fanned out" and gaps appeared over 5 years.
 Medical history: type 2 diabetes, well controlled. Ex-smoker.
@@ -1676,7 +1729,7 @@ const BOOK_FIXES = {
   "3.12": f => { f.mv(0, " mandible closes. Also", 0, " headgear can be used"); },
   "4.1": f => { f.qrep(5, "advantages? (Figure 4.2)?", "advantages (Figure 4.2)?"); },
   "4.3": f => { f.rep(0, "( 13 tooth unit)", "(⅓ tooth unit)"); f.del(1, " Figure 4.8 shows the occlusion"); f.qset(2, "This is the occlusion after 7 months of Twin Block therapy (Figure 4.8). What is characteristic about this appearance?"); },
-  "4.6": f => { f.del(1, " thorough temporo-mandibular joint"); },
+  "4.6": f => { f.del(1, " thorough temporo-mandibular joint"); f.rep(0, "8 ± 5 degrees", "8 ± 3 degrees"); },
   "4.7": f => { f.split(0, " What are the limitations of removable appliance therapy", " • Dependent on excellent"); },
   "4.8": f => { f.order([0, 1, 3, 2]); },
   "4.9": f => { f.del(2, " This boy was fitted"); f.qset(3, "This boy wore a Twin Block full-time for 7 months and his dental appearance is now as shown (Figure 4.26). Describe the features of his malocclusion at this stage"); f.del(5, " A common problem associated"); f.del(7, " This boy continued"); f.qset(8, "After 6 further months of night-time Twin Block wear (Figure 4.27), summarize the changes that have enabled overjet reduction to occur during this period of functional appliance treatment"); },
@@ -1707,8 +1760,16 @@ const BOOK_FIXES = {
   "10.11": f => { f.split(2, " Figures 10.36 and 10.37 show", " Pre-adjusted edgewise appliances"); f.split(0, " Comment on the soft tissues (Figure 10.35)", " The profile is retrognathic"); },
   "10.12": f => { f.split(8, " The post-treatment records are shown", " There has been an improvement"); f.qset(7, "The pre-surgical records are shown (Figure 10.42). What has happened to the UL2?"); }
 };
+/* tooth charts that the scan turned into rows of digits: written out in words (read from each case's own text) */
+{ const f28 = BOOK_FIXES["2.8"]; BOOK_FIXES["2.8"] = f => { f28(f); f.rep(0, "654321/ 12 456 76E4321/ 1234567", "Upper right: 6 5 4 3 2 1. Upper left: 1 2 4 5 6 (the UL3 is absent). Lower right: 7 6 E 4 3 2 1 (the LR5 is absent and the LRE is retained). Lower left: 1 2 3 4 5 6 7."); }; }
+{ const f29 = BOOK_FIXES["2.9"]; BOOK_FIXES["2.9"] = f => { f29(f); f.rep(0, "6EDC2 /12BCDE6 6EDC21/ 12 CDE6", "upper right 6 E D C 2, upper left 1 2 B C D E 6, lower right 6 E D C 2 1, lower left 1 2 C D E 6"); }; }
+BOOK_FIXES["3.11"] = f => { f.rep(0, "76E4321/ 1 C4E67 76E4321/ 1234567", "upper right 7 6 E 4 3 2 1, upper left 1 C 4 E 6 7 (the UL2 is absent), lower right 7 6 E 4 3 2 1, lower left 1 2 3 4 5 6 7."); };
+BOOK_FIXES["4.13"] = f => { f.rep(1, "7654321/ 1234567 • Teeth present: 654321/ 1234567", "• Teeth present: upper 7 6 5 4 3 2 1 / 1 2 3 4 5 6 7, lower 6 5 4 3 2 1 / 1 2 3 4 5 6 7 (the LR7 is unerupted)"); };
+BOOK_FIXES["7.3"] = f => { f.rep(0, "765432 / 1234567 7654321 / 1234567 UR1 is unerupted", "upper right 7 6 5 4 3 2 (the UR1 is unerupted), upper left 1 2 3 4 5 6 7, lower right 7 6 5 4 3 2 1, lower left 1 2 3 4 5 6 7."); };
+BOOK_FIXES["7.8"] = f => { f.rep(0, "6EDC21/ 2CDE6 6ED321/ 123DE6", "Teeth present: upper right 6 E D C 2 1, upper left 2 C D E 6 (the UL1 is unerupted), lower right 6 E D 3 2 1, lower left 1 2 3 D E 6"); };
+BOOK_FIXES["7.9"] = f => { f.rep(2, "654C21 / 12C4E 7 • Teeth present: 54321 / 12345", "• Teeth present: upper right 6 5 4 C 2 1, upper left 1 2 C 4 E 7; lower right 5 4 3 2 1, lower left 1 2 3 4 5"); };
 /* words the scan or the line breaks damaged, across every case */
-const BOOK_WORDS = [[/[\uE000-\uF8FF]/g, "– "], [/\b0?19 × 0?25(?:-inch|”|")/g, "0.019 × 0.025-inch"], [/\b019 × 025\b/g, "0.019 × 0.025"], [/\b21 × 25-inch/g, "0.021 × 0.025-inch"], [/(^|[\s(])0(1[0-9]|2[0-9])-inch/g, "$10.0$2-inch"], [/([Ss])elfligat/g, "$1elf-ligat"], [/anchoragedemanding/g, "anchorage-demanding"], [/timeconsuming/g, "time-consuming"], [/mediumterm/g, "medium-term"], [/shortterm/g, "short-term"], [/longterm/g, "long-term"], [/healthrelated/g, "health-related"], [/computerbased/g, "computer-based"], [/fulltime/g, "full-time"], [/throatchin/g, "throat–chin"], [/toothsize/g, "tooth-size"], [/distallyorientated/g, "distally-orientated"], [/odontomelike/g, "odontome-like"], [/intraand/g, "intra- and"], [/mild-tomoderate/g, "mild-to-moderate"], [/EgermarkEriksson/g, "Egermark-Eriksson"], [/8-darginine/g, "8-D-arginine"], [/[Tt]ranverse/g, m => m[0] + "ransverse"], [/dento-alve?oler|dento-aveolar/g, "dento-alveolar"], [/auxillary/g, "auxiliary"], [/Nasolanial/g, "Nasolabial"], [/centerline|centreline/g, "centre line"], [/\bnonextraction/g, "non-extraction"], [/third\(torque\)/g, "third- (torque)"], [/pseudotranspositon/g, "pseudotransposition"], [/openbite/g, "open bite"], [/peri-apical/g, "periapical"]];
+const BOOK_WORDS = [[/\bevidenced-based\b/g, "evidence-based"], [/\br etainers\b/g, "retainers"], [/[\uE000-\uF8FF]/g, "– "], [/\b0?19 × 0?25(?:-inch|”|")/g, "0.019 × 0.025-inch"], [/\b019 × 025\b/g, "0.019 × 0.025"], [/\b21 × 25-inch/g, "0.021 × 0.025-inch"], [/(^|[\s(])0(1[0-9]|2[0-9])-inch/g, "$10.0$2-inch"], [/([Ss])elfligat/g, "$1elf-ligat"], [/anchoragedemanding/g, "anchorage-demanding"], [/timeconsuming/g, "time-consuming"], [/mediumterm/g, "medium-term"], [/shortterm/g, "short-term"], [/longterm/g, "long-term"], [/healthrelated/g, "health-related"], [/computerbased/g, "computer-based"], [/fulltime/g, "full-time"], [/throatchin/g, "throat–chin"], [/toothsize/g, "tooth-size"], [/distallyorientated/g, "distally-orientated"], [/odontomelike/g, "odontome-like"], [/intraand/g, "intra- and"], [/mild-tomoderate/g, "mild-to-moderate"], [/EgermarkEriksson/g, "Egermark-Eriksson"], [/8-darginine/g, "8-D-arginine"], [/[Tt]ranverse/g, m => m[0] + "ransverse"], [/dento-alve?oler|dento-aveolar/g, "dento-alveolar"], [/auxillary/g, "auxiliary"], [/Nasolanial/g, "Nasolabial"], [/centerline|centreline/g, "centre line"], [/\bnonextraction/g, "non-extraction"], [/third\(torque\)/g, "third- (torque)"], [/pseudotranspositon/g, "pseudotransposition"], [/openbite/g, "open bite"], [/peri-apical/g, "periapical"]];
 const FIX_MISSES = [];
 function extractBookCases(pages){
   const JUNK = [/^\d{1,3}$/, /^CHAPTER \d+$/i, /^Clinical Cases in Orthodontics$/i, /^C\s?H\s?A\s?P\s?T\s?E\s?R\b/, /^(?:[A-Z]\s){4,}[A-Z]?\s*$/, /^Clinical Cases in Orthodontics\s*\d*\s*$/i, /^\d+\s+Clinical Cases in Orthodontics\s*$/i, /^Figures? \d+\.\d+[a-z]?(?:[–-]\d+\.\d+)?[a-z]?\s*$/i, /^\(?[a-d]\)?\s*$/, /^[a-d]\s+[a-d]\s*$/, /^(CLASS (I|II|III)( DIVISION [12])? MALOCCLUSION|ORTHOGNATHIC SURGERY|TOOTH IMPACTION|CLINICAL AND CEPHALOMETRIC ANALYSIS|THE DEVELOPING DENTITION|FIXED APPLIANCES|STABILITY AND RETENTION|DEVELOPMENT OF THE CRANIOFACIAL REGION)$/];
@@ -1809,7 +1870,7 @@ function extractBookCases(pages){
       introToA: (m, n) => { const [rest, piece] = cutOut(intro, m); intro = rest; items[n].a = items[n].a.trimEnd() + piece; },
       introq: (qs, as) => { const i = intro.indexOf(qs), j = intro.indexOf(as, i + 1); if (i < 0 || j < 0){ miss(qs); return; } items.unshift({q: intro.slice(i, j).trim(), a: intro.slice(j).trim(), page: L[0].page}); intro = intro.slice(0, i).trim(); }
     };
-    if (BOOK_FIXES[h.id]) BOOK_FIXES[h.id](fix);
+    if (BOOK_FIXES[h.id]){ try { BOOK_FIXES[h.id](fix); } catch (e) { miss("fix failed: " + (e && e.message)); } }  /* a copy of the book whose text differs from the one these corrections were written for must never break the case */
     const words = t => BOOK_WORDS.reduce((x, [re, to]) => x.replace(re, to), t).replace(/\s+/g, " ").replace(/[–\s]+$/, "").trim();
     /* in-text pointers to a figure mean nothing without it; the book's summary belongs to the first question; its treatment plan becomes a question */
     const tidy = a => a.replace(/(^|\s)(?:The|Her|His)[^.?!•]{0,80}?\b(?:is|are) shown in Figures? \d+\.\d+[a-z]?(?: and \d+\.\d+[a-z]?)?\./g, "$1").replace(/(^|\s)Figure \d+\.\d+[a-z]? shows the final occlusion[^.]*\./g, "$1").replace(/(^|\s)Summary(?:\s*\(Figures?[^)]*\))?\s+(?:A|An|This)\s[\s\S]*?(?=\sTreatment Plan\b|$)/, "$1");
@@ -1837,6 +1898,7 @@ const COMPLAINT = {"2.4": "Intermittent nocturnal pain from a lower left tooth, 
 /* details the book gives elsewhere than in a sentence the sheet can read */
 const SHEET_EXTRA = {"4.16": [["Cephalometric values", "SNA 80°, SNB 75°, ANB 5°, Wits 1 mm, MMPA 31°, LAFH 57%, UI-Mx 112°, LI-Mn 90°"]], "9.5": [["Medical history", "Unilateral left-sided cleft lip and palate"]]};
 function caseSheet(bc){
+  if (bc.own) return bc.sheet;
   const H = (bc.head || []).filter(l => !/^•/.test(l)), text = H.join(" ").replace(/\s+/g, " ").replace(/\(?\bFig(?:ure)?s?\.?\s*\d+\.\d+[a-z]?(?:\s*(?:and|,|–|-)\s*\d+\.\d+[a-z]?)*\)?/gi, "").replace(/\(\s*\)/g, "");
   const sents = text.match(/[^.!?]+[.!?]+/g) || [];
   const LEAK = /\bclass\s*(i{1,3}|[123])\b|skeletal|malocclusion|overjet|overbite|crowd|impact|hypodont|open bite|deep bite|retrognath|prognath|ectopic|unerupted|missing|absen|crossbite|retrocl|procl|diagnos|•/i;
@@ -2008,7 +2070,7 @@ function avTalk(wrap, on){
   const vt = wrap && wrap.querySelector(".vt"); if (!vt || !vt.src) return;
   if (on){ const p = vt.play(); if (p) p.catch(() => {}); } else vt.pause();
 }
-function avatarHtml(){ return `<div class="avatar-wrap"><div class="av" data-mood="neutral"><img src="examiner.jpg?v=${VER["examiner.jpg"] || "1"}" alt="BDI Examiner" width="640" height="800" decoding="async"><video class="vi" muted loop playsinline preload="auto" aria-hidden="true"></video><video class="vt" muted loop playsinline preload="auto" aria-hidden="true"></video><span class="sbars" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="avatar-name">BDI Examiner</div><div class="avatar-status"></div><div class="vrow"><button type="button" class="btn sm vtest">Test voice</button></div></div>`; }
+function avatarHtml(){ return `<div class="avatar-wrap"><div class="av" data-mood="neutral"><img src="examiner.jpg?v=${VER["examiner.jpg"] || "1"}" alt="BDI Examiner" width="640" height="800" decoding="async"><video class="vi" muted loop playsinline preload="auto" aria-hidden="true"></video><video class="vt" muted loop playsinline preload="auto" aria-hidden="true"></video><span class="sbars" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="avatar-name">BDI Examiner</div><div class="avatar-status"></div><div class="vrow"><button type="button" class="btn sm vstop" hidden>■ Stop the examiner</button><button type="button" class="btn sm vtest">Test voice</button></div></div>`; }
 function setMood(box, mood, status){
   const wrap = box && (box.classList.contains("avatar-wrap") ? box : box.querySelector(".avatar-wrap")); if (!wrap) return;
   AV.wrap = wrap; wrap.querySelector(".av").dataset.mood = mood || "neutral";
@@ -2020,7 +2082,15 @@ function savedVoice(){ try { return localStorage.getItem("bdi.vname") || ""; } c
 function pickVoice(lang){
   const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
   /* one examiner voice for everyone: Daniel (British English, male); devices without him get the closest British male voice */
-  if (lang !== "ar"){ const dan = vs.filter(v => /^daniel\b/i.test(v.name) && /^en[-_]GB/i.test(v.lang)); if (dan.length){ VOICE_MALE = true; return dan.find(v => /enhanced|premium/i.test(v.name)) || dan[0]; } }
+  /* always British English, male: Daniel on Apple devices, then the British male voices of Chrome/Android and Windows, then any British voice */
+  if (lang !== "ar"){
+    const gb = vs.filter(v => /^en[-_]GB/i.test(v.lang) && !/compact|novelty/i.test(v.name));
+    const rank = [/^daniel\b/i, /google uk english male/i, /\b(ryan|thomas|george)\b/i, /\b(oliver|arthur|male)\b/i];
+    for (const re of rank){ const hit = gb.filter(v => re.test(v.name)); if (hit.length){ VOICE_MALE = true; return hit.find(v => /enhanced|premium|natural|neural/i.test(v.name)) || hit[0]; } }
+    const fem = /female|kate|serena|libby|sonia|maisie|susan|hazel|martha|fiona|moira/i, anyGb = gb.filter(v => !fem.test(v.name));
+    if (anyGb.length){ VOICE_MALE = true; return anyGb[0]; }
+    if (gb.length){ VOICE_MALE = false; return gb[0]; }
+  }
   if (lang === "ar") { const ar = vs.filter(v => /^ar/i.test(v.lang)); return ar.find(v => MALE_RE.test(v.name)) || ar[0] || null; }
   const BAD = /compact|novelty|albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|kathy|ralph|eddy|flo\b|grandma|grandpa|reed|rocko|sandy|shelley/i;
   const FEM = /female|samantha|serena|kate|moira|karen|zira|susan|hazel|aria|jenny|sonia|libby|maisie|michelle|ava|allison|victoria|tessa|fiona|martha|catherine|nicky|sara|emma|amy|joanna/i;
@@ -2050,24 +2120,46 @@ function spoken(t){
     .replace(/\s+[—–-]\s+/g, ", ").replace(/\s*[:;]\s+/g, ", ").replace(/\s+/g, " ").trim();
   return x;
 }
+/* the examiner's own voice (British male, made on the device by tts/bdi-tts.js): the same on every phone; the device voice is only a fallback */
+const TTSA = new Audio(); let TTSWAIT = null;
+const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=";
+function ttsStop(){ try { TTSA.pause(); } catch {} if (TTSWAIT){ const w = TTSWAIT; TTSWAIT = null; w(); } }
+function ttsPlayBlob(blob){ return new Promise(res => { const url = URL.createObjectURL(blob); const end = () => { TTSA.onended = TTSA.onerror = null; TTSWAIT = null; URL.revokeObjectURL(url); res(); }; TTSWAIT = end; TTSA.onended = TTSA.onerror = end; TTSA.src = url; const p = TTSA.play(); if (p) p.catch(end); }); }
+async function ttsSpeak(sents, my, done){
+  let next = BDI_TTS.synth(sents[0]);
+  for (let i = 0; i < sents.length; i++){
+    let blob; try { blob = await next; } catch { done(); return; }
+    if (AV.gen !== my) return;
+    if (i + 1 < sents.length) next = BDI_TTS.synth(sents[i + 1]);  /* the next sentence is made while this one plays */
+    await ttsPlayBlob(blob);
+    if (AV.gen !== my) return;
+  }
+  done();
+}
+const ttsReady = () => !!(window.BDI_TTS && BDI_TTS.ready);
+function ttsStatus(){ const el = document.getElementById("voiceState"); if (!el) return; el.textContent = ttsReady() ? "Examiner voice: British male, ready on this device." : window.BDI_TTS ? "Examiner voice: getting ready… until then the device's own voice is used." : "Examiner voice: the device's own voice."; }
+setInterval(ttsStatus, 1500);
+function ttsPreload(){ try { if (!window.BDI_TTS || BDI_TTS.ready) return; const c = navigator.connection; if (!document.documentElement.classList.contains("in-app") && c && (c.saveData || /(^|-)2g$|3g/.test(c.effectiveType || ""))) return; BDI_TTS.load("tts/").catch(() => {}); } catch {} }
 function stopSpeak(){
-  AV.gen++; clearTimeout(AV.guard);
+  AV.gen++; clearTimeout(AV.guard); ttsStop();
   try { speechSynthesis.cancel(); } catch {}
   const av = AV.wrap && AV.wrap.querySelector(".av"); if (av) delete av.dataset.speaking; avTalk(AV.wrap, false);
+  document.querySelectorAll(".vstop").forEach(b => { b.hidden = true; });
 }
 let SPEECH_OK = false;
-["click", "keydown", "touchend"].forEach(ev => document.addEventListener(ev, () => { if (SPEECH_OK || !("speechSynthesis" in window)) return; SPEECH_OK = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch {} }, {capture: true}));
+["click", "keydown", "touchend"].forEach(ev => document.addEventListener(ev, () => { if (!TTSA.dataset.u){ TTSA.dataset.u = "1"; try { TTSA.src = SILENT_WAV; const p = TTSA.play(); if (p) p.catch(() => {}); } catch {} } if (SPEECH_OK || !("speechSynthesis" in window)) return; SPEECH_OK = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch {} }, {capture: true}));
 function speak(text){
   stopSpeak();
-  const wrap = AV.wrap; if (!wrap || !document.body.contains(wrap) || !voiceOn || !("speechSynthesis" in window)) return;
+  const wrap = AV.wrap; if (!wrap || !document.body.contains(wrap) || !voiceOn || (!("speechSynthesis" in window) && !ttsReady())) return;
   const clean = spoken(text); if (!clean) return;
   let sents = clean.match(/[^.!?؟]+[.!?؟]?/g) || [clean], total = 0; sents = sents.map(s => s.trim()).filter(Boolean).filter(s => (total += s.length) < 620);
   if (!sents.length) sents = [clean.slice(0, 300)];
   const my = ++AV.gen, av = wrap.querySelector(".av");
-  av.dataset.speaking = "1"; avTalk(wrap, true);
-  const done = () => { if (AV.gen !== my) return; clearTimeout(AV.guard); delete av.dataset.speaking; avTalk(wrap, false); };
+  av.dataset.speaking = "1"; avTalk(wrap, true); const sb = wrap.querySelector(".vstop"); if (sb) sb.hidden = false;
+  const done = () => { if (AV.gen !== my) return; clearTimeout(AV.guard); delete av.dataset.speaking; avTalk(wrap, false); const sb2 = wrap.querySelector(".vstop"); if (sb2) sb2.hidden = true; };
   AV.guard = setTimeout(done, 4000 + clean.length * 90);  /* some browsers never fire onend */
   /* group sentences into flowing phrases and queue them all at once, so the engine keeps natural intonation with no robotic gaps */
+  if (ttsReady() && !/[؀-ۿ]/.test(clean)){ ttsSpeak(sents, my, done); return; }
   const chunks = []; { let cur = ""; sents.forEach(x => { if (cur && (cur + " " + x).length > 230){ chunks.push(cur); cur = x; } else cur = cur ? cur + " " + x : x; }); if (cur) chunks.push(cur); }
   const lastIdx = chunks.length - 1;
   chunks.forEach((c, idx) => {
@@ -2078,6 +2170,8 @@ function speak(text){
     try { speechSynthesis.speak(u); } catch { if (idx === lastIdx) done(); }
   });
 }
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") stopSpeak(); });
 
 /* ---------- library: BM25 over the decrypted books ---------- */
 let BOOKSTORE = [], INDEX = null;
@@ -2176,6 +2270,8 @@ async function loadLibrary(){
   BOOKSTORE = got.filter(Boolean);
   st.textContent = window.LIBFAIL.length ? "Some books could not be opened. Reload the page; if it persists, tell your supervisor." : "";
   BOOKSTORE.sort((a, b) => a.title.localeCompare(b.title));
+  try { window.RWCASES = JSON.parse(await decFile("c1.dat")); } catch (e) { window.RWCASES = null; }
+  try { window.CENTRE = JSON.parse(await decFile("c2.dat")); } catch (e) { window.CENTRE = null; }
   await sleep(0); await ligFix(BOOKSTORE); await buildIndex(); renderLibrary(); await sleep(0); afterLibrary();
 }
 /* some scanned books split words at the fi / ff / fl ligatures ("signi fi cant", "the fi rst") or after one letter ("r etainers");
@@ -2230,6 +2326,7 @@ const GENERAL_SUM = /^(summari[sz]e (?:the |this |her |his )?(?:main |presenting
 const GENERAL_PROB = /\b(problem list|main problems|key problems?)\b/i;
 const SUMQ = "Look at the patient's details and all the records in front of you, then write your summary of this case.";
 async function stagedViva(bc){
+  if (bc.own){ const stage = bc.figs.map(f => ({l: f.l, src: f.src, g: f.g, ar: f.ar})); return {stage, qs: bc.qs.map(q => ({q: q.q, model: q.a, figs: q.figs && q.figs.length ? q.figs.map(i => stage[i]) : null}))}; }
   const ch = bc.id.split(".")[0], ok = await loadFigs(ch);
   const all = (ok && window.BDIFIGS && BDIFIGS.idx[bc.id] || []).map(f => ({l: f.l, p: f.p, src: BDIFIGS.img[f.k]}));
   const stage = ok ? caseRecords(bc) : [], onStage = new Set(stage.map(f => f.l));
@@ -2253,14 +2350,15 @@ async function stagedViva(bc){
   ];
   return {qs, stage};
 }
-const figHtml = list => list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Patient record ${i + 1}" loading="lazy"><figcaption>Tap to enlarge</figcaption></figure>`).join("");
+const recHtml = list => { let out = "", cur = null; list.forEach((f, i) => { if (f.g !== cur){ if (cur !== null) out += "</div>"; out += `<div class="rgroup ${f.g || ""}">`; cur = f.g; } out += `<figure data-i="${i}" style="--ar:${f.ar || 1}"><img src="${f.src}" alt="${esc(f.l)}"><figcaption>${esc(f.l)}</figcaption></figure>`; }); return out + (cur !== null ? "</div>" : ""); };
+const figHtml = list => list.length && list[0].g ? recHtml(list) : list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Patient record ${i + 1}" loading="lazy"><figcaption>${esc(f.l || "Tap to enlarge")}</figcaption></figure>`).join("");
 const sheetHtml = bc => `<div class="exsheet"><div class="exh">Diagnostic Examination <span>Patient details</span></div><table>${caseSheet(bc).filter(([k, v]) => v).map(([k, v]) => `<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("") || '<tr><th>History</th><td>No written history for this case. Work from the records.</td></tr>'}</table></div>`;
 /* what a card may say before the examination: who the patient is and why they came, never the diagnosis */
 const sheetLine = (bc, short) => { const f = Object.fromEntries(caseSheet(bc)); return [[f.Sex, f.Age].filter(Boolean).join(", "), f.Complaint || (short ? "" : "Patient details and records")].filter(Boolean).join(" — "); };
 /* shortens a label at a whole word, never mid-word */
 const clip = (s, n) => { s = String(s).replace(/\s+/g, " ").trim(); if (s.length <= n) return s; const cut = s.lastIndexOf(" ", n); return s.slice(0, cut > n * .6 ? cut : n).replace(/[\s,;:.—–-]+$/, "") + "…"; };
-const bookCase = bc => ({id: "b" + bc.id, title: "Case " + bc.id, topic: bc.topic, text: noFig(!bc.intro || bc.intro.startsWith(bc.summary.slice(0, 120)) ? (bc.intro || bc.summary) : bc.summary + "\n\n" + bc.intro), viva: bc.qs.map(q => ({q: noFig(q.q), model: noFig(q.a), page: q.page})), book: bc});
-const findCase = id => { if (/^b\d/.test(id)){ const bc = BOOKCASES.find(c => "b" + c.id === id); return bc ? bookCase(bc) : null; } return visCases().find(c => c.id === id) || null; };
+const bookCase = bc => ({id: "b" + bc.id, title: "Case " + bc.id, topic: bc.topic, text: bc.own ? bc.summary : noFig(!bc.intro || bc.intro.startsWith(bc.summary.slice(0, 120)) ? (bc.intro || bc.summary) : bc.summary + "\n\n" + bc.intro), viva: bc.qs.map(q => ({q: noFig(q.q), model: noFig(q.a), page: q.page})), book: bc});
+const findCase = id => { if (/^b[\dC]/.test(id)){ const bc = BOOKCASES.find(c => "b" + c.id === id); return bc ? bookCase(bc) : null; } return visCases().find(c => c.id === id) || null; };
 function renderBank(more){
   const q = ($("#bkFilter").value || "").trim().toLowerCase(), tp = $("#bkTopic").value, src = $("#bkSrc").value;
   const topics = [...new Set([...TOPICS, ...BOOKCASES.map(c => c.topic)])];
@@ -2272,7 +2370,7 @@ function renderBank(more){
   bankItems = items;
   $("#bkCount").textContent = `${items.length} case${items.length === 1 ? "" : "s"}` + (!BOOKCASES.length && src !== "p" ? " · book cases loading…" : "");
   $("#bankGrid").innerHTML = items.slice(0, bankShown).map(({c, bc}) => bc
-    ? `<div class="bcase"><div><span class="pill">Book case</span><span class="pill d0">${esc(bc.topic)}</span></div><h3>Case ${esc(bc.id)}</h3><p>${esc(sheetLine(bc))}</p><div class="meta">${bc.qs.length} questions · p. ${bc.page - 10}</div><div class="actions"><button class="btn sm primary" data-case="b${esc(bc.id)}" data-tab="viva">Viva</button><button class="btn sm" data-case="b${esc(bc.id)}" data-tab="read">Open</button><button class="btn sm" data-bc="${esc(bc.id)}">Step by step</button></div></div>`
+    ? `<div class="bcase"><div><span class="pill">${bc.own ? "Centre case" : "Book case"}</span><span class="pill d0">${esc(bc.topic)}</span></div><h3>${bc.own ? "Centre case" : "Case"} ${esc(bc.id)}</h3><p>${esc(sheetLine(bc))}</p><div class="meta">${bc.qs.length} questions${bc.own ? "" : " · p. " + (bc.page - 10)}</div><div class="actions"><button class="btn sm primary" data-case="b${esc(bc.id)}" data-tab="viva">Viva</button><button class="btn sm" data-case="b${esc(bc.id)}" data-tab="read">Open</button><button class="btn sm" data-bc="${esc(bc.id)}">Step by step</button></div></div>`
     : `<div class="bcase"><div>${c.draft ? '<span class="pill d3">Draft — only you see this</span>' : ""}<span class="pill d${c.level}">${["","Foundation","Intermediate","Advanced"][c.level]}</span><span class="pill">${esc(c.topic)}</span></div><h3>${esc(c.title)}</h3><p>${esc(c.text.split("\n")[0])}</p><div class="actions"><button class="btn sm primary" data-case="${c.id}" data-tab="read">Read &amp; study</button></div></div>`).join("") || '<p class="muted">No case matches — try other words or another topic.</p>';
   $("#bkMore").hidden = items.length <= bankShown;
 }
@@ -2290,8 +2388,7 @@ function showCaseTab(tab){
   const canViva = c.book || c.id === "my"; $('#caseTabs [data-tab="viva"]').hidden = !canViva;
   if (tab === "viva" && !canViva){ tab = "read"; curTab = "read"; $$("#caseTabs .stab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === "read"))); }
   if (tab === "read"){
-    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2>${c.book ? `<span class="meta">Clinical Cases in Orthodontics, p. ${c.book.page - 10}</span>` : ""}</div><div class="pane-b"><pre class="casetext">${caseFmt(c.text)}</pre>${c.book ? '<div class="recs" id="caseRecs"></div>' : ""}</div></div>
-      <div class="pane"><div class="pane-h"><h2>Textbook references</h2></div><div class="pane-b">${INDEX ? hitsHtml(search(c.topic + " " + c.text.slice(0, 160) + " treatment", 6), c.topic) : '<p class="muted">The textbook library is still loading — reopen this case in a few seconds.</p>'}</div></div>`;
+    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2>${c.book && !c.book.own ? `<span class="meta">Clinical Cases in Orthodontics, p. ${c.book.page - 10}</span>` : ""}</div><div class="pane-b"><pre class="casetext">${caseFmt(c.text)}</pre>${c.book ? '<div class="recs" id="caseRecs"></div>' : ""}${c.book && c.book.ceph ? `<h3 class="sh">Cephalometric tracing</h3><table class="cephtab">${c.book.ceph.map(r => `<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join("")}</table>` : ""}</div></div>`;
     if (c.book) mountRecs($("#caseRecs"), c.book);
   } else if (tab === "viva"){
     if (c.book){
@@ -2384,7 +2481,7 @@ function finishViva(V, vv, av){
   setMood(av, pct >= 70 ? "happy" : "concern", pct >= 70 ? "Well done." : "Keep studying.");
   $("#vf").hidden = true;
   const xp = 20 + Math.round(pct / 2);
-  if (/^b\d/.test(String(V.caseId || ""))) srsMark("c:" + V.caseId, pct >= 70 ? 1 : pct >= 40 ? 0.5 : 0);
+  if (/^b[\dC]/.test(String(V.caseId || ""))) srsMark("c:" + V.caseId, pct >= 70 ? 1 : pct >= 40 ? 0.5 : 0);
   ST.events.push({type:"viva", score:pct, topic:V.topic, xp, at:Date.now(), caseId:V.caseId}); const b = levelInfo(ST.xp).i; ST.xp += xp; save(); planNote("case", null, String(V.caseId || "").replace(/^b/, ""));
   toast(levelInfo(ST.xp).i > b ? `Level up — ${LEVELS[levelInfo(ST.xp).i].n}! (+${xp} XP)` : `+${xp} XP`); renderDashboard();
 }
@@ -2394,15 +2491,67 @@ const ICON = {
   stop: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>',
   speak: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>'
 };
+/* the answer is recorded, turned into a 16 kHz WAV on the device and sent to Gemini, which writes it down;
+   the browser's own dictation is used only when Gemini cannot be (no key, or the Anthropic key is selected) */
+const b64 = u8 => { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+async function toWav16k(blob){
+  const AC = window.AudioContext || window.webkitAudioContext, OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext, ctx = new AC();
+  try {
+    const buf = await ctx.decodeAudioData(await blob.arrayBuffer()), rate = 16000, len = Math.max(1, Math.round(buf.duration * rate));
+    const off = new OAC(1, len, rate), src = off.createBufferSource(); src.buffer = buf; src.connect(off.destination); src.start();
+    const pcm = (await off.startRendering()).getChannelData(0), out = new DataView(new ArrayBuffer(44 + len * 2)), w = (o, t) => { for (let i = 0; i < t.length; i++) out.setUint8(o + i, t.charCodeAt(i)); };
+    w(0, "RIFF"); out.setUint32(4, 36 + len * 2, true); w(8, "WAVEfmt "); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 1, true);
+    out.setUint32(24, rate, true); out.setUint32(28, rate * 2, true); out.setUint16(32, 2, true); out.setUint16(34, 16, true); w(36, "data"); out.setUint32(40, len * 2, true);
+    for (let i = 0; i < len; i++){ const v = Math.max(-1, Math.min(1, pcm[i])); out.setInt16(44 + i * 2, v < 0 ? v * 32768 : v * 32767, true); }
+    return new Uint8Array(out.buffer);
+  } finally { try { ctx.close(); } catch {} }
+}
+const TRANSCRIBE_SYS = "You are a transcription tool. The speaker is an orthodontic resident answering an examiner, in English, in Egyptian Arabic, or a mix of both. Write down exactly what is said and nothing else: no translation, no summary, no comments, no quotation marks. Write orthodontic terms, measurements and abbreviations in English letters (for example overjet, overbite, Class II division 1, SNA 82, ANB, MMPA, anchorage, Twin Block). Always write MMPA (maxillary-mandibular planes angle) with these exact letters, never MPA. Common terms to spell exactly: SNA, SNB, ANB, Wits appraisal, FMA, MMPA, SN-MP, IMPA, U1-SN, U1-NA, L1-NB, interincisal angle, Frankfort plane, Steiner, Tweed, Ricketts, McNamara, Bolton, Angle Class I II III, Curve of Spee, Curve of Wilson, Andrews six keys, ANS, PNS, Pogonion, Menton, Gnathion, Gonion, Sella, Nasion, Basion, Articulare, Twin Block, Herbst, Frankel, Bionator, activator, headgear, RPE, Hyrax, Haas, Hawley, Essix, MARA, transpalatal arch, lingual arch, Nance, TPA, TADs, miniscrew, MBT, Roth, Damon, Alexander, edgewise, straight wire, torque, tip, rotation, crowding, spacing, diastema, crossbite, scissor bite, open bite, deep bite, overjet, overbite, retention, relapse, root resorption, white spot lesions, canine retraction, space closure, extraction, premolar, Le Fort, BSSO, genioplasty, distraction osteogenesis, cleft lip and palate. Write Arabic words in Arabic letters. Use normal punctuation. If you hear no speech, answer exactly: [no speech]";
+async function gemTranscribe(blob){
+  let audio; try { audio = {mime: "audio/wav", data: b64(await toWav16k(blob))}; } catch { audio = {mime: (blob.type || "audio/webm").split(";")[0], data: b64(new Uint8Array(await blob.arrayBuffer()))}; }
+  const t = await callAI([{role: "user", content: "Write down exactly what the speaker says.", audio}], TRANSCRIBE_SYS, {temp: 0, tokens: 1024});
+  const out = String(t || "").trim().replace(/^["“”]+|["“”]+$/g, "").trim();
+  return /^\[?no speech\]?\.?$/i.test(out) ? "" : out;
+}
 function setupMic(ta, btn){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR || !btn) return;
-  btn.hidden = false; let rec = null, on = false, base = "";
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  btn && btn.addEventListener("click", () => stopSpeak());
+  const canRec = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder && (window.AudioContext || window.webkitAudioContext));
+  if ((!SR && !canRec) || !btn) return;
+  btn.hidden = false; let rec = null, on = false, base = "", mr = null, stream = null, chunks = [], cap = 0, busy = false;
   btn.setAttribute("aria-label", "Speak your answer"); btn.title = "Speak your answer";
   const stop = () => { on = false; btn.classList.remove("rec"); btn.innerHTML = ICON.mic; btn.setAttribute("aria-label", "Speak your answer"); };
   stop();
   const WHY = {"not-allowed": "The microphone is blocked. Allow it for this site: in Safari go to Safari ▸ Settings ▸ Websites ▸ Microphone; in Chrome/Edge click the lock icon in the address bar. On a Mac also switch on Dictation in System Settings ▸ Keyboard.", "service-not-allowed": "Voice typing is switched off on this device. On a Mac turn on Dictation in System Settings ▸ Keyboard, then reload.", "no-speech": "I did not hear anything — try again and speak after the red dot appears.", "audio-capture": "No microphone was found.", "network": "Voice typing needs an internet connection."};
+  const useGemini = () => canRec && aiReady() && aiProv() !== "anthropic";
+  async function startGemini(){
+    try { stream = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true}}); }
+    catch (e) { toast(/denied|permission|notallowed|not allowed/i.test((e.name || "") + (e.message || "")) ? WHY["not-allowed"] : "Could not start the microphone."); return; }
+    const types = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"], mime = types.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || "";
+    chunks = [];
+    try { mr = new MediaRecorder(stream, mime ? {mimeType: mime} : undefined); } catch { stream.getTracks().forEach(t => t.stop()); toast("Could not start the microphone."); return; }
+    mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    mr.onstop = async () => {
+      clearTimeout(cap); stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(chunks, {type: (mr && mr.mimeType) || mime || "audio/webm"}); mr = null; stop();
+      if (blob.size < 1500){ toast("I did not hear anything. Try again."); return; }
+      busy = true; btn.disabled = true; btn.setAttribute("aria-busy", "true"); toast("Writing what you said…");
+      try {
+        const text = await gemTranscribe(blob);
+        if (text){ ta.value = (ta.value.trim() ? ta.value.trim() + " " : "") + text; ta.dispatchEvent(new Event("input", {bubbles: true})); ta.focus(); }
+        else toast("I did not hear anything. Try again.");
+      } catch (e) { toast((e && e.message) || "Could not write what you said. Try again or type your answer."); }
+      finally { busy = false; btn.disabled = false; btn.removeAttribute("aria-busy"); }
+    };
+    mr.start(); on = true; btn.classList.add("rec"); btn.innerHTML = ICON.stop; btn.setAttribute("aria-label", "Stop speaking");
+    toast("Listening… speak, then press the mic again to stop.");
+    cap = setTimeout(() => { try { mr && mr.stop(); } catch {} }, 120000);
+  }
   btn.addEventListener("click", () => {
-    if (on){ try { rec && rec.stop(); } catch {} return; }
+    if (busy) return;
+    if (on){ if (mr){ try { mr.stop(); } catch {} } else { try { rec && rec.stop(); } catch {} } return; }
+    if (useGemini()){ startGemini(); return; }
+    if (!SR){ toast("Voice typing needs the examiner key. Set it up in Account, or type your answer."); return; }
     try { rec = new SR(); } catch { toast("Voice typing is not available in this browser."); return; }
     rec.lang = "en-US"; rec.interimResults = true; rec.continuous = false; base = ta.value ? ta.value.trim() + " " : "";
     rec.onresult = e => { let t = ""; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = base + t; };
@@ -2453,7 +2602,7 @@ function stopQuizTimer(){ clearInterval(Q.tick); Q.tick = null; }
 const quizTopics = () => [...new Set([...TOPICS, ...BOOKCASES.map(c => c.topic)])].filter(Boolean);
 /* the quiz shows no patient, so it can only use questions that make sense without one */
 const NEEDS_CASE = /\b(this|these|that|those|the) (case|patient|patient’s|patient's|malocclusion|finding|findings|observations?|tooth|teeth|problems?|appliances?|occlusion|child|boy|girl|result|approach|procedure|technique|condition|anomaly|options?|plan|stage|period)\b|\b(this|these|it|they|them|her|his|she|he|him)\b|in this|what would you|what do you|how would you|would you|do you|the case|\b[UL][LR][A-E1-8]\b|\b(was|were|been|now|anything|other|the centre line|intra-oral features|extra-oral features|combined treatment|associated with treatment|during treatment|the design)\b/i;
-const bookQs = () => BOOKCASES.flatMap(c => c.qs.map((q, k) => [q, k]).filter(([q]) => !/\bFig(?:ure)?s?\.?\s*\d/i.test(q.q) && !NEEDS_CASE.test(q.q) && q.q.length >= 30 && q.a.length >= 60).map(([q, k]) => ({kind:"book", topic:c.topic, caseId:c.id, q:q.q, a:noFig(q.a), page:q.page, key:c.id + "#" + k})));
+const bookQs = () => BOOKCASES.filter(c => !c.own).flatMap(c => c.qs.map((q, k) => [q, k]).filter(([q]) => !/\bFig(?:ure)?s?\.?\s*\d/i.test(q.q) && !NEEDS_CASE.test(q.q) && q.q.length >= 30 && q.a.length >= 60).map(([q, k]) => ({kind:"book", topic:c.topic, caseId:c.id, q:q.q, a:noFig(q.a), page:q.page, key:c.id + "#" + k})));
 const srsKey = x => x.kind === "book" ? "b:" + x.key : "m:" + (x.i != null ? x.i : x.id);
 function quizPool(){
   const src = (document.querySelector('input[name=qsrc]:checked') || {}).value || "mcq";
@@ -2743,7 +2892,7 @@ function planCaseDone(id, done){ return done["case:" + id] || ST.events.some(e =
 function buildPlan(p){
   const today = ymd(new Date()), days = [];
   for (let d = fromYmd(today); ymd(d) < p.exam; d.setDate(d.getDate() + 1)) if (d.getDay() !== p.rest) days.push(ymd(d));
-  if (!days.length) return {days: [], covered: 0, total: BOOKCASES.length};
+  if (!days.length) return {days: [], covered: 0, total: BKN()};
   const done = p.done || {}, weak = planWeakTopics(), N = days.length;
   const quiet = 1, practice = N - quiet > 1 ? Math.max(1, Math.round(N * .25)) : 0, learn = N - quiet - practice;
   const cap = learn * p.mins, lists = weak.map(({t, score}) => ({t, w: BOOKCASES.filter(c => c.topic === t && !planCaseDone(c.id, done)).length * (score < 50 ? 1.6 : score < 70 ? 1.2 : 1) + 1, cases: BOOKCASES.filter(c => c.topic === t && !planCaseDone(c.id, done))}));
@@ -2762,7 +2911,7 @@ function buildPlan(p){
     else if (m + PLAN_COST.quiz <= p.mins && (ST.wrong || []).length) x.tasks.push({k: "quiz", id: `mist:${x.d}`, topic: "wrong", label: "Quiz: my mistakes"});
   });
   out.filter(x => x.phase === "quiet").forEach(x => { x.tasks.push({k: "rest", id: `rest:${x.d}`, label: "Light review only, then rest well"}); });
-  return {days: out, covered, total: BOOKCASES.length};
+  return {days: out, covered, total: BKN()};
 }
 /* today's list stays as it was this morning, even as tasks are ticked */
 function planToday(p){
@@ -2835,24 +2984,24 @@ function renderPlan(){
   $("#planSetup").hidden = !!p && !box.dataset.edit;
   if (!p){ box.innerHTML = ""; return; }
   if (p.exam <= today){ box.innerHTML = `<div class="pane"><div class="pane-b"><h2 style="margin:0 0 6px">${p.exam === today ? "Today is your exam. Good luck, Doctor." : "Your exam date has passed."}</h2><p class="muted" style="margin:0">Set a new date above to build another plan.</p></div></div>`; $("#planSetup").hidden = false; return; }
-  if (!BOOKCASES.length){ box.innerHTML = '<div class="pane"><div class="pane-b"><p class="muted" style="margin:0">Your cases are still loading. Your plan will appear in a moment.</p></div></div>'; return; }
+  if (!BKN()){ box.innerHTML = '<div class="pane"><div class="pane-b"><p class="muted" style="margin:0">Your cases are still loading. Your plan will appear in a moment.</p></div></div>'; return; }
   const b = buildPlan(p), t = planToday(p), left = Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5);
-  const doneCases = BOOKCASES.filter(c => planCaseDone(c.id, p.done || {})).length, pct = Math.round(doneCases / Math.max(1, BOOKCASES.length) * 100);
+  const doneCases = BOOKCASES.filter(c => planCaseDone(c.id, p.done || {})).length, pct = Math.round(doneCases / Math.max(1, BKN()) * 100);
   const seg = k => b.days.filter(x => x.phase === k).length, sum = Math.max(1, b.days.length), rest = b.days.filter(x => x.d !== today);
   const tDone = t.tasks.filter(x => (p.done || {})[x.id]).length, allDone = t.tasks.length && tDone === t.tasks.length;
   const weeks = []; rest.forEach(x => { const d = fromYmd(x.d), mon = new Date(d); mon.setDate(d.getDate() - ((d.getDay() + 6) % 7)); const k = ymd(mon); let w = weeks.find(y => y.k === k); if (!w) weeks.push(w = {k, days: []}); w.days.push(x); });
-  const short = b.covered + doneCases < BOOKCASES.length;
+  const short = b.covered + doneCases < BKN();
   box.innerHTML = `
   <div class="phero cine"><div class="phero-main"><div class="wsm">Your exam · ${esc(dayLabel(p.exam, {weekday: "long", day: "numeric", month: "long", year: "numeric"}))}</div><div class="pcount"><b>${left}</b><span>${left === 1 ? "day" : "days"} to go</span></div></div>
-    <div class="phero-side"><div class="ring pring" style="--p:${pct}"><span>${pct}%</span></div><div><b>${doneCases} of ${BOOKCASES.length}</b><span>book cases done</span></div></div></div>
+    <div class="phero-side"><div class="ring pring" style="--p:${pct}"><span>${pct}%</span></div><div><b>${doneCases} of ${BKN()}</b><span>book cases done</span></div></div></div>
   <div class="pphases" aria-label="Plan phases">${[["learn", "Learn"], ["practice", "Exam practice"], ["quiet", "Last day"]].filter(([k]) => seg(k)).map(([k, l]) => `<div class="pseg ${k}" style="flex:${seg(k)} 1 0"><i></i><b>${l}</b><span>${seg(k)} ${seg(k) === 1 ? "day" : "days"}</span></div>`).join("")}</div>
-  ${short ? `<p class="notice2" style="margin:0 0 14px">At ${p.mins} minutes a day your plan covers ${b.covered + doneCases} of the ${BOOKCASES.length} cases, weakest topics first. Add more time a day to cover more.</p>` : ""}
+  ${short ? `<p class="notice2" style="margin:0 0 14px">At ${p.mins} minutes a day your plan covers ${b.covered + doneCases} of the ${BKN()} cases, weakest topics first. Add more time a day to cover more.</p>` : ""}
   <div class="pane ptoday ${allDone ? "alldone" : ""}"><div class="pane-h"><h2>Today · ${esc(dayLabel(today))}</h2><span class="meta">${t.tasks.length ? `${tDone} of ${t.tasks.length} done` : ""}</span></div><div class="pane-b">${allDone ? '<p class="pwell">Today is done. Well done, Doctor.</p>' : ""}${t.tasks.length ? t.tasks.map(x => planTaskRow(x, true)).join("") : `<p class="muted" style="margin:0">${t.d === today && new Date().getDay() === p.rest ? "Your rest day. Enjoy it, and start again tomorrow." : "Nothing is planned for today."}</p>`}</div></div>
   ${weeks.length ? `<div class="pane"><div class="pane-h"><h2>Coming up</h2><span class="meta">changes by itself if you miss a day</span></div><div class="pane-b">${weeks.map((w, i) => `<details class="pweek" ${i === 0 ? "open" : ""}><summary>Week of ${esc(dayLabel(w.k, {day: "numeric", month: "long"}))}<span class="meta">${w.days.length} ${w.days.length === 1 ? "day" : "days"}</span></summary>${w.days.map(x => `<div class="pday"><div class="pdate"><b>${esc(dayLabel(x.d, {weekday: "short"}))}</b><span>${esc(dayLabel(x.d, {day: "numeric", month: "short"}))}</span></div><div class="pdtxt">${x.tasks.length ? [...new Set(x.tasks.map(y => y.k === "rest" ? y.label : y.label))].map(esc).join("<br>") : '<span class="muted">Free day</span>'}</div></div>`).join("")}</details>`).join("")}</div></div>` : ""}
   <div class="actions" style="justify-content:center;margin:6px 0 4px"><button type="button" class="btn sm" id="planEdit">Change my plan</button></div>`;
 }
 function renderPlanHome(){
-  const box = $("#planHome"); if (!box) return; const p = ST.plan, today = ymd(new Date()), live = p && p.exam > today && BOOKCASES.length;
+  const box = $("#planHome"); if (!box) return; const p = ST.plan, today = ymd(new Date()), live = p && p.exam > today && BKN();
   const t = live ? planToday(p) : null, next = t && t.tasks.find(x => !(p.done || {})[x.id]), left = live ? Math.round((fromYmd(p.exam) - fromYmd(today)) / 864e5) : 0;
   const cell = (go, h, v) => `<button type="button" class="coll-cell" data-go="${go}"><b>${h}</b>${esc(v)}</button>`;
   box.innerHTML = cell("plan", "TODAY", !live ? "Build your plan" : next ? next.label : t.tasks.length ? "Today is done" : "Nothing planned") + cell("parta", "PART A", "Practise questions") + cell("plan", "EXAM", live ? `${left} ${left === 1 ? "day" : "days"}` : "Set your date");
@@ -2903,7 +3052,7 @@ function startEvidence(topic, direct){
   /* the book passages appear straight away and do not depend on the AI */
   const src = $("#evSources"); src.hidden = !direct; src.innerHTML = direct ? `<h3 class="sh" style="margin-top:0">From the books</h3>${hitsHtml(found, topic)}` : "";
   if (!aiReady()){ evChat = null; $("#evChat").innerHTML = direct ? "" : `<p class="notice2">${NO_AI}</p>`; $("#evPane").scrollIntoView({block: "start", behavior: "smooth"}); return; }
-  evChat = mountChat($("#evChat"), {system: tutorSystem("THE TOPIC: " + topic, direct ? "evidence" : "topic"), topic: topicOf(topic), avatar: true, keep: 30, showEv: t => ASKS_EVIDENCE.test(t),
+  evChat = mountChat($("#evChat"), {system: tutorSystem("THE TOPIC: " + topic, direct ? "evidence" : "topic"), topic: topicOf(topic), avatar: false, keep: 30, showEv: t => ASKS_EVIDENCE.test(t),
     opening: direct ? `What do the textbooks say about ${topic}? Give me the evidence with each book and page.` : `Please examine me on this topic: ${topic}. Ask me your first question.`,
     pick: (x, prev) => evidencePick(topic, x === (direct ? `What do the textbooks say about ${topic}? Give me the evidence with each book and page.` : `Please examine me on this topic: ${topic}. Ask me your first question.`) ? "" : x, prev)});
   $("#evPane").scrollIntoView({block: "start", behavior: "smooth"});
@@ -3027,6 +3176,7 @@ function toolSpace(){
 
 /* ================= book cases, deep discussion, AI tutor, cloud sync ================= */
 let BOOKCASES = [];
+const BKN = () => BOOKCASES.filter(c => !c.own).length; /* the book's own cases, without the centre cases */
 function ocrFix(s){
   return s.replace(/(\w+i) i f (ed|ing|ies|y)\b/g, "$1fi$2").replace(/(\w+i) f ([ilIL]\w{2,})/g, "$1f$2").replace(/\b([fF]) ([ilIL]\w{2,})/g, "$1$2")
     .replace(/(\w) f f (\w)/g, "$1ff$2").replace(/(\w{2,}) ff (e|i|o|a)(\w{2,})/g, "$1ff$2$3").replace(/\s{2,}/g, " ");
@@ -3035,6 +3185,11 @@ function prepareBookCases(){
   const rec = BOOKSTORE.find(b => b.id === "cases");
   BOOKCASES = rec ? extractBookCases(rec.pages).map(c => ({...c, summary: ocrFix(c.summary), intro: ocrFix(c.intro), full: ocrFix(c.full), qs: c.qs.map(q => ({...q, q: ocrFix(q.q), a: ocrFix(q.a)}))})) : [];
   BOOKCASES.forEach(c => { c.topic = topicOf(c.full); });
+  /* students see the Institute's own wording (c1.dat), same facts and page references; if it cannot be read, no cases are offered rather than the book's text */
+  const RW = window.RWCASES;
+  BOOKCASES = RW ? BOOKCASES.filter(c => RW[c.id] && RW[c.id].qs.length === c.qs.length).map(c => { const r = RW[c.id]; return {...c, intro: r.intro, summary: r.summary, full: r.full, qs: c.qs.map((q, k) => ({...q, q: r.qs[k].q, a: r.qs[k].a}))}; }) : [];
+  /* the Institute's own centre cases: pre-treatment records and a plan-only viva */
+  if (window.CENTRE) BOOKCASES = BOOKCASES.concat(window.CENTRE.map(c => ({id: c.id, own: true, page: 0, topic: "Centre cases", sheet: c.sheet, figs: c.figs, summary: c.sheet.filter(r => r[0] !== "Cephalometric values").map(r => r[0] + ": " + String(r[1]).replace(/\.$/, "")).join(". ") + ".", ceph: c.ceph, intro: "", full: c.full, qs: c.qs.map(q => ({q: q.q, a: q.a, figs: q.figs, page: 0}))})));
   buildQIndex(); refreshQuizUi(); renderBank(); renderDashboard(); if ($("#v-plan") && !$("#v-plan").hidden) renderPlan();
 }
 /* small BM25 over every book question+answer, for "related questions" */
@@ -3081,7 +3236,7 @@ let SES = null;
 const recCache = {};
 function mountRecs(box, bc){
   if (!box) return;
-  (recCache[bc.id] || (recCache[bc.id] = recordFigs(bc))).then(list => { if (!list.length) delete recCache[bc.id]; if (!box.isConnected || !list.length) return; box.innerHTML = list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Patient records — tap to enlarge</figcaption></figure>`).join(""); box.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(list, +f.dataset.i); }; });
+  (recCache[bc.id] || (recCache[bc.id] = recordFigs(bc))).then(list => { if (!list.length) delete recCache[bc.id]; if (!box.isConnected || !list.length) return; box.classList.toggle("own", !!bc.own); box.innerHTML = bc.own ? recHtml(list) : list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Patient records — tap to enlarge</figcaption></figure>`).join(""); box.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(list, +f.dataset.i); }; });
 }
 function openSession(id){
   const bc = BOOKCASES.find(c => c.id === id); if (!bc) return;
@@ -3092,7 +3247,7 @@ function openSession(id){
 function renderSession(){
   const S_ = SES, bc = S_.bc, box = $("#sesBody");
   if (S_.i < 0){
-    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2><span class="meta">from Clinical Cases in Orthodontics, p. ${bc.page - 10}</span></div><div class="pane-b"><pre class="casetext">${caseFmt(bc.summary)}</pre><div class="recs" id="sesRecs"></div><details><summary class="muted">Full case text (history, examination, findings)</summary><pre class="casetext">${esc(noFig(bc.intro))}</pre></details><p class="muted">${bc.qs.length} questions follow. Answer each one in your own words <b>before</b> revealing the book's answer. You will then see what other books in your library say, and can go deeper.</p><div class="actions"><button class="btn primary" id="sesGo">Begin</button></div></div></div>`;
+    box.innerHTML = `<div class="pane"><div class="pane-h"><h2>Case presentation</h2>${bc.own ? "" : `<span class="meta">from Clinical Cases in Orthodontics, p. ${bc.page - 10}</span>`}</div><div class="pane-b"><pre class="casetext">${caseFmt(bc.summary)}</pre><div class="recs" id="sesRecs"></div><details><summary class="muted">Full case text (history, examination, findings)</summary><pre class="casetext">${esc(noFig(bc.intro))}</pre></details><p class="muted">${bc.qs.length} questions follow. Answer each one in your own words <b>before</b> revealing the book's answer. You will then see what other books in your library say, and can go deeper.</p><div class="actions"><button class="btn primary" id="sesGo">Begin</button></div></div></div>`;
     mountRecs($("#sesRecs"), bc); $("#sesGo").addEventListener("click", () => { S_.i = 0; renderSession(); }); return;
   }
   if (S_.i >= bc.qs.length){ finishSession(); return; }
@@ -3111,7 +3266,7 @@ function renderSession(){
     const g = skipped ? null : coverage(ans, q.a); S_.res.push(g ? g.frac : 0);
     const other = diverse(q.q + " " + bc.topic, 3, "cases"), rel = relatedQs(q.q, bc.id, 4);
     $("#sesFb").innerHTML = `${g ? `<div class="viva-score"><div class="verdict ${g.verdict}">${{correct:"✓ Good coverage", partial:"◐ Partial coverage", wrong:"✗ Little overlap"}[g.verdict]} · ${Math.round(g.frac * 100)}%</div><div class="score-bar"><i style="width:${Math.round(g.frac * 100)}%;background:${g.verdict==="correct"?"var(--ok)":g.verdict==="partial"?"var(--warn)":"var(--hi)"}"></i></div>${g.hit.length?`<p class="ok small">Key terms you used: ${g.hit.map(esc).join(", ")}</p>`:""}${g.miss.length?`<p class="bad small">Key terms missing: ${g.miss.map(esc).join(", ")}</p>`:""}<p class="muted small">Automatic check on key terms — judge your answer against the book's text below, or discuss it with the tutor.</p></div>` : ""}
-      <h3 class="sh">The book's answer <span class="cite">Clinical Cases in Orthodontics, p. ${q.page - 10}</span></h3><div class="ans" dir="auto">${esc(noFig(q.a))}</div>
+      <h3 class="sh">${bc.own ? "Model answer" : `The book's answer <span class="cite">Clinical Cases in Orthodontics, p. ${q.page - 10}</span>`}</h3><div class="ans" dir="auto">${esc(noFig(q.a))}</div>
       <h3 class="sh">What other books say</h3>${other.length ? hitsHtml(other, q.q) : '<p class="muted">No other books loaded.</p>'}
       <h3 class="sh">Go deeper</h3><div class="actions"><button class="btn" id="sesMore">More passages (all books)</button><button class="btn primary" id="sesDeep">Discuss this with the tutor</button></div><div id="sesMoreBox"></div><div id="sesChat"></div>
       ${rel.length ? `<h3 class="sh">Related questions elsewhere in the book</h3><ul class="rel">${rel.map(d => `<li><a href="#" data-bc="${esc(d.c.id)}">Case ${esc(d.c.id)}</a> — ${esc(noFig(d.c.qs[d.k].q))}</li>`).join("")}</ul>` : ""}
@@ -3145,7 +3300,7 @@ const hasOwnKey = () => !!(ST.ai && ST.ai.key && ST.ai.provider && ST.ai.provide
 /* once, at the first visit: ask the resident to set up a personal examiner key (asked again after a week if skipped) */
 function keyNudge(){
   document.querySelectorAll(".keynudge").forEach(x => x.remove());
-  if (hasOwnKey() || !(FB.user || ENTERED)) return;
+  if (hasOwnKey() || AIKEY || !(FB.user || ENTERED)) return; /* the Institute key works for everyone: nobody is asked for a key */
   let at = 0; try { at = +localStorage.getItem("bdi.keyask") || 0; } catch {}
   if (at && Date.now() - at < 7 * 864e5) return;
   const host = $("#v-dashboard"); if (!host) return;
@@ -3243,7 +3398,7 @@ function gemRace(key, models, makeBody, onText){
   });
 }
 async function callGemini(key, model, messages, system, opts = {}){
-  const makeBody = m => JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}]})), generationConfig: {temperature: .6, maxOutputTokens: opts.tokens || 2048, ...(gemNoBudget.has(m) ? {} : {thinkingConfig: {thinkingBudget: 0}}), ...(opts.json ? {responseMimeType: "application/json"} : {})}});
+  const makeBody = m => JSON.stringify({systemInstruction: {parts: [{text: system}]}, contents: messages.map(x => ({role: x.role === "assistant" ? "model" : "user", parts: [{text: x.content}, ...(x.audio ? [{inlineData: {mimeType: x.audio.mime, data: x.audio.data}}] : [])]})), generationConfig: {temperature: opts.temp != null ? opts.temp : .6, maxOutputTokens: opts.tokens || 2048, ...(gemNoBudget.has(m) ? {} : {thinkingConfig: {thinkingBudget: 0}}), ...(opts.json ? {responseMimeType: "application/json"} : {})}});
   if (opts.onText || opts.race){
     const order = () => [...new Set([gemGood, model, ...GEM_MODELS].filter(Boolean))].filter(x => !gemGone.has(x));
     let err;
@@ -3309,7 +3464,7 @@ function mountChat(host, o){
   const inGrid = !!host.closest(".exam-grid");
   const bubble = (cls, html, opening) => { const d = document.createElement("div"); d.className = "viva-msg " + cls; d.dir = "auto"; d.innerHTML = html; cm.appendChild(d); msgScroll(cm, d, inGrid && opening); return d; };
   async function turn(userText, shown){
-    if (busy) return; busy = true; cs_(true);
+    if (busy) return; stopSpeak(); busy = true; cs_(true);
     if (shown !== null) bubble("student", esc(shown != null ? shown : userText));
     const lastReply = msgs.length ? msgs[msgs.length - 1].content : "";
     const hits = o.pick ? o.pick(userText, lastReply) : null;
@@ -3406,6 +3561,7 @@ function figMentions(text){
   return set;
 }
 async function recordFigs(bc){
+  if (bc.own) return bc.figs.map(f => ({l: f.l, src: f.src, g: f.g, ar: f.ar}));
   return (await loadFigs(bc.id.split(".")[0])) ? caseRecords(bc) : [];
 }
 function openLbx(list, i){
@@ -3470,14 +3626,14 @@ function startTutor(ev, resume){
       $("#tRecRetry").onclick = () => { box.innerHTML = '<span class="meta"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Loading the patient\'s records…</span>'; begin(); };
       return;
     }
-    box.innerHTML = list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Record ${i + 1} — tap to enlarge</figcaption></figure>`).join("");
+    box.classList.toggle("own", !!bc.own); box.innerHTML = bc.own ? recHtml(list) : list.map((f, i) => `<figure data-i="${i}"><img src="${f.src}" alt="Record ${i + 1}"><figcaption>Record ${i + 1} — tap to enlarge</figcaption></figure>`).join("");
     box.onclick = e => { const f = e.target.closest("figure"); if (f) openLbx(list, +f.dataset.i); };
     $("#tRun").scrollIntoView({block: "start"});
     const endAt = limit ? (resume && resume.end ? resume.end : Date.now() + limit * 60000) : 0;
     const form = {mode, tp, nq: $("#tNq").value, tm, min: $("#tMin").value, lang: $("#tLang").value, level: $("#tLevel").value};
     const chat = mountChat($("#tChat"), {keep: 40, resume: resume && resume.chat, onSave: scored && (s => s ? saveRun("exam", {form, caseId: bc.id, end: endAt, chat: s}) : clearRun("exam")), system: sys, topic: bc.topic, exam: mode === "disc" ? false : true, nQ, avatar: true, caseId: bc.id,
       opening: mode === "disc" ? "The patient's details and records are on my screen. Ask me to study them and give you my summary, then we'll discuss the case." : "Begin the examination. This is question 1 of " + nQ + ".",
-      greet: unseen && $("#tLang").value !== "ar" ? `${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}. Please study the patient's details and all the records on your screen, then write your summary of the case.` : "",
+      greet: unseen && $("#tLang").value !== "ar" ? `${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}. Please study the patient's details and all the records on your screen, then write your summary of the case and press Send. As soon as you do, I will start the questions.` : "",
       retrieve: t => excerpts(diverse(t + " " + bc.topic, 4)),
       onEnd: () => { clearInterval(TUT.tick); }});
     if (limit){
@@ -3505,7 +3661,7 @@ async function gateStart(){
     const fbJs = f => loadScript(IN_APP ? `vendor/firebase-${f}-compat.js` : `https://www.gstatic.com/firebasejs/10.12.2/firebase-${f}-compat.js`);
     await fbJs("app"); await Promise.all([fbJs("auth"), fbJs("firestore")]);
     if (!firebase.apps.length) firebase.initializeApp(FB.cfg);
-    FB.auth = firebase.auth(); FB.db = firebase.firestore();
+    FB.auth = firebase.auth(); FB.db = firebase.firestore(); try { FB.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {}); } catch {}
   } catch (e) { gShow('<p class="bad">Could not reach the sign-in service. Check your internet connection and try again.</p><div class="btnrow"><button class="btn primary" onclick="location.reload()">Try again</button></div>'); return; }
   FB.auth.onAuthStateChanged(gateAuth);
 }
@@ -3526,7 +3682,7 @@ async function enterOffline(u){
   const raw = await cachedKey(u.uid); if (!raw) return false;
   try { LIBKEY = await crypto.subtle.importKey("raw", b64u(raw), "AES-GCM", false, ["decrypt"]); } catch { return false; }
   NO_AI = "The examiner needs an internet connection. Connect and open the app again.";
-  FB.user = u; FB.offline = true; ENTERED = true; FB.ready = true; document.body.classList.remove("locked");
+  FB.user = u; FB.offline = true; ENTERED = true; FB.ready = true; document.body.classList.remove("locked"); setTimeout(ttsPreload, 2500);
   try { if (localStorage.getItem("bdi.uid") !== u.uid){ ST = {name: u.displayName || "", xp: 0, events: [], wrong: []}; localStorage.setItem("bdi.uid", u.uid); save(); $("#pName").value = ST.name; } } catch {}
   $("#tabAdmin").hidden = true; renderBank(); renderDashboard(); renderAccount(); setView("dashboard", false);
   const n = document.createElement("div"); n.className = "notice2 offline-note";
@@ -3550,7 +3706,7 @@ async function gateAuth(u){
 }
 function gateLogin(){
   const note = GATE_NOTE; GATE_NOTE = "";
-  gShow(`${note ? `<p class="note">${esc(note)}</p>` : ""}<form id="gForm"><div class="f"><label for="gName">Full name (new accounts)</label><input id="gName" autocomplete="name" maxlength="80" placeholder="Dr …"></div><div class="f"><label for="gEmail">Email</label><input id="gEmail" type="email" required autocomplete="email"></div><div class="f"><label for="gPass">Password</label><input id="gPass" type="password" required minlength="6" autocomplete="current-password"></div><p class="bad" id="gMsg" style="margin:0"></p><div class="btnrow"><button class="btn primary">Sign in</button><button type="button" class="btn" id="gUp">Create account</button><button type="button" class="btn" id="gForgot">Forgot password</button></div></form><p class="muted small">Access is by invitation. After you create an account and confirm your email, your supervisor approves you.</p>`);
+  gShow(`${note ? `<p class="note">${esc(note)}</p>` : ""}<form id="gForm"><div class="f"><label for="gName">Full name <span style="font-weight:400;opacity:.75">— only if you are creating a new account</span></label><input id="gName" autocomplete="name" maxlength="80" placeholder="Leave empty if you already have an account"></div><div class="f"><label for="gEmail">Email</label><input id="gEmail" type="email" required autocomplete="email"></div><div class="f"><label for="gPass">Password</label><input id="gPass" type="password" required minlength="6" autocomplete="current-password"></div><p class="bad" id="gMsg" style="margin:0"></p><div class="btnrow"><button class="btn primary">Sign in</button><button type="button" class="btn" id="gUp">Create account</button><button type="button" class="btn" id="gForgot">Forgot password</button></div></form><p class="muted small">Access is by invitation. After you create an account and confirm your email, your supervisor approves you.</p>`);
   const msg = t => { $("#gMsg").textContent = t; };
   $("#gForm").addEventListener("submit", async ev => { ev.preventDefault(); msg(""); try { await FB.auth.signInWithEmailAndPassword($("#gEmail").value.trim(), $("#gPass").value); } catch (e) { msg(gErr(e)); } });
   $("#gUp").addEventListener("click", async () => {
@@ -3594,7 +3750,7 @@ async function enter(u){
     if (!FB.admin) FB.unsubAppr = FB.db.collection("approved").doc(u.email.toLowerCase()).onSnapshot(s => { if (!s.exists) kick("Your access has been withdrawn."); }, () => {});
     try { if (localStorage.getItem("bdi.uid") !== u.uid){ ST = {name: u.displayName || "", xp: 0, events: [], wrong: []}; localStorage.setItem("bdi.uid", u.uid); save(); $("#pName").value = ST.name; renderDashboard(); } } catch {}
     new Image().src = `examiner.jpg?v=${VER["examiner.jpg"] || "1"}`;
-    ENTERED = true; FB.ready = true; document.body.classList.remove("locked");
+    ENTERED = true; FB.ready = true; document.body.classList.remove("locked"); setTimeout(ttsPreload, 2500);
     $("#tabAdmin").hidden = !FB.admin; renderBank(); renderDashboard(); renderAccount(); setView(LIBKEY ? "dashboard" : "admin");
     if (LIBKEY) loadLibrary().then(() => fbPull()); else fbPull();
     if (FB.admin) renderAdmin();
@@ -3853,12 +4009,38 @@ addEventListener("popstate", e => {
 try { const A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
   if (A) A.addListener("backButton", () => { if (closeOverlay()) return; if (NAV.d > 0) history.back(); else A.minimizeApp(); });
 } catch {}
+/* Guide: English or Arabic (remembered); panels fade in and their words light up as you scroll */
+function guideLang(l){ $("#gdEn").hidden = l === "ar"; $("#gdAr").hidden = l !== "ar"; $$("[data-gl]").forEach(b => b.classList.toggle("on", b.dataset.gl === l)); try { localStorage.setItem("bdi.gl", l); } catch {} guideScroll(); }
+document.addEventListener("click", e => { const b = e.target.closest("[data-gl]"); if (b) guideLang(b.dataset.gl); });
+function guideInit(){
+  $$("#gx .gx-t").forEach(p => {
+    const walk = n => { [...n.childNodes].forEach(c => { if (c.nodeType === 3){ const f = document.createDocumentFragment(); c.textContent.split(/(\s+)/).forEach(w => { if (!w) return; if (/^\s+$/.test(w)) f.append(w); else { const s = document.createElement("span"); s.className = "gx-w"; s.textContent = w; f.append(s); } }); c.replaceWith(f); } else walk(c); }); };
+    walk(p);
+  });
+}
+function guideScroll(){
+  const v = $("#v-guide"); if (!v || v.hidden) return;
+  const vh = innerHeight, still = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  $$("#gx .gx-hero, #gx .gx-p").forEach(p => {
+    if (p.offsetParent === null) return;
+    const r = p.getBoundingClientRect();
+    if (r.top < vh * .8 && r.bottom > 0) p.classList.add("in");
+    const t = p.querySelector(".gx-t"); if (!t) return;
+    const ws = t.querySelectorAll(".gx-w"), q = Math.min(1, Math.max(0, (vh * .8 - t.getBoundingClientRect().top) / (vh * .45)));
+    const k = still ? ws.length : Math.round(q * ws.length);
+    ws.forEach((w, i) => w.classList.toggle("on", i < k));
+  });
+}
+addEventListener("scroll", guideScroll, {passive: true}); addEventListener("resize", guideScroll);
+guideInit();
+try { guideLang(localStorage.getItem("bdi.gl") === "ar" ? "ar" : "en"); } catch {}
 function setView(v, push = true){
   stopSpeak(); if (v === "admin") renderAdmin();
   if (push) navPush(v); NAV.cur = v;
   $$(".tab").forEach(t => { const on = t.dataset.view === v || ((v === "case" || v === "session") && t.dataset.view === "cases"); t.setAttribute("aria-selected", String(on)); if (on) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   $$(".view").forEach(s => s.hidden = s.id !== "v-" + v);
   if (v === "plan") renderPlan();
+  if (v === "guide") setTimeout(guideScroll, 50);
   tabsInView();
   window.scrollTo(0, 0);
 }
@@ -3936,7 +4118,7 @@ function fillVoices(){
 }
 if ("speechSynthesis" in window){ speechSynthesis.addEventListener && speechSynthesis.addEventListener("voiceschanged", fillVoices); }
 document.addEventListener("change", e => { if (e.target.classList && e.target.classList.contains("vsel")){ try { localStorage.setItem("bdi.vname", e.target.value); } catch {} } });
-document.addEventListener("click", e => { if (e.target.classList && e.target.classList.contains("vtest")){ const w = e.target.closest(".avatar-wrap"); if (w){ AV.wrap = w; fillVoices(); speak("Hello, I'm your examiner. Take your time."); } } });
+document.addEventListener("click", e => { if (e.target.classList && e.target.classList.contains("vstop")){ stopSpeak(); return; } if (e.target.classList && e.target.classList.contains("vtest")){ const w = e.target.closest(".avatar-wrap"); if (w){ AV.wrap = w; fillVoices(); speak("Hello, I'm your examiner. Take your time."); } } });
 window.addEventListener("online", () => { try { fbSchedule(); } catch {} });
 
 })();
